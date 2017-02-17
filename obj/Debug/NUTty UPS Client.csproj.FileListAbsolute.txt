@@ -1,0 +1,13 @@
+c:\users\craig\documents\visual studio 2015\Projects\NUTty UPS Client\NUTty UPS Client\bin\Debug\NUTty UPS Client.exe.config
+c:\users\craig\documents\visual studio 2015\Projects\NUTty UPS Client\NUTty UPS Client\bin\Debug\NUTty UPS Client.exe
+c:\users\craig\documents\visual studio 2015\Projects\NUTty UPS Client\NUTty UPS Client\bin\Debug\NUTty UPS Client.pdb
+c:\users\craig\documents\visual studio 2015\Projects\NUTty UPS Client\NUTty UPS Client\obj\Debug\NUTty UPS Client.csprojResolveAssemblyReference.cache
+c:\users\craig\documents\visual studio 2015\Projects\NUTty UPS Client\NUTty UPS Client\obj\Debug\NUTty_UPS_Client.Properties.Resources.resources
+c:\users\craig\documents\visual studio 2015\Projects\NUTty UPS Client\NUTty UPS Client\obj\Debug\NUTty UPS Client.csproj.GenerateResource.Cache
+c:\users\craig\documents\visual studio 2015\Projects\NUTty UPS Client\NUTty UPS Client\obj\Debug\NUTty UPS Client.exe
+c:\users\craig\documents\visual studio 2015\Projects\NUTty UPS Client\NUTty UPS Client\obj\Debug\NUTty UPS Client.pdb
+c:\users\craig\documents\visual studio 2015\Projects\NUTty UPS Client\NUTty UPS Client\obj\Debug\NUTty_UPS_Client.frmSettings.resources
+c:\users\craig\documents\visual studio 2015\Projects\NUTty UPS Client\NUTty UPS Client\obj\Debug\NUTty_UPS_Client.frmTray.resources
+C:\Users\Craig\Documents\Visual Studio 2015\Projects\NUTty UPS Client\NUTty-UPS-Client\bin\Debug\NUTty UPS Client.exe.config
+C:\Users\Craig\Documents\Visual Studio 2015\Projects\NUTty UPS Client\NUTty-UPS-Client\obj\Debug\NUTty UPS Client.exe
+C:\Users\Craig\Documents\Visual Studio 2015\Projects\NUTty UPS Client\NUTty-UPS-Client\obj\Debug\NUTty UPS Client.pdb
