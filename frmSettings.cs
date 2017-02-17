@@ -49,6 +49,14 @@ namespace NUTty_UPS_Client
             Int16 nutPort = Convert.ToInt16(txtPort.Text);
             string nutOutput = NUT_poller.PollNUTServer(txtIPAddress.Text, nutPort);
             NUT_Processor.ParseNUTOutput(nutOutput);
+
+            lblUPSModel.Text = NUT_Processor.UPSStatistics();
+
+            Tuple<string, int, int> UPSBatteryStatus = NUT_Processor.GetBatteryStatus();
+
+            this.UpdateUPSStatus(UPSBatteryStatus.Item1, UPSBatteryStatus.Item3);
+            this.updateUPSModelLabel(NUT_Processor.UPSStatistics());
+
         }
 
         public static frmSettings _frmSettings;
@@ -91,7 +99,6 @@ namespace NUTty_UPS_Client
             }
             UPSPolling = !UPSPolling;
         }
-
 
     }
 

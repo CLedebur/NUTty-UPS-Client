@@ -10,29 +10,28 @@ namespace NUTty_UPS_Client
     class NUT_Processor
     {
         public static string[,] UPSVariables;
-        private static void UpdateTxtOutput(string txtOutput)
+        private static void WriteNUTLog(string strOutput)
         {
             try
             {
-                frmSettings._frmSettings.updateTxtOutput(txtOutput);
+                frmSettings._frmSettings.updateTxtOutput(strOutput);
             } catch
             {
-                Console.WriteLine(txtOutput);
+                Console.WriteLine(strOutput);
             }
         }
 
         public static string ParseNUTOutput(string nutOutput)
         {
             nutOutput = Regex.Replace(nutOutput, @"\r\n?|\n", Environment.NewLine); // Replaces UNIX linefeeds with ANSI
-            //UpdateTxtOutput(nutOutput);
 
-            UpdateTxtOutput("Attempting to sanitize output");
+            WriteNUTLog("Attempting to sanitize output");
             List<string> nutList = new List<string>(nutOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
 
             // Sanity check! 
             if (nutList[0].Contains("BEGIN LIST VAR ups") && nutList[nutList.Count - 1].Contains("END LIST VAR ups"))
             {
-                UpdateTxtOutput("Data structure is correct. Let's continue.");
+                WriteNUTLog("Data structure is correct. Let's continue.");
             }
 
             UPSVariables = new string[nutList.Count -1, 2];
@@ -48,7 +47,7 @@ namespace NUTty_UPS_Client
                 UPSVariables[j, 1] = strUPSVarList[strUPSVarList.Count - 2]; // Only needs the data in between the quotes
 
                 //UPSVariables[j, 0] = (strTemp[strTemp.Count - 1].Trim(' '));
-                UpdateTxtOutput(UPSVariables[j, 0] + " is " + UPSVariables[j, 1]);
+                WriteNUTLog(UPSVariables[j, 0] + " is " + UPSVariables[j, 1]);
                 j++;
             }
 
@@ -60,12 +59,7 @@ namespace NUTty_UPS_Client
         private static void ProcessNUTData()
         {
             // Battery charge level in percentage (0 - 100)
-            UpdateTxtOutput("Battery charge: " + SearchNUTData("battery.charge"));
-
-
-            //frmSettings._frmSettings.UpdateUPSStatus(UPSStatusMessage, UPSStatusCode);
-            //frmSettings._frmSettings.updateUPSModelLabel(UPSStatistics());
-            
+            WriteNUTLog("Battery charge: " + SearchNUTData("battery.charge"));            
         }
 
         public static string UPSStatistics()

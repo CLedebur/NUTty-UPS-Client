@@ -9,7 +9,7 @@ namespace NUTty_UPS_Client
     public class NUT_poller
     {
 
-        private static void UpdateTxtOutput(string strOutput)
+        private static void WriteNUTLog(string strOutput)
         {
             Console.WriteLine(strOutput);
         }
@@ -19,11 +19,11 @@ namespace NUTty_UPS_Client
             TelnetConnection nutServer = new TelnetConnection(nutIP, nutPort);
             string nutUPSStatus = "LIST VAR ups";
 
-            UpdateTxtOutput("Connecting to NUT server " + nutIP + " at " + nutPort);
+            WriteNUTLog("Connecting to NUT server " + nutIP + " at " + nutPort);
 
             if(nutServer.IsConnected)
             {
-                UpdateTxtOutput("Connected to NUT server");
+                WriteNUTLog("Connected to NUT server");
             }
 
             nutServer.WriteLine(nutUPSStatus);

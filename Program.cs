@@ -18,9 +18,10 @@ namespace NUTty_UPS_Client
             Application.SetCompatibleTextRenderingDefault(false);
 
 
-            Application.Run(new frmTray());
-            frmTray._frmTray.Activate();
+            Application.Run(new frmSettings());
+            frmSettings._frmSettings.Activate();
         }
+
 
 
     }
