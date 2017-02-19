@@ -33,7 +33,7 @@ namespace NUTty_UPS_Client
         {
             try
             {
-                string NUTOutput = NUT_poller.PollNUTServer("192.168.253.6", 3493);
+                // string NUTOutput = NUT_poller.PollNUTServer("192.168.253.6", 3493);
             }
             catch
             {
@@ -42,7 +42,7 @@ namespace NUTty_UPS_Client
                   
             }
 
-            this.txtUPSStatistics.Text = NUT_Processor.ParseNUTOutput(NUT_poller.PollNUTServer("192.168.253.6", 3493));
+            // this.txtUPSStatistics.Text = NUT_Processor.ParseNUTOutput(NUT_poller.PollNUTServer("192.168.253.6", 3493));
             lblUPSConnection.Text = "Connected";
             Tuple<string, double, int> UPSBatteryStatus = NUT_Processor.GetBatteryStatus();
             lblTimeRemaining.Text = UPSBatteryStatus.Item1;

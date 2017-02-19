@@ -12,13 +12,8 @@ namespace NUTty_UPS_Client
         public static string[,] UPSVariables;
         private static void WriteNUTLog(string strOutput)
         {
-            try
-            {
-                frmSettings._frmSettings.updateTxtOutput(strOutput);
-            } catch
-            {
-                Console.WriteLine(strOutput);
-            }
+            Console.WriteLine(strOutput);
+            
         }
 
         public static string ParseNUTOutput(string nutOutput)
@@ -146,15 +141,17 @@ namespace NUTty_UPS_Client
         }
         private static string SearchNUTData(string NUTVariable)
         {
-
+            WriteNUTLog("[SearchNUTData] Invoked. Searching for: " + NUTVariable);
             for (int i = 0; i < UPSVariables.Length; i++)
             {
                 if (UPSVariables[i,0].Equals(NUTVariable))
                 {
+                    WriteNUTLog("[SearchNUTData] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
                     return UPSVariables[i, 1];
                 }
             }
 
+            WriteNUTLog("[SearchNUTData] Could not find requested variable");
             return "INVALID";
         }
     }

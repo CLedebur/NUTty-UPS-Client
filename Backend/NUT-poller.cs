@@ -13,8 +13,9 @@ namespace NUTty_UPS_Client
         {
             Console.WriteLine(strOutput);
         }
-        public static string PollNUTServer(string nutIP, int nutPort)
+        public static Tuple<string, bool> PollNUTServer(string nutIP, int nutPort)
         {
+            bool isSuccessful = false;
 
             TelnetConnection nutServer = new TelnetConnection(nutIP, nutPort);
             string nutUPSStatus = "LIST VAR ups";
@@ -28,8 +29,17 @@ namespace NUTty_UPS_Client
 
             nutServer.WriteLine(nutUPSStatus);
             string nutOutput = nutServer.Read();
+            WriteNUTLog("[NUT Poller] Got data from server:\n" + nutOutput + "\n");
 
-            return nutOutput;
+            if (nutOutput.Contains("ERR ACCESS-DENIED")) 
+            {
+                WriteNUTLog("[NUT Poller] Got ACCESS DENIED when trying to retrieve data");
+            } else
+            {
+                isSuccessful = true;
+            }
+
+            return Tuple.Create(nutOutput, isSuccessful);
             
         }
     }
