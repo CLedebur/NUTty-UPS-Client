@@ -52,7 +52,7 @@ namespace NUTty_UPS_Client
 
             lblUPSModel.Text = NUT_Processor.UPSStatistics();
 
-            Tuple<string, int, int> UPSBatteryStatus = NUT_Processor.GetBatteryStatus();
+            Tuple<string, double, int> UPSBatteryStatus = NUT_Processor.GetBatteryStatus();
 
             this.UpdateUPSStatus(UPSBatteryStatus.Item1, UPSBatteryStatus.Item3);
             this.updateUPSModelLabel(NUT_Processor.UPSStatistics());
