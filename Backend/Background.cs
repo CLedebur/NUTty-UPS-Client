@@ -48,7 +48,7 @@ namespace NUTty_UPS_Client.Backend
             UPSPollTimer = new System.Timers.Timer(UPSPollingInterval);
             UPSPollTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             UPSPollTimer.AutoReset = true;
-            //UPSPollTimer.Enabled = true;
+            UPSPollTimer.Enabled = true;
 
             try
             {
@@ -67,7 +67,7 @@ namespace NUTty_UPS_Client.Backend
             } finally
             {
                 
-                //UPSPollTimer.Start();
+                UPSPollTimer.Start();
             }
 
         }

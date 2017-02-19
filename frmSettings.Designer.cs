@@ -39,7 +39,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtPollFrequency = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.chkEnablePolling = new System.Windows.Forms.CheckBox();
             this.pnlSettings = new System.Windows.Forms.Panel();
             this.pnlDebug = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
@@ -54,8 +53,8 @@
             this.cmbAlarmAction = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnRevert = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
+            this.btnRevert = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblUPSStatus = new System.Windows.Forms.Label();
             this.pnlSettings.SuspendLayout();
@@ -153,27 +152,15 @@
             this.label3.TabIndex = 14;
             this.label3.Text = "seconds";
             // 
-            // chkEnablePolling
-            // 
-            this.chkEnablePolling.AutoSize = true;
-            this.chkEnablePolling.Location = new System.Drawing.Point(14, 42);
-            this.chkEnablePolling.Name = "chkEnablePolling";
-            this.chkEnablePolling.Size = new System.Drawing.Size(93, 17);
-            this.chkEnablePolling.TabIndex = 15;
-            this.chkEnablePolling.Text = "Enable Polling";
-            this.chkEnablePolling.UseVisualStyleBackColor = true;
-            this.chkEnablePolling.CheckedChanged += new System.EventHandler(this.chkEnablePolling_CheckedChanged);
-            // 
             // pnlSettings
             // 
-            this.pnlSettings.Controls.Add(this.chkEnablePolling);
             this.pnlSettings.Controls.Add(this.label3);
             this.pnlSettings.Controls.Add(this.txtPollFrequency);
             this.pnlSettings.Controls.Add(this.label2);
             this.pnlSettings.Enabled = false;
             this.pnlSettings.Location = new System.Drawing.Point(12, 77);
             this.pnlSettings.Name = "pnlSettings";
-            this.pnlSettings.Size = new System.Drawing.Size(266, 63);
+            this.pnlSettings.Size = new System.Drawing.Size(266, 43);
             this.pnlSettings.TabIndex = 12;
             // 
             // pnlDebug
@@ -181,11 +168,10 @@
             this.pnlDebug.Controls.Add(this.label5);
             this.pnlDebug.Controls.Add(this.checkBox1);
             this.pnlDebug.Controls.Add(this.label4);
-            this.pnlDebug.Location = new System.Drawing.Point(12, 265);
+            this.pnlDebug.Location = new System.Drawing.Point(12, 245);
             this.pnlDebug.Name = "pnlDebug";
             this.pnlDebug.Size = new System.Drawing.Size(266, 140);
             this.pnlDebug.TabIndex = 13;
-            this.pnlDebug.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // label5
             // 
@@ -226,7 +212,7 @@
             this.pnlAlarms.Controls.Add(this.cmbAlarmAction);
             this.pnlAlarms.Controls.Add(this.label7);
             this.pnlAlarms.Enabled = false;
-            this.pnlAlarms.Location = new System.Drawing.Point(12, 146);
+            this.pnlAlarms.Location = new System.Drawing.Point(12, 126);
             this.pnlAlarms.Name = "pnlAlarms";
             this.pnlAlarms.Size = new System.Drawing.Size(266, 113);
             this.pnlAlarms.TabIndex = 14;
@@ -325,19 +311,10 @@
             // 
             this.panel1.Controls.Add(this.btnApply);
             this.panel1.Controls.Add(this.btnRevert);
-            this.panel1.Location = new System.Drawing.Point(12, 412);
+            this.panel1.Location = new System.Drawing.Point(12, 391);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(266, 33);
             this.panel1.TabIndex = 15;
-            // 
-            // btnRevert
-            // 
-            this.btnRevert.Location = new System.Drawing.Point(110, 3);
-            this.btnRevert.Name = "btnRevert";
-            this.btnRevert.Size = new System.Drawing.Size(75, 23);
-            this.btnRevert.TabIndex = 0;
-            this.btnRevert.Text = "Revert";
-            this.btnRevert.UseVisualStyleBackColor = true;
             // 
             // btnApply
             // 
@@ -349,10 +326,19 @@
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
+            // btnRevert
+            // 
+            this.btnRevert.Location = new System.Drawing.Point(110, 3);
+            this.btnRevert.Name = "btnRevert";
+            this.btnRevert.Size = new System.Drawing.Size(75, 23);
+            this.btnRevert.TabIndex = 0;
+            this.btnRevert.Text = "Revert";
+            this.btnRevert.UseVisualStyleBackColor = true;
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.lblUPSStatus);
-            this.panel2.Location = new System.Drawing.Point(12, 451);
+            this.panel2.Location = new System.Drawing.Point(12, 430);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(446, 31);
             this.panel2.TabIndex = 16;
@@ -361,17 +347,17 @@
             // 
             this.lblUPSStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblUPSStatus.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUPSStatus.Location = new System.Drawing.Point(0, 0);
+            this.lblUPSStatus.Location = new System.Drawing.Point(1, 3);
             this.lblUPSStatus.Name = "lblUPSStatus";
             this.lblUPSStatus.Size = new System.Drawing.Size(445, 25);
-            this.lblUPSStatus.TabIndex = 8;
+            this.lblUPSStatus.TabIndex = 9;
             this.lblUPSStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 482);
+            this.ClientSize = new System.Drawing.Size(467, 469);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pnlAlarms);
@@ -414,7 +400,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtPollFrequency;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox chkEnablePolling;
         private System.Windows.Forms.Panel pnlSettings;
         private System.Windows.Forms.Panel pnlDebug;
         private System.Windows.Forms.Label label5;

@@ -123,23 +123,6 @@ namespace NUTty_UPS_Client
 
         }
 
-        private void chkEnablePolling_CheckedChanged(object sender, EventArgs e)
-        {
-            if(chkEnablePolling.Checked == true)
-            {
-                //Backend.Background.UPSPollTimer.Enabled = true;
-                
-                
-            } else
-            {
-                //Backend.Background.UPSPollTimer.Enabled = false;
-            }
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
