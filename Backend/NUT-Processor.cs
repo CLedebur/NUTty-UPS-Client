@@ -93,11 +93,12 @@ namespace NUTty_UPS_Client
 
         public static Tuple<string, double, int> GetBatteryStatus()
         {
-            /* Status codes:
-            0 = GREEN, UPS online and connected to AC
-            1 = ORANGE, UPS online and running on battery
-            2 = RED, UPS online and running on battery, critically low
-            -1 = Invalid/no data */
+           /* Status codes:
+            * 0 = GREEN, UPS online and connected to AC
+            * 1 = ORANGE, UPS online and running on battery
+            * 2 = RED, UPS online and running on battery, critically low
+            * -1 = Invalid/no data 
+            */
 
             /* UPS Status messages:
              * OL = Online, connected to AC power
@@ -117,11 +118,12 @@ namespace NUTty_UPS_Client
 
                 if (UPSBatteryRuntime <= 60)
                 {
-                    UPSStatusMessage = (UPSBatteryRuntime + " sec"); // Only display in seconds, since it's exactly a minute (or less)
+                    UPSStatusMessage = (Math.Round(UPSBatteryRuntime, 0) + " sec"); // Only display in seconds, since it's exactly a minute (or less)
                 }
                 else
                 {
-                    UPSStatusMessage = ((UPSBatteryRuntime / 60) + " min"); // Breaks it down into minutes
+                    UPSBatteryRuntime = Math.Round((UPSBatteryRuntime / 60), 0);
+                    UPSStatusMessage = (UPSBatteryRuntime + " min"); // Breaks it down into minutes
                 }
             }
             else if (UPSStatus.Equals("OB DISCHRG"))
@@ -129,16 +131,18 @@ namespace NUTty_UPS_Client
                 UPSStatusCode = 1;
                 if (UPSBatteryRuntime <= 60)
                 {
-                    UPSStatusMessage = (UPSBatteryRuntime + " sec remaining"); // Only display in seconds, since it's exactly a minute (or less)
+                    UPSStatusMessage = (Math.Round(UPSBatteryRuntime, 0) + " sec remaining"); // Only display in seconds, since it's exactly a minute (or less)
                 }
                 else
                 {
-                    UPSStatusMessage = ((UPSBatteryRuntime / 60) + " min remaining"); // Breaks it down into minutes
+                    UPSBatteryRuntime = Math.Round((UPSBatteryRuntime / 60), 0);
+                    UPSStatusMessage = (Math.Round(UPSBatteryRuntime, 0) + " min remaining"); // Breaks it down into minutes
                 }
             }
 
             return Tuple.Create(UPSStatusMessage, UPSBatteryCharge, UPSStatusCode);
         }
+
         private static string SearchNUTData(string NUTVariable)
         {
             WriteNUTLog("[SearchNUTData] Invoked. Searching for: " + NUTVariable);

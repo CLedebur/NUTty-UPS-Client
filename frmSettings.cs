@@ -17,7 +17,7 @@ namespace NUTty_UPS_Client
     {
         public bool isPolled = false;
 
-        public bool UPSPolling = false;
+        public bool isPollingUPS = false;
         const int UPSPollingInterval = 5000;
         private System.Timers.Timer UPSPollTimer;
 
@@ -38,7 +38,16 @@ namespace NUTty_UPS_Client
                 Invoke(new MethodInvoker(UPSPoll));
             } else
             {
-                if (UPSPolling) { UPSPoll(); }
+                if (isPollingUPS)
+                {
+                    UPSPoll();
+                    if (!isPolled)
+                    {
+                        pnlSettings.Enabled = false;
+                        pnlAlarms.Enabled = false;
+                        lblUPSModel.Text = "Lost connection to UPS";
+                    }
+                }
             }
 
             return;
@@ -78,9 +87,9 @@ namespace NUTty_UPS_Client
 
         public static frmSettings _frmSettings;
 
-        public void updateTxtOutput(string strOutput)
+        public void WriteNUTLog(string strOutput)
         {
-            txtOutput.AppendText(Environment.NewLine + strOutput);
+            Console.WriteLine(strOutput);
         }
 
         public void UpdateUPSStatus(string UPSStatusMessage, int UPSStatusCode)
@@ -107,21 +116,30 @@ namespace NUTty_UPS_Client
 
             if(!isPolled)
             {
-                return;
+                return; // Was not able to retrieve data from the NUT server, so aborting here.
             }
 
-            if (UPSPolling)
-            {
-                updateTxtOutput("Automatic polling disabled");
-                UPSPollTimer.Stop();
-            } else
-            {
-                updateTxtOutput("Automatic polling enabled");
-                UPSPollTimer.Start();
-            }
-            UPSPolling = !UPSPolling;
+            // If information was successfully retrieved, we know that we can communicare with NUT server
+            pnlSettings.Enabled = true;
+            pnlAlarms.Enabled = true;
+
         }
 
+        private void chkEnablePolling_CheckedChanged(object sender, EventArgs e)
+        {
+            if(chkEnablePolling.Checked = true)
+            {
+                UPSPollTimer.Enabled = true;
+            } else
+            {
+                UPSPollTimer.Enabled = false;
+            }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 
     
