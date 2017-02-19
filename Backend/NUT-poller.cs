@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace NUTty_UPS_Client
 {
-    public class NUT_poller
+    public class NUT_Poller
     {
 
         private static void WriteNUTLog(string strOutput)

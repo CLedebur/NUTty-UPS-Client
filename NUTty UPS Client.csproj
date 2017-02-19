@@ -54,7 +54,7 @@
     <Compile Include="frmSettings.Designer.cs">
       <DependentUpon>frmSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Backend\NUT-poller.cs" />
+    <Compile Include="Backend\NUT-Poller.cs" />
     <Compile Include="Backend\NUT-Processor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

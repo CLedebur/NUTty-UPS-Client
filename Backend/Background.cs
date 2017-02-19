@@ -75,7 +75,7 @@ namespace NUTty_UPS_Client.Backend
                 
             } finally
             {
-                
+                StartSettings(); // Temporary - as the timer won't work
                 UPSPollTimer.Start();
             }
 

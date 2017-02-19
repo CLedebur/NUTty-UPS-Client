@@ -53,16 +53,42 @@
             this.cmbAlarmAction = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.chkSimulate = new System.Windows.Forms.CheckBox();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnRevert = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblUPSStatus = new System.Windows.Forms.Label();
-            this.chkSimulate = new System.Windows.Forms.CheckBox();
+            this.pnlSimulator = new System.Windows.Forms.Panel();
+            this.btnSimApply = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
+            this.cmbSimUPSStatus = new System.Windows.Forms.ComboBox();
+            this.txtSimOutputVoltage = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.txtSimInputVoltageNominal = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.txtSimInputVoltage = new System.Windows.Forms.TextBox();
+            this.lblSimInputVoltage = new System.Windows.Forms.Label();
+            this.txtSimBatteryVoltageNominal = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.txtSimBatteryVoltage = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.txtSimBatteryRuntimeLow = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.txtSimBatteryRuntime = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.txtSimBatteryChargeWarn = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.txtSimBatteryChargeLow = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtSimBatteryCharge = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.lblSimulator = new System.Windows.Forms.Label();
             this.pnlSettings.SuspendLayout();
             this.pnlDebug.SuspendLayout();
             this.pnlAlarms.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.pnlSimulator.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtIPAddress
@@ -72,6 +98,7 @@
             this.txtIPAddress.Size = new System.Drawing.Size(100, 20);
             this.txtIPAddress.TabIndex = 0;
             this.txtIPAddress.Text = "127.0.0.1";
+            this.txtIPAddress.TextChanged += new System.EventHandler(this.txtIPAddress_TextChanged);
             // 
             // txtPort
             // 
@@ -80,6 +107,7 @@
             this.txtPort.Size = new System.Drawing.Size(44, 20);
             this.txtPort.TabIndex = 1;
             this.txtPort.Text = "3493";
+            this.txtPort.TextChanged += new System.EventHandler(this.txtPort_TextChanged);
             // 
             // lblIPAddress
             // 
@@ -143,6 +171,7 @@
             this.txtPollFrequency.Size = new System.Drawing.Size(44, 20);
             this.txtPollFrequency.TabIndex = 13;
             this.txtPollFrequency.Text = "5";
+            this.txtPollFrequency.TextChanged += new System.EventHandler(this.txtPollFrequency_TextChanged);
             // 
             // label3
             // 
@@ -193,7 +222,6 @@
             this.checkBox1.TabIndex = 20;
             this.checkBox1.Text = "Enable Logging";
             this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // label4
             // 
@@ -228,7 +256,6 @@
             this.checkBox2.TabIndex = 18;
             this.checkBox2.Text = "Audible alarm on PC";
             this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // chkNotification
             // 
@@ -239,7 +266,6 @@
             this.chkNotification.TabIndex = 17;
             this.chkNotification.Text = "Notify when UPS status changes";
             this.chkNotification.UseVisualStyleBackColor = true;
-            this.chkNotification.CheckedChanged += new System.EventHandler(this.chkNotification_CheckedChanged);
             // 
             // label8
             // 
@@ -321,8 +347,20 @@
             this.panel1.Size = new System.Drawing.Size(266, 33);
             this.panel1.TabIndex = 15;
             // 
+            // chkSimulate
+            // 
+            this.chkSimulate.AutoSize = true;
+            this.chkSimulate.Location = new System.Drawing.Point(11, 8);
+            this.chkSimulate.Name = "chkSimulate";
+            this.chkSimulate.Size = new System.Drawing.Size(72, 17);
+            this.chkSimulate.TabIndex = 2;
+            this.chkSimulate.Text = "Simulated";
+            this.chkSimulate.UseVisualStyleBackColor = true;
+            this.chkSimulate.CheckedChanged += new System.EventHandler(this.chkSimulate_CheckedChanged);
+            // 
             // btnApply
             // 
+            this.btnApply.Enabled = false;
             this.btnApply.Location = new System.Drawing.Point(191, 3);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(75, 23);
@@ -358,22 +396,242 @@
             this.lblUPSStatus.TabIndex = 9;
             this.lblUPSStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // chkSimulate
+            // pnlSimulator
             // 
-            this.chkSimulate.AutoSize = true;
-            this.chkSimulate.Location = new System.Drawing.Point(11, 8);
-            this.chkSimulate.Name = "chkSimulate";
-            this.chkSimulate.Size = new System.Drawing.Size(72, 17);
-            this.chkSimulate.TabIndex = 2;
-            this.chkSimulate.Text = "Simulated";
-            this.chkSimulate.UseVisualStyleBackColor = true;
-            this.chkSimulate.CheckedChanged += new System.EventHandler(this.chkSimulate_CheckedChanged);
+            this.pnlSimulator.Controls.Add(this.btnSimApply);
+            this.pnlSimulator.Controls.Add(this.label19);
+            this.pnlSimulator.Controls.Add(this.cmbSimUPSStatus);
+            this.pnlSimulator.Controls.Add(this.txtSimOutputVoltage);
+            this.pnlSimulator.Controls.Add(this.label17);
+            this.pnlSimulator.Controls.Add(this.txtSimInputVoltageNominal);
+            this.pnlSimulator.Controls.Add(this.label18);
+            this.pnlSimulator.Controls.Add(this.txtSimInputVoltage);
+            this.pnlSimulator.Controls.Add(this.lblSimInputVoltage);
+            this.pnlSimulator.Controls.Add(this.txtSimBatteryVoltageNominal);
+            this.pnlSimulator.Controls.Add(this.label15);
+            this.pnlSimulator.Controls.Add(this.txtSimBatteryVoltage);
+            this.pnlSimulator.Controls.Add(this.label16);
+            this.pnlSimulator.Controls.Add(this.txtSimBatteryRuntimeLow);
+            this.pnlSimulator.Controls.Add(this.label14);
+            this.pnlSimulator.Controls.Add(this.txtSimBatteryRuntime);
+            this.pnlSimulator.Controls.Add(this.label13);
+            this.pnlSimulator.Controls.Add(this.txtSimBatteryChargeWarn);
+            this.pnlSimulator.Controls.Add(this.label11);
+            this.pnlSimulator.Controls.Add(this.txtSimBatteryChargeLow);
+            this.pnlSimulator.Controls.Add(this.label10);
+            this.pnlSimulator.Controls.Add(this.txtSimBatteryCharge);
+            this.pnlSimulator.Controls.Add(this.label9);
+            this.pnlSimulator.Controls.Add(this.lblSimulator);
+            this.pnlSimulator.Location = new System.Drawing.Point(458, 9);
+            this.pnlSimulator.Name = "pnlSimulator";
+            this.pnlSimulator.Size = new System.Drawing.Size(200, 452);
+            this.pnlSimulator.TabIndex = 17;
+            // 
+            // btnSimApply
+            // 
+            this.btnSimApply.Location = new System.Drawing.Point(122, 309);
+            this.btnSimApply.Name = "btnSimApply";
+            this.btnSimApply.Size = new System.Drawing.Size(75, 23);
+            this.btnSimApply.TabIndex = 25;
+            this.btnSimApply.Text = "Apply";
+            this.btnSimApply.UseVisualStyleBackColor = true;
+            this.btnSimApply.Click += new System.EventHandler(this.btnSimApply_Click);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(3, 285);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(55, 13);
+            this.label19.TabIndex = 24;
+            this.label19.Text = "ups.status";
+            // 
+            // cmbSimUPSStatus
+            // 
+            this.cmbSimUPSStatus.FormattingEnabled = true;
+            this.cmbSimUPSStatus.Items.AddRange(new object[] {
+            "OL",
+            "OB DISCHRG"});
+            this.cmbSimUPSStatus.Location = new System.Drawing.Point(124, 282);
+            this.cmbSimUPSStatus.Name = "cmbSimUPSStatus";
+            this.cmbSimUPSStatus.Size = new System.Drawing.Size(73, 21);
+            this.cmbSimUPSStatus.TabIndex = 23;
+            // 
+            // txtSimOutputVoltage
+            // 
+            this.txtSimOutputVoltage.Location = new System.Drawing.Point(124, 258);
+            this.txtSimOutputVoltage.Name = "txtSimOutputVoltage";
+            this.txtSimOutputVoltage.Size = new System.Drawing.Size(73, 20);
+            this.txtSimOutputVoltage.TabIndex = 22;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(3, 261);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(75, 13);
+            this.label17.TabIndex = 21;
+            this.label17.Text = "output.voltage";
+            // 
+            // txtSimInputVoltageNominal
+            // 
+            this.txtSimInputVoltageNominal.Location = new System.Drawing.Point(124, 232);
+            this.txtSimInputVoltageNominal.Name = "txtSimInputVoltageNominal";
+            this.txtSimInputVoltageNominal.Size = new System.Drawing.Size(73, 20);
+            this.txtSimInputVoltageNominal.TabIndex = 20;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(3, 235);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(107, 13);
+            this.label18.TabIndex = 19;
+            this.label18.Text = "input.voltage.nominal";
+            // 
+            // txtSimInputVoltage
+            // 
+            this.txtSimInputVoltage.Location = new System.Drawing.Point(124, 207);
+            this.txtSimInputVoltage.Name = "txtSimInputVoltage";
+            this.txtSimInputVoltage.Size = new System.Drawing.Size(73, 20);
+            this.txtSimInputVoltage.TabIndex = 18;
+            // 
+            // lblSimInputVoltage
+            // 
+            this.lblSimInputVoltage.AutoSize = true;
+            this.lblSimInputVoltage.Location = new System.Drawing.Point(3, 210);
+            this.lblSimInputVoltage.Name = "lblSimInputVoltage";
+            this.lblSimInputVoltage.Size = new System.Drawing.Size(68, 13);
+            this.lblSimInputVoltage.TabIndex = 17;
+            this.lblSimInputVoltage.Text = "input.voltage";
+            // 
+            // txtSimBatteryVoltageNominal
+            // 
+            this.txtSimBatteryVoltageNominal.Location = new System.Drawing.Point(124, 181);
+            this.txtSimBatteryVoltageNominal.Name = "txtSimBatteryVoltageNominal";
+            this.txtSimBatteryVoltageNominal.Size = new System.Drawing.Size(73, 20);
+            this.txtSimBatteryVoltageNominal.TabIndex = 16;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(3, 184);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(116, 13);
+            this.label15.TabIndex = 15;
+            this.label15.Text = "battery.voltage.nominal";
+            // 
+            // txtSimBatteryVoltage
+            // 
+            this.txtSimBatteryVoltage.Location = new System.Drawing.Point(124, 155);
+            this.txtSimBatteryVoltage.Name = "txtSimBatteryVoltage";
+            this.txtSimBatteryVoltage.Size = new System.Drawing.Size(73, 20);
+            this.txtSimBatteryVoltage.TabIndex = 14;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(3, 158);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(77, 13);
+            this.label16.TabIndex = 13;
+            this.label16.Text = "battery.voltage";
+            // 
+            // txtSimBatteryRuntimeLow
+            // 
+            this.txtSimBatteryRuntimeLow.Location = new System.Drawing.Point(124, 130);
+            this.txtSimBatteryRuntimeLow.Name = "txtSimBatteryRuntimeLow";
+            this.txtSimBatteryRuntimeLow.Size = new System.Drawing.Size(73, 20);
+            this.txtSimBatteryRuntimeLow.TabIndex = 12;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(3, 133);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(95, 13);
+            this.label14.TabIndex = 11;
+            this.label14.Text = "battery.runtime.low";
+            // 
+            // txtSimBatteryRuntime
+            // 
+            this.txtSimBatteryRuntime.Location = new System.Drawing.Point(124, 104);
+            this.txtSimBatteryRuntime.Name = "txtSimBatteryRuntime";
+            this.txtSimBatteryRuntime.Size = new System.Drawing.Size(73, 20);
+            this.txtSimBatteryRuntime.TabIndex = 10;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(3, 107);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(76, 13);
+            this.label13.TabIndex = 9;
+            this.label13.Text = "battery.runtime";
+            // 
+            // txtSimBatteryChargeWarn
+            // 
+            this.txtSimBatteryChargeWarn.Location = new System.Drawing.Point(124, 78);
+            this.txtSimBatteryChargeWarn.Name = "txtSimBatteryChargeWarn";
+            this.txtSimBatteryChargeWarn.Size = new System.Drawing.Size(73, 20);
+            this.txtSimBatteryChargeWarn.TabIndex = 6;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(3, 81);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(115, 13);
+            this.label11.TabIndex = 5;
+            this.label11.Text = "battery.charge.warning";
+            // 
+            // txtSimBatteryChargeLow
+            // 
+            this.txtSimBatteryChargeLow.Location = new System.Drawing.Point(124, 52);
+            this.txtSimBatteryChargeLow.Name = "txtSimBatteryChargeLow";
+            this.txtSimBatteryChargeLow.Size = new System.Drawing.Size(73, 20);
+            this.txtSimBatteryChargeLow.TabIndex = 4;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(3, 55);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(94, 13);
+            this.label10.TabIndex = 3;
+            this.label10.Text = "battery.charge.low";
+            // 
+            // txtSimBatteryCharge
+            // 
+            this.txtSimBatteryCharge.Location = new System.Drawing.Point(124, 26);
+            this.txtSimBatteryCharge.Name = "txtSimBatteryCharge";
+            this.txtSimBatteryCharge.Size = new System.Drawing.Size(73, 20);
+            this.txtSimBatteryCharge.TabIndex = 2;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(3, 29);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(75, 13);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "battery.charge";
+            // 
+            // lblSimulator
+            // 
+            this.lblSimulator.AutoSize = true;
+            this.lblSimulator.Location = new System.Drawing.Point(3, 0);
+            this.lblSimulator.Name = "lblSimulator";
+            this.lblSimulator.Size = new System.Drawing.Size(91, 13);
+            this.lblSimulator.TabIndex = 0;
+            this.lblSimulator.Text = "Simulator Settings";
             // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(467, 469);
+            this.ClientSize = new System.Drawing.Size(670, 469);
+            this.Controls.Add(this.pnlSimulator);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pnlAlarms);
@@ -400,6 +658,8 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
+            this.pnlSimulator.ResumeLayout(false);
+            this.pnlSimulator.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -436,6 +696,31 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label lblUPSStatus;
         private System.Windows.Forms.CheckBox chkSimulate;
+        private System.Windows.Forms.Panel pnlSimulator;
+        private System.Windows.Forms.Label lblSimulator;
+        private System.Windows.Forms.TextBox txtSimBatteryRuntime;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox txtSimBatteryChargeWarn;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox txtSimBatteryChargeLow;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox txtSimBatteryCharge;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtSimBatteryRuntimeLow;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox txtSimBatteryVoltageNominal;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox txtSimBatteryVoltage;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Button btnSimApply;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.ComboBox cmbSimUPSStatus;
+        private System.Windows.Forms.TextBox txtSimOutputVoltage;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox txtSimInputVoltageNominal;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox txtSimInputVoltage;
+        private System.Windows.Forms.Label lblSimInputVoltage;
     }
 }
 
