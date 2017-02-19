@@ -7,36 +7,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-using System.Timers;
+using System.Net;
+
 
 namespace NUTty_UPS_Client
 {
-
+    
     public partial class frmSettings : Form
     {
         public bool isPolled = false;
-
         public bool isPollingUPS = false;
-        const int UPSPollingInterval = 5000;
-        private System.Timers.Timer UPSPollTimer;
 
         public frmSettings()
         {
             InitializeComponent();
             _frmSettings = this;
 
-            UPSPollTimer = new System.Timers.Timer(UPSPollingInterval);
-            UPSPollTimer.Elapsed += OnTimedEvent;
-            UPSPollTimer.AutoReset = true;
-            UPSPollTimer.Enabled = false;
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        public void TimerTrigger()
         {
-            if (InvokeRequired) {
+            if (InvokeRequired)
+            {
                 Invoke(new MethodInvoker(UPSPoll));
-            } else
+            }
+            else
             {
                 if (isPollingUPS)
                 {
@@ -50,9 +45,7 @@ namespace NUTty_UPS_Client
                 }
             }
 
-            return;
         }
-
         private void UPSPoll()
         {
             Int16 nutPort = Convert.ToInt16(txtPort.Text);
@@ -112,7 +105,12 @@ namespace NUTty_UPS_Client
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            UPSPoll();
+            if(ValidateIPAddress() && ValidatePort())
+            {
+                UPSPoll();
+            }
+
+
 
             if(!isPolled)
             {
@@ -127,12 +125,14 @@ namespace NUTty_UPS_Client
 
         private void chkEnablePolling_CheckedChanged(object sender, EventArgs e)
         {
-            if(chkEnablePolling.Checked = true)
+            if(chkEnablePolling.Checked == true)
             {
-                UPSPollTimer.Enabled = true;
+                //Backend.Background.UPSPollTimer.Enabled = true;
+                
+                
             } else
             {
-                UPSPollTimer.Enabled = false;
+                //Backend.Background.UPSPollTimer.Enabled = false;
             }
         }
 
@@ -140,6 +140,85 @@ namespace NUTty_UPS_Client
         {
 
         }
+
+        private void frmSettings_Load(object sender, EventArgs e)
+        {
+            Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings = Backend.NUT_Config.GetConnectionSettings();
+            if (NUTConnectionSettings.Item1 != IPAddress.Parse("127.0.0.1"))
+            {
+                txtIPAddress.Text = NUTConnectionSettings.Item1.ToString();
+            }
+
+            if (NUTConnectionSettings.Item2 != 0)
+            {
+                txtPort.Text = NUTConnectionSettings.Item2.ToString();
+            }
+
+            if (NUTConnectionSettings.Item3 != 0)
+            {
+                txtPollFrequency.Text = NUTConnectionSettings.Item3.ToString();
+            }
+        }
+
+        private void btnApply_Click(object sender, EventArgs e)
+        {
+            if(ValidateIPAddress())
+            {
+                Backend.NUT_Config.SetConfig("IP Address", txtIPAddress.Text);
+            }
+
+            if(ValidatePort())
+            {
+                Backend.NUT_Config.SetConfig("Port", txtPort.Text);
+            }
+            if(ValidatePollInterval())
+            {
+                Backend.NUT_Config.SetConfig("Poll Interval", txtPollFrequency.Text);
+            }
+
+        }
+
+        private bool ValidateIPAddress()
+        {
+            IPAddress NUTIPAddress;
+            if (IPAddress.TryParse(txtIPAddress.Text, out NUTIPAddress))
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("The IP address entered is incorrect");
+                return false;
+            }
+        }
+
+        private bool ValidatePort()
+        {
+            UInt16 NUTPort;
+            if(UInt16.TryParse(txtPort.Text, out NUTPort))
+            {
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("The port number entered is incorrect");
+                return false;
+            }
+        }
+
+        private bool ValidatePollInterval()
+        {
+            UInt32 NUTPollInterval;
+            if(UInt32.TryParse(txtPollFrequency.Text, out NUTPollInterval))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 
     

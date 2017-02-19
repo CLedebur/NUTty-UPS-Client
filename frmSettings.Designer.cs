@@ -35,7 +35,6 @@
             this.lblPort = new System.Windows.Forms.Label();
             this.btnConnect = new System.Windows.Forms.Button();
             this.lblUPSModel = new System.Windows.Forms.Label();
-            this.lblUPSStatus = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtPollFrequency = new System.Windows.Forms.TextBox();
@@ -47,16 +46,23 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.pnlAlarms = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
-            this.cmbAlarmAction = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.cmbBatteryPercentage = new System.Windows.Forms.ComboBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.chkNotification = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.chkNotification = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.cmbBatteryPercentage = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cmbAlarmAction = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnRevert = new System.Windows.Forms.Button();
+            this.btnApply = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.lblUPSStatus = new System.Windows.Forms.Label();
             this.pnlSettings.SuspendLayout();
             this.pnlDebug.SuspendLayout();
             this.pnlAlarms.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtIPAddress
@@ -65,7 +71,7 @@
             this.txtIPAddress.Name = "txtIPAddress";
             this.txtIPAddress.Size = new System.Drawing.Size(100, 20);
             this.txtIPAddress.TabIndex = 0;
-            this.txtIPAddress.Text = "192.168.253.6";
+            this.txtIPAddress.Text = "127.0.0.1";
             // 
             // txtPort
             // 
@@ -106,21 +112,11 @@
             // lblUPSModel
             // 
             this.lblUPSModel.AutoSize = true;
-            this.lblUPSModel.Location = new System.Drawing.Point(297, 9);
+            this.lblUPSModel.Location = new System.Drawing.Point(289, 9);
             this.lblUPSModel.Name = "lblUPSModel";
             this.lblUPSModel.Size = new System.Drawing.Size(79, 13);
             this.lblUPSModel.TabIndex = 6;
             this.lblUPSModel.Text = "Not Connected";
-            // 
-            // lblUPSStatus
-            // 
-            this.lblUPSStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblUPSStatus.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUPSStatus.Location = new System.Drawing.Point(7, 448);
-            this.lblUPSStatus.Name = "lblUPSStatus";
-            this.lblUPSStatus.Size = new System.Drawing.Size(445, 25);
-            this.lblUPSStatus.TabIndex = 7;
-            this.lblUPSStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label1
             // 
@@ -182,11 +178,10 @@
             // 
             // pnlDebug
             // 
-            this.pnlDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pnlDebug.Controls.Add(this.label5);
             this.pnlDebug.Controls.Add(this.checkBox1);
             this.pnlDebug.Controls.Add(this.label4);
-            this.pnlDebug.Location = new System.Drawing.Point(12, 305);
+            this.pnlDebug.Location = new System.Drawing.Point(12, 265);
             this.pnlDebug.Name = "pnlDebug";
             this.pnlDebug.Size = new System.Drawing.Size(266, 140);
             this.pnlDebug.TabIndex = 13;
@@ -233,39 +228,37 @@
             this.pnlAlarms.Enabled = false;
             this.pnlAlarms.Location = new System.Drawing.Point(12, 146);
             this.pnlAlarms.Name = "pnlAlarms";
-            this.pnlAlarms.Size = new System.Drawing.Size(266, 153);
+            this.pnlAlarms.Size = new System.Drawing.Size(266, 113);
             this.pnlAlarms.TabIndex = 14;
             // 
-            // label7
+            // checkBox2
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(3, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(38, 13);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "Alarms";
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(14, 90);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(121, 17);
+            this.checkBox2.TabIndex = 18;
+            this.checkBox2.Text = "Audible alarm on PC";
+            this.checkBox2.UseVisualStyleBackColor = true;
             // 
-            // cmbAlarmAction
+            // chkNotification
             // 
-            this.cmbAlarmAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbAlarmAction.FormattingEnabled = true;
-            this.cmbAlarmAction.Items.AddRange(new object[] {
-            "Do Nothing",
-            "Hibernate",
-            "Shut Down"});
-            this.cmbAlarmAction.Location = new System.Drawing.Point(70, 38);
-            this.cmbAlarmAction.Name = "cmbAlarmAction";
-            this.cmbAlarmAction.Size = new System.Drawing.Size(128, 21);
-            this.cmbAlarmAction.TabIndex = 13;
+            this.chkNotification.AutoSize = true;
+            this.chkNotification.Location = new System.Drawing.Point(14, 67);
+            this.chkNotification.Name = "chkNotification";
+            this.chkNotification.Size = new System.Drawing.Size(182, 17);
+            this.chkNotification.TabIndex = 17;
+            this.chkNotification.Text = "Notify when UPS status changes";
+            this.chkNotification.UseVisualStyleBackColor = true;
             // 
-            // label6
+            // label8
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(11, 17);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(130, 13);
-            this.label6.TabIndex = 14;
-            this.label6.Text = "When the battery reaches";
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(10, 41);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(59, 13);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "the PC will:";
             // 
             // cmbBatteryPercentage
             // 
@@ -297,60 +290,113 @@
             this.cmbBatteryPercentage.Size = new System.Drawing.Size(51, 21);
             this.cmbBatteryPercentage.TabIndex = 15;
             // 
-            // label8
+            // label6
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(10, 41);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(59, 13);
-            this.label8.TabIndex = 16;
-            this.label8.Text = "the PC will:";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(11, 17);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(130, 13);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "When the battery reaches";
             // 
-            // chkNotification
+            // cmbAlarmAction
             // 
-            this.chkNotification.AutoSize = true;
-            this.chkNotification.Location = new System.Drawing.Point(14, 67);
-            this.chkNotification.Name = "chkNotification";
-            this.chkNotification.Size = new System.Drawing.Size(182, 17);
-            this.chkNotification.TabIndex = 17;
-            this.chkNotification.Text = "Notify when UPS status changes";
-            this.chkNotification.UseVisualStyleBackColor = true;
+            this.cmbAlarmAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAlarmAction.FormattingEnabled = true;
+            this.cmbAlarmAction.Items.AddRange(new object[] {
+            "Do Nothing",
+            "Hibernate",
+            "Shut Down"});
+            this.cmbAlarmAction.Location = new System.Drawing.Point(70, 38);
+            this.cmbAlarmAction.Name = "cmbAlarmAction";
+            this.cmbAlarmAction.Size = new System.Drawing.Size(128, 21);
+            this.cmbAlarmAction.TabIndex = 13;
             // 
-            // checkBox2
+            // label7
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(14, 90);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(121, 17);
-            this.checkBox2.TabIndex = 18;
-            this.checkBox2.Text = "Audible alarm on PC";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(38, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "Alarms";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnApply);
+            this.panel1.Controls.Add(this.btnRevert);
+            this.panel1.Location = new System.Drawing.Point(12, 412);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(266, 33);
+            this.panel1.TabIndex = 15;
+            // 
+            // btnRevert
+            // 
+            this.btnRevert.Location = new System.Drawing.Point(110, 3);
+            this.btnRevert.Name = "btnRevert";
+            this.btnRevert.Size = new System.Drawing.Size(75, 23);
+            this.btnRevert.TabIndex = 0;
+            this.btnRevert.Text = "Revert";
+            this.btnRevert.UseVisualStyleBackColor = true;
+            // 
+            // btnApply
+            // 
+            this.btnApply.Location = new System.Drawing.Point(191, 3);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(75, 23);
+            this.btnApply.TabIndex = 1;
+            this.btnApply.Text = "Apply";
+            this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.lblUPSStatus);
+            this.panel2.Location = new System.Drawing.Point(12, 451);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(446, 31);
+            this.panel2.TabIndex = 16;
+            // 
+            // lblUPSStatus
+            // 
+            this.lblUPSStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblUPSStatus.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUPSStatus.Location = new System.Drawing.Point(0, 0);
+            this.lblUPSStatus.Name = "lblUPSStatus";
+            this.lblUPSStatus.Size = new System.Drawing.Size(445, 25);
+            this.lblUPSStatus.TabIndex = 8;
+            this.lblUPSStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 482);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.pnlAlarms);
             this.Controls.Add(this.pnlDebug);
             this.Controls.Add(this.pnlSettings);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.lblUPSStatus);
             this.Controls.Add(this.lblUPSModel);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.lblPort);
             this.Controls.Add(this.lblIPAddress);
             this.Controls.Add(this.txtPort);
             this.Controls.Add(this.txtIPAddress);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "frmSettings";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "NUTty UPS Client";
+            this.Load += new System.EventHandler(this.frmSettings_Load);
             this.pnlSettings.ResumeLayout(false);
             this.pnlSettings.PerformLayout();
             this.pnlDebug.ResumeLayout(false);
             this.pnlDebug.PerformLayout();
             this.pnlAlarms.ResumeLayout(false);
             this.pnlAlarms.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -364,7 +410,6 @@
         private System.Windows.Forms.Label lblPort;
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.Label lblUPSModel;
-        private System.Windows.Forms.Label lblUPSStatus;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtPollFrequency;
@@ -383,6 +428,11 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox chkNotification;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btnApply;
+        private System.Windows.Forms.Button btnRevert;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label lblUPSStatus;
     }
 }
 

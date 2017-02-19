@@ -17,11 +17,12 @@ namespace NUTty_UPS_Client
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            Backend.Background BGProcess = new Backend.Background();
+            BGProcess.StartBackgroundProcess();            
 
-            Application.Run(new frmSettings());
-            frmSettings._frmSettings.Activate();
+            //Application.Run(new frmSettings());
+            //frmSettings._frmSettings.Activate();
         }
-
 
 
     }

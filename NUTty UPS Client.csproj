@@ -46,7 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Backend\Registry.cs" />
+    <Compile Include="Backend\Background.cs" />
+    <Compile Include="Backend\NUT-Config.cs" />
     <Compile Include="frmTray.cs">
       <SubType>Form</SubType>
     </Compile>
