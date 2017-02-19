@@ -15,7 +15,7 @@ namespace NUTty_UPS_Client.Backend
     {
         System.Timers.Timer UPSPollTimer;
         public static int UPSPollingInterval = 5000;
-
+        public static bool isSimulated = false;
         public static Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings;
 
         public Background()
@@ -48,7 +48,16 @@ namespace NUTty_UPS_Client.Backend
             UPSPollTimer = new System.Timers.Timer(UPSPollingInterval);
             UPSPollTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             UPSPollTimer.AutoReset = true;
-            UPSPollTimer.Enabled = true;
+            //UPSPollTimer.Enabled = true;
+
+            try
+            {
+                isSimulated = Convert.ToBoolean(NUT_Config.GetConfig("Simulate"));
+            }
+            catch
+            {
+                isSimulated = false;
+            }
 
             try
             {
@@ -61,7 +70,7 @@ namespace NUTty_UPS_Client.Backend
                     NUTConnectionSettings = NUT_Config.GetConnectionSettings();
                 }
             }
-            catch (Exception e)
+            catch
             {
                 
             } finally
@@ -76,7 +85,6 @@ namespace NUTty_UPS_Client.Backend
         {
             Application.Run(new frmSettings());
             frmSettings._frmSettings.Activate();
-
         }
     }
 }

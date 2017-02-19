@@ -20,6 +20,7 @@ namespace NUTty_UPS_Client.Backend
                 Console.WriteLine("[CONFIG] Could not set registry key: " + KeyName + " wtih value " + KeyValue + "\nException:" + e);
                 return false;
             }
+            Console.WriteLine("[CONFIG] Set registry key " + KeyName + " with value " + KeyValue);
             return true;
 
         }
@@ -69,14 +70,13 @@ namespace NUTty_UPS_Client.Backend
             }
             catch (NullReferenceException)
             {
-                Console.WriteLine("[CONFIG] Registry key does not exist");
+                Console.WriteLine("[CONFIG] Registry key does not exist: " + KeyName);
                 return null;
             }
             catch (Exception e) {
                 Console.WriteLine("[CONFIG] Failed to read registry key: " + e);
                 return null;
             }
-
 
             return RegValue.ToString();
         }

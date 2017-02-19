@@ -126,6 +126,14 @@ namespace NUTty_UPS_Client
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
+            if (Backend.Background.isSimulated) {
+                chkSimulate.Checked = true;
+            }
+            else
+            {
+                chkSimulate.Checked = false;
+            }
+
             Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings = Backend.NUT_Config.GetConnectionSettings();
             if (NUTConnectionSettings.Item1 != IPAddress.Parse("127.0.0.1"))
             {
@@ -202,6 +210,34 @@ namespace NUTty_UPS_Client
             }
         }
 
+        private void chkSimulate_CheckedChanged(object sender, EventArgs e)
+        {
+            if(chkSimulate.Checked) {
+                Backend.NUT_Config.SetConfig("Simulate", "true");
+                txtIPAddress.Enabled = false;
+                txtPort.Enabled = false;
+            } else
+            {
+                Backend.NUT_Config.SetConfig("Simulate", "false");
+                txtIPAddress.Enabled = true;
+                txtPort.Enabled = true;
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkNotification_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
     

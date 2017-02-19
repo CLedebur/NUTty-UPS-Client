@@ -57,6 +57,7 @@
             this.btnRevert = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblUPSStatus = new System.Windows.Forms.Label();
+            this.chkSimulate = new System.Windows.Forms.CheckBox();
             this.pnlSettings.SuspendLayout();
             this.pnlDebug.SuspendLayout();
             this.pnlAlarms.SuspendLayout();
@@ -192,6 +193,7 @@
             this.checkBox1.TabIndex = 20;
             this.checkBox1.Text = "Enable Logging";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // label4
             // 
@@ -226,6 +228,7 @@
             this.checkBox2.TabIndex = 18;
             this.checkBox2.Text = "Audible alarm on PC";
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // chkNotification
             // 
@@ -236,6 +239,7 @@
             this.chkNotification.TabIndex = 17;
             this.chkNotification.Text = "Notify when UPS status changes";
             this.chkNotification.UseVisualStyleBackColor = true;
+            this.chkNotification.CheckedChanged += new System.EventHandler(this.chkNotification_CheckedChanged);
             // 
             // label8
             // 
@@ -309,6 +313,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.chkSimulate);
             this.panel1.Controls.Add(this.btnApply);
             this.panel1.Controls.Add(this.btnRevert);
             this.panel1.Location = new System.Drawing.Point(12, 391);
@@ -353,6 +358,17 @@
             this.lblUPSStatus.TabIndex = 9;
             this.lblUPSStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // chkSimulate
+            // 
+            this.chkSimulate.AutoSize = true;
+            this.chkSimulate.Location = new System.Drawing.Point(11, 8);
+            this.chkSimulate.Name = "chkSimulate";
+            this.chkSimulate.Size = new System.Drawing.Size(72, 17);
+            this.chkSimulate.TabIndex = 2;
+            this.chkSimulate.Text = "Simulated";
+            this.chkSimulate.UseVisualStyleBackColor = true;
+            this.chkSimulate.CheckedChanged += new System.EventHandler(this.chkSimulate_CheckedChanged);
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -382,6 +398,7 @@
             this.pnlAlarms.ResumeLayout(false);
             this.pnlAlarms.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -418,6 +435,7 @@
         private System.Windows.Forms.Button btnRevert;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label lblUPSStatus;
+        private System.Windows.Forms.CheckBox chkSimulate;
     }
 }
 
