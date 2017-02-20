@@ -464,6 +464,7 @@
             this.cmbSimUPSStatus.Name = "cmbSimUPSStatus";
             this.cmbSimUPSStatus.Size = new System.Drawing.Size(73, 21);
             this.cmbSimUPSStatus.TabIndex = 23;
+            this.cmbSimUPSStatus.SelectedIndexChanged += new System.EventHandler(this.cmbSimUPSStatus_SelectedIndexChanged);
             // 
             // txtSimOutputVoltage
             // 
@@ -667,7 +668,7 @@
             this.btnSimBatteryDecay.Name = "btnSimBatteryDecay";
             this.btnSimBatteryDecay.Size = new System.Drawing.Size(75, 23);
             this.btnSimBatteryDecay.TabIndex = 29;
-            this.btnSimBatteryDecay.Text = "Decay";
+            this.btnSimBatteryDecay.Text = "Manual Poll";
             this.btnSimBatteryDecay.UseVisualStyleBackColor = true;
             this.btnSimBatteryDecay.Click += new System.EventHandler(this.btnSimBatteryDecay_Click);
             // 

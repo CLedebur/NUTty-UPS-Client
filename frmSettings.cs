@@ -328,6 +328,18 @@ namespace NUTty_UPS_Client
         {
             SimulateBatteryDecay();
         }
+
+        private void cmbSimUPSStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbSimUPSStatus.Text.Equals("OL"))
+            {
+                txtSimBatteryDecay.Enabled = false;
+            }
+            else
+            {
+                txtSimBatteryDecay.Enabled = true;
+            }
+        }
     }
 
     
