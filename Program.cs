@@ -18,8 +18,9 @@ namespace NUTty_UPS_Client
             Application.SetCompatibleTextRenderingDefault(false);
 
             Backend.Background BGProcess = new Backend.Background();
-            BGProcess.StartBackgroundProcess();            
+            //BGProcess.StartBackgroundProcess();            
 
+            BGProcess.InitializeBg();
             //Application.Run(new frmSettings());
             //frmSettings._frmSettings.Activate();
         }

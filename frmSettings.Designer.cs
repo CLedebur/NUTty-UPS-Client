@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSettings));
             this.txtIPAddress = new System.Windows.Forms.TextBox();
             this.txtPort = new System.Windows.Forms.TextBox();
@@ -59,6 +60,10 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblUPSStatus = new System.Windows.Forms.Label();
             this.pnlSimulator = new System.Windows.Forms.Panel();
+            this.btnSimBatteryDecay = new System.Windows.Forms.Button();
+            this.label20 = new System.Windows.Forms.Label();
+            this.txtSimBatteryDecay = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.btnSimApply = new System.Windows.Forms.Button();
             this.label19 = new System.Windows.Forms.Label();
             this.cmbSimUPSStatus = new System.Windows.Forms.ComboBox();
@@ -83,16 +88,17 @@
             this.txtSimBatteryCharge = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.lblSimulator = new System.Windows.Forms.Label();
-            this.txtSimBatteryDecay = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.btnSimBatteryDecay = new System.Windows.Forms.Button();
+            this.ntfUPSTray = new System.Windows.Forms.NotifyIcon(this.components);
+            this.mnuNotify = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuNotifySettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuNotifyExit = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlSettings.SuspendLayout();
             this.pnlDebug.SuspendLayout();
             this.pnlAlarms.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.pnlSimulator.SuspendLayout();
+            this.mnuNotify.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtIPAddress
@@ -435,6 +441,43 @@
             this.pnlSimulator.Size = new System.Drawing.Size(200, 452);
             this.pnlSimulator.TabIndex = 17;
             // 
+            // btnSimBatteryDecay
+            // 
+            this.btnSimBatteryDecay.Location = new System.Drawing.Point(6, 346);
+            this.btnSimBatteryDecay.Name = "btnSimBatteryDecay";
+            this.btnSimBatteryDecay.Size = new System.Drawing.Size(75, 23);
+            this.btnSimBatteryDecay.TabIndex = 29;
+            this.btnSimBatteryDecay.Text = "Manual Poll";
+            this.btnSimBatteryDecay.UseVisualStyleBackColor = true;
+            this.btnSimBatteryDecay.Click += new System.EventHandler(this.btnSimBatteryDecay_Click);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(182, 321);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(15, 13);
+            this.label20.TabIndex = 28;
+            this.label20.Text = "%";
+            // 
+            // txtSimBatteryDecay
+            // 
+            this.txtSimBatteryDecay.Location = new System.Drawing.Point(124, 318);
+            this.txtSimBatteryDecay.Name = "txtSimBatteryDecay";
+            this.txtSimBatteryDecay.Size = new System.Drawing.Size(55, 20);
+            this.txtSimBatteryDecay.TabIndex = 27;
+            this.txtSimBatteryDecay.Text = "1";
+            this.txtSimBatteryDecay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(3, 314);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(118, 26);
+            this.label12.TabIndex = 26;
+            this.label12.Text = "UPS Battery decay rate\r\n(in % points per poll)";
+            // 
             // btnSimApply
             // 
             this.btnSimApply.Location = new System.Drawing.Point(122, 346);
@@ -635,42 +678,34 @@
             this.lblSimulator.TabIndex = 0;
             this.lblSimulator.Text = "Simulator Settings";
             // 
-            // txtSimBatteryDecay
+            // ntfUPSTray
             // 
-            this.txtSimBatteryDecay.Location = new System.Drawing.Point(124, 318);
-            this.txtSimBatteryDecay.Name = "txtSimBatteryDecay";
-            this.txtSimBatteryDecay.Size = new System.Drawing.Size(55, 20);
-            this.txtSimBatteryDecay.TabIndex = 27;
-            this.txtSimBatteryDecay.Text = "1";
-            this.txtSimBatteryDecay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ntfUPSTray.ContextMenuStrip = this.mnuNotify;
+            this.ntfUPSTray.Icon = ((System.Drawing.Icon)(resources.GetObject("ntfUPSTray.Icon")));
+            this.ntfUPSTray.Text = "NUTty UPS Client";
+            this.ntfUPSTray.Visible = true;
             // 
-            // label12
+            // mnuNotify
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(3, 314);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(118, 26);
-            this.label12.TabIndex = 26;
-            this.label12.Text = "UPS Battery decay rate\r\n(in % points per poll)";
+            this.mnuNotify.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuNotifySettings,
+            this.mnuNotifyExit});
+            this.mnuNotify.Name = "mnuNotify";
+            this.mnuNotify.Size = new System.Drawing.Size(153, 70);
             // 
-            // label20
+            // mnuNotifySettings
             // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(182, 321);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(15, 13);
-            this.label20.TabIndex = 28;
-            this.label20.Text = "%";
+            this.mnuNotifySettings.Name = "mnuNotifySettings";
+            this.mnuNotifySettings.Size = new System.Drawing.Size(152, 22);
+            this.mnuNotifySettings.Text = "&Settings";
+            this.mnuNotifySettings.Click += new System.EventHandler(this.mnuNotifySettings_Click);
             // 
-            // btnSimBatteryDecay
+            // mnuNotifyExit
             // 
-            this.btnSimBatteryDecay.Location = new System.Drawing.Point(6, 346);
-            this.btnSimBatteryDecay.Name = "btnSimBatteryDecay";
-            this.btnSimBatteryDecay.Size = new System.Drawing.Size(75, 23);
-            this.btnSimBatteryDecay.TabIndex = 29;
-            this.btnSimBatteryDecay.Text = "Manual Poll";
-            this.btnSimBatteryDecay.UseVisualStyleBackColor = true;
-            this.btnSimBatteryDecay.Click += new System.EventHandler(this.btnSimBatteryDecay_Click);
+            this.mnuNotifyExit.Name = "mnuNotifyExit";
+            this.mnuNotifyExit.Size = new System.Drawing.Size(152, 22);
+            this.mnuNotifyExit.Text = "E&xit";
+            this.mnuNotifyExit.Click += new System.EventHandler(this.mnuNotifyExit_Click_1);
             // 
             // frmSettings
             // 
@@ -690,11 +725,12 @@
             this.Controls.Add(this.lblIPAddress);
             this.Controls.Add(this.txtPort);
             this.Controls.Add(this.txtIPAddress);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmSettings";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "NUTty UPS Client";
             this.Load += new System.EventHandler(this.frmSettings_Load);
+            this.Resize += new System.EventHandler(this.frmSettings_Resize);
             this.pnlSettings.ResumeLayout(false);
             this.pnlSettings.PerformLayout();
             this.pnlDebug.ResumeLayout(false);
@@ -706,6 +742,7 @@
             this.panel2.ResumeLayout(false);
             this.pnlSimulator.ResumeLayout(false);
             this.pnlSimulator.PerformLayout();
+            this.mnuNotify.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -771,6 +808,10 @@
         private System.Windows.Forms.TextBox txtSimBatteryDecay;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btnSimBatteryDecay;
+        private System.Windows.Forms.NotifyIcon ntfUPSTray;
+        private System.Windows.Forms.ContextMenuStrip mnuNotify;
+        private System.Windows.Forms.ToolStripMenuItem mnuNotifyExit;
+        private System.Windows.Forms.ToolStripMenuItem mnuNotifySettings;
     }
 }
 

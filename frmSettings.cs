@@ -15,7 +15,6 @@ namespace NUTty_UPS_Client
     public partial class frmSettings : Form
     {
         public static frmSettings _frmSettings;
-
         public bool isPolled = false;
         
         private double SimUPSDecayRate = 1;
@@ -114,6 +113,7 @@ namespace NUTty_UPS_Client
             pnlAlarms.Enabled = true;
         }
 
+        
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
@@ -130,6 +130,13 @@ namespace NUTty_UPS_Client
                 pnlSimulator.Visible = false;
                 chkSimulate.Checked = false;
             }
+
+            
+            // Constructing notify tray icon
+            ntfUPSTray = new NotifyIcon(this.components);
+            ntfUPSTray.Visible = true;
+            ntfUPSTray.DoubleClick += new System.EventHandler(this.ntfUPSTray_DoubleClick);
+            
 
             // Checks settings in the registry and fills in the fields accordingly
             Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings = Backend.NUT_Config.GetConnectionSettings();
@@ -149,6 +156,25 @@ namespace NUTty_UPS_Client
             }
 
             btnApply.Enabled = false;
+        }
+
+        private void ntfUPSTray_DoubleClick(object Sender, EventArgs e)
+        {
+            // Show the form when the user double clicks on the notify icon.
+
+            // Set the WindowState to normal if the form is minimized.
+            if (this.WindowState == FormWindowState.Minimized)
+                this.WindowState = FormWindowState.Normal;
+
+            // Activate the form.
+            this.Activate();
+        }
+
+        private void mnuNotifyExit_Click_1(object Sender, EventArgs e)
+        {
+            // Close the form, which closes the application.
+            ntfUPSTray.Dispose();
+            this.Close();
         }
 
         private void btnApply_Click(object sender, EventArgs e)
@@ -340,7 +366,22 @@ namespace NUTty_UPS_Client
                 txtSimBatteryDecay.Enabled = true;
             }
         }
+
+        private void frmSettings_Resize(object sender, System.EventArgs e)
+        {
+            WriteNUTLog("Hiding window");
+            if (FormWindowState.Minimized == WindowState)
+            {
+                
+                frmSettings._frmSettings.Hide();
+            }
+        }
+
+        private void mnuNotifySettings_Click(object sender, EventArgs e)
+        {
+            frmSettings._frmSettings.Show();
+            _frmSettings.WindowState = FormWindowState.Normal;
+        }
     }
 
-    
 }

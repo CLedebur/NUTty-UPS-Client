@@ -14,23 +14,13 @@ namespace NUTty_UPS_Client.Backend
 {
     class Background
     {
-        // Background thread worker
-        private System.ComponentModel.BackgroundWorker BGUPSPolling;
-        
-        // Experimenting with timers
         System.Timers.Timer UPSPollTimer;
-        System.Threading.Timer UPSPollTimer2 = null;
 
         public static int UPSPollingInterval = 5000;
         public static bool isSimulated = false;
         public bool isPollingUPS = false;
         public static Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings;
 
-        public Background()
-        {
-            
-
-        }
         public static void WriteNUTLog(string strOutput)
         {
             Console.WriteLine("[BACKGROUND] " + strOutput);
@@ -38,7 +28,6 @@ namespace NUTty_UPS_Client.Backend
 
         void OnTimedEvent(Object sender, ElapsedEventArgs e)
         {
-            GC.KeepAlive(UPSPollTimer);
             WriteNUTLog("[TIMER] Triggered");
             if (isPollingUPS)
             {
@@ -49,19 +38,7 @@ namespace NUTty_UPS_Client.Backend
             
         }
 
-        private void InitializeBackgroundWorker()
-        {
-            BGUPSPolling.DoWork += new System.ComponentModel.DoWorkEventHandler(BGUPSPolling_DoWork);
-        }
-
-        private void BGUPSPolling_DoWork(object sender, DoWorkEventArgs e)
-        {
-            BackgroundWorker worker = sender as BackgroundWorker;
-
-        }
-
-
-        public void StartBackgroundProcess()
+        public void InitializeBg()
         {
             UPSPollTimer = new System.Timers.Timer(UPSPollingInterval);
             UPSPollTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
@@ -69,8 +46,14 @@ namespace NUTty_UPS_Client.Backend
             UPSPollTimer.Enabled = true;
             UPSPollTimer.Start();
 
-            //UPSPollTimer2 = new System.Threading.Timer(_ => WriteNUTLog("[TIMER2] Keeping Alive" ));
-            //UPSPollTimer2.Change(0, UPSPollingInterval);
+            // Settings for BGWorker here
+            WriteNUTLog("[INITIALIZE] Started");
+
+            StartBackgroundProcess();
+        }
+
+        private void StartBackgroundProcess()
+        {
 
             try
             {
@@ -88,8 +71,9 @@ namespace NUTty_UPS_Client.Backend
                 if (NUTConnectionSettings.Item1 == IPAddress.Parse("127.0.0.1") || NUTConnectionSettings.Item2 == 0 || NUTConnectionSettings.Item3 == 0)
                 {
                     WriteNUTLog("Empty values found, starting Settings form");
-                    StartSettings();
+                    Application.Run(new frmSettings());
                     NUTConnectionSettings = NUT_Config.GetConnectionSettings();
+                    return;
                 }
             }
             catch
@@ -97,18 +81,15 @@ namespace NUTty_UPS_Client.Backend
                 
             } finally
             {
-                //StartSettings(); // Temporary - as the timer won't work
-                Thread.Sleep(10000);
                 
             }
-
+            Application.Run(new frmSettings());
         }
         
         public static void StartSettings()
         {
             Application.Run(new frmSettings());
-            new Thread(() => new frmSettings().Show()).Start();
-            //frmSettings._frmSettings.Activate();
+            
         }
     }
 }
