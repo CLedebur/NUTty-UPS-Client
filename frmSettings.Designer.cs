@@ -43,10 +43,10 @@
             this.pnlSettings = new System.Windows.Forms.Panel();
             this.pnlDebug = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkDebugLogging = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.pnlAlarms = new System.Windows.Forms.Panel();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.chkAlarm = new System.Windows.Forms.CheckBox();
             this.chkNotification = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.cmbBatteryPercentage = new System.Windows.Forms.ComboBox();
@@ -206,7 +206,7 @@
             // pnlDebug
             // 
             this.pnlDebug.Controls.Add(this.label5);
-            this.pnlDebug.Controls.Add(this.checkBox1);
+            this.pnlDebug.Controls.Add(this.chkDebugLogging);
             this.pnlDebug.Controls.Add(this.label4);
             this.pnlDebug.Location = new System.Drawing.Point(12, 245);
             this.pnlDebug.Name = "pnlDebug";
@@ -223,15 +223,16 @@
             this.label5.TabIndex = 21;
             this.label5.Text = resources.GetString("label5.Text");
             // 
-            // checkBox1
+            // chkDebugLogging
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(14, 16);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(100, 17);
-            this.checkBox1.TabIndex = 20;
-            this.checkBox1.Text = "Enable Logging";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.chkDebugLogging.AutoSize = true;
+            this.chkDebugLogging.Location = new System.Drawing.Point(14, 16);
+            this.chkDebugLogging.Name = "chkDebugLogging";
+            this.chkDebugLogging.Size = new System.Drawing.Size(100, 17);
+            this.chkDebugLogging.TabIndex = 20;
+            this.chkDebugLogging.Text = "Enable Logging";
+            this.chkDebugLogging.UseVisualStyleBackColor = true;
+            this.chkDebugLogging.CheckedChanged += new System.EventHandler(this.chkDebugLogging_CheckedChanged);
             // 
             // label4
             // 
@@ -244,7 +245,7 @@
             // 
             // pnlAlarms
             // 
-            this.pnlAlarms.Controls.Add(this.checkBox2);
+            this.pnlAlarms.Controls.Add(this.chkAlarm);
             this.pnlAlarms.Controls.Add(this.chkNotification);
             this.pnlAlarms.Controls.Add(this.label8);
             this.pnlAlarms.Controls.Add(this.cmbBatteryPercentage);
@@ -257,15 +258,16 @@
             this.pnlAlarms.Size = new System.Drawing.Size(266, 113);
             this.pnlAlarms.TabIndex = 14;
             // 
-            // checkBox2
+            // chkAlarm
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(14, 90);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(121, 17);
-            this.checkBox2.TabIndex = 18;
-            this.checkBox2.Text = "Audible alarm on PC";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.chkAlarm.AutoSize = true;
+            this.chkAlarm.Location = new System.Drawing.Point(14, 90);
+            this.chkAlarm.Name = "chkAlarm";
+            this.chkAlarm.Size = new System.Drawing.Size(121, 17);
+            this.chkAlarm.TabIndex = 18;
+            this.chkAlarm.Text = "Audible alarm on PC";
+            this.chkAlarm.UseVisualStyleBackColor = true;
+            this.chkAlarm.CheckedChanged += new System.EventHandler(this.chkAlarm_CheckedChanged);
             // 
             // chkNotification
             // 
@@ -276,6 +278,7 @@
             this.chkNotification.TabIndex = 17;
             this.chkNotification.Text = "Notify when UPS status changes";
             this.chkNotification.UseVisualStyleBackColor = true;
+            this.chkNotification.CheckedChanged += new System.EventHandler(this.chkNotification_CheckedChanged);
             // 
             // label8
             // 
@@ -315,6 +318,7 @@
             this.cmbBatteryPercentage.Name = "cmbBatteryPercentage";
             this.cmbBatteryPercentage.Size = new System.Drawing.Size(51, 21);
             this.cmbBatteryPercentage.TabIndex = 15;
+            this.cmbBatteryPercentage.SelectedIndexChanged += new System.EventHandler(this.cmbBatteryPercentage_SelectedIndexChanged);
             // 
             // label6
             // 
@@ -337,6 +341,7 @@
             this.cmbAlarmAction.Name = "cmbAlarmAction";
             this.cmbAlarmAction.Size = new System.Drawing.Size(128, 21);
             this.cmbAlarmAction.TabIndex = 13;
+            this.cmbAlarmAction.SelectedIndexChanged += new System.EventHandler(this.cmbAlarmAction_SelectedIndexChanged);
             // 
             // label7
             // 
@@ -691,19 +696,19 @@
             this.mnuNotifySettings,
             this.mnuNotifyExit});
             this.mnuNotify.Name = "mnuNotify";
-            this.mnuNotify.Size = new System.Drawing.Size(153, 70);
+            this.mnuNotify.Size = new System.Drawing.Size(117, 48);
             // 
             // mnuNotifySettings
             // 
             this.mnuNotifySettings.Name = "mnuNotifySettings";
-            this.mnuNotifySettings.Size = new System.Drawing.Size(152, 22);
+            this.mnuNotifySettings.Size = new System.Drawing.Size(116, 22);
             this.mnuNotifySettings.Text = "&Settings";
             this.mnuNotifySettings.Click += new System.EventHandler(this.mnuNotifySettings_Click);
             // 
             // mnuNotifyExit
             // 
             this.mnuNotifyExit.Name = "mnuNotifyExit";
-            this.mnuNotifyExit.Size = new System.Drawing.Size(152, 22);
+            this.mnuNotifyExit.Size = new System.Drawing.Size(116, 22);
             this.mnuNotifyExit.Text = "E&xit";
             this.mnuNotifyExit.Click += new System.EventHandler(this.mnuNotifyExit_Click_1);
             // 
@@ -763,7 +768,7 @@
         private System.Windows.Forms.Panel pnlSettings;
         private System.Windows.Forms.Panel pnlDebug;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkDebugLogging;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel pnlAlarms;
         private System.Windows.Forms.Label label7;
@@ -771,7 +776,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cmbAlarmAction;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox chkAlarm;
         private System.Windows.Forms.CheckBox chkNotification;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnApply;

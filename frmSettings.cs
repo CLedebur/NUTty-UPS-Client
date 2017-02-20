@@ -5,9 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using System.Net;
+using System.Timers;
 
 namespace NUTty_UPS_Client
 {
@@ -16,8 +17,24 @@ namespace NUTty_UPS_Client
     {
         public static frmSettings _frmSettings;
         public bool isPolled = false;
-        
+        public static bool isPollingUPS = false;
+
+        System.Timers.Timer UPSPollTimer; // Timer to poll the NUT server every UPSPollingInterval ms, default 5000 ms
         private double SimUPSDecayRate = 1;
+
+        void OnTimedEvent(Object sender, ElapsedEventArgs e)
+        {
+            if (isPollingUPS)
+            {
+                // Runtime, charge and status code
+                WriteNUTLog("[TIMER] Polling UPS");
+
+                new Thread(delegate ()
+                {
+                    UPSPoll();
+                } ).Start();
+            }
+        }
 
         public frmSettings()
         {
@@ -56,7 +73,11 @@ namespace NUTty_UPS_Client
             {
                 Console.WriteLine("Did not get data successfully");
                 MessageBox.Show("Was unable to retrieve data from NUT sever. Got an \"Access Denied\" message.\n\nA common cause of this is the IP address of this client not being whitelisted on the NUT server.");
+                isPollingUPS = false;
                 return;
+            } else
+            {
+                isPollingUPS = true;
             }
 
             // Refreshes the data on the form
@@ -111,16 +132,22 @@ namespace NUTty_UPS_Client
             // If information was successfully retrieved, we know that we can communicare with NUT server
             pnlSettings.Enabled = true;
             pnlAlarms.Enabled = true;
+            isPollingUPS = true;
+            
         }
-
-        
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
+
+            UPSPollTimer = new System.Timers.Timer(Backend.Background.UPSPollingInterval);
+            UPSPollTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            UPSPollTimer.AutoReset = true;
+            UPSPollTimer.Enabled = true;
+            UPSPollTimer.Start();
+
             // Checks to see if we are in a simulation environment
             if (Backend.Background.isSimulated) {
                 chkSimulate.Checked = true;
-                UPSPoll();
                 SimulatorPopulate();
             }
             else
@@ -155,18 +182,62 @@ namespace NUTty_UPS_Client
                 txtPollFrequency.Text = NUTConnectionSettings.Item3.ToString();
             }
 
+            try
+            {
+                txtPollFrequency.Text = Backend.NUT_Config.GetConfig("Poll Interval");
+                cmbBatteryPercentage.Text = Backend.NUT_Config.GetConfig("Warn Threshold");
+                cmbAlarmAction.Text = Backend.NUT_Config.GetConfig("Threshold Action");
+                chkNotification.Checked = Convert.ToBoolean(Backend.NUT_Config.GetConfig("Notification"));
+                chkAlarm.Checked = Convert.ToBoolean(Backend.NUT_Config.GetConfig("Alarm"));
+                chkDebugLogging.Checked = Convert.ToBoolean(Backend.NUT_Config.GetConfig("Debug"));
+            }
+            catch
+            {
+
+            }
+
+            if (chkNotification.Checked)
+            {
+                Backend.NUT_Config.SetConfig("Notification", "true");
+            }
+            else
+            {
+                Backend.NUT_Config.SetConfig("Notification", "false");
+            }
+            // Alarm
+            if (chkAlarm.Checked)
+            {
+                Backend.NUT_Config.SetConfig("Alarm", "true");
+            }
+            else
+            {
+                Backend.NUT_Config.SetConfig("Alarm", "false");
+            }
+            // Debug Logging
+            if (chkDebugLogging.Checked)
+            {
+                Backend.NUT_Config.SetConfig("Debug", "true");
+            }
+            else
+            {
+                Backend.NUT_Config.SetConfig("Debug", "false");
+            }
+
+
+            UPSPoll();
+            if (isPollingUPS)
+            {
+                pnlSettings.Enabled = true;
+                pnlAlarms.Enabled = true;
+            }
+
             btnApply.Enabled = false;
         }
 
         private void ntfUPSTray_DoubleClick(object Sender, EventArgs e)
         {
-            // Show the form when the user double clicks on the notify icon.
-
-            // Set the WindowState to normal if the form is minimized.
             if (this.WindowState == FormWindowState.Minimized)
                 this.WindowState = FormWindowState.Normal;
-
-            // Activate the form.
             this.Activate();
         }
 
@@ -225,6 +296,40 @@ namespace NUTty_UPS_Client
                 }
 
             }
+
+            // Poll interval (in ms)
+            Backend.NUT_Config.SetConfig("Poll Interval", txtPollFrequency.Text);
+            // Low battery threshold percentage
+            Backend.NUT_Config.SetConfig("Warn Threshold", cmbBatteryPercentage.Text);
+            // Threshold action
+            Backend.NUT_Config.SetConfig("Threshold action", cmbAlarmAction.Text);
+            // Notifications
+            if (chkNotification.Checked) {
+                Backend.NUT_Config.SetConfig("Notification", "true");
+            } else
+            {
+                Backend.NUT_Config.SetConfig("Notification", "false");
+            }
+            // Alarm
+            if (chkAlarm.Checked)
+            {
+                Backend.NUT_Config.SetConfig("Alarm", "true");
+            }
+            else
+            {
+                Backend.NUT_Config.SetConfig("Alarm", "false");
+            }
+            // Debug Logging
+            if (chkDebugLogging.Checked)
+            {
+                Backend.NUT_Config.SetConfig("Debug", "true");
+            }
+            else
+            {
+                Backend.NUT_Config.SetConfig("Debug", "false");
+            }
+
+
             btnApply.Enabled = false;
 
         }
@@ -269,6 +374,7 @@ namespace NUTty_UPS_Client
                 return false;
             }
         }
+
 
         private void chkSimulate_CheckedChanged(object sender, EventArgs e)
         {
@@ -369,10 +475,8 @@ namespace NUTty_UPS_Client
 
         private void frmSettings_Resize(object sender, System.EventArgs e)
         {
-            WriteNUTLog("Hiding window");
             if (FormWindowState.Minimized == WindowState)
             {
-                
                 frmSettings._frmSettings.Hide();
             }
         }
@@ -381,6 +485,31 @@ namespace NUTty_UPS_Client
         {
             frmSettings._frmSettings.Show();
             _frmSettings.WindowState = FormWindowState.Normal;
+        }
+
+        private void cmbBatteryPercentage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnApply.Enabled = true;
+        }
+
+        private void cmbAlarmAction_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnApply.Enabled = true;
+        }
+
+        private void chkNotification_CheckedChanged(object sender, EventArgs e)
+        {
+            btnApply.Enabled = true;
+        }
+
+        private void chkAlarm_CheckedChanged(object sender, EventArgs e)
+        {
+            btnApply.Enabled = true;
+        }
+
+        private void chkDebugLogging_CheckedChanged(object sender, EventArgs e)
+        {
+            btnApply.Enabled = true;
         }
     }
 

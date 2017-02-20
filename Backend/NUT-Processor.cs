@@ -40,9 +40,6 @@ namespace NUTty_UPS_Client
 
                 UPSVariables[j, 0] = strTemp[strTemp.Count - 1].Trim(' '); // Removes trailing spaces
                 UPSVariables[j, 1] = strUPSVarList[strUPSVarList.Count - 2]; // Only needs the data in between the quotes
-
-                //UPSVariables[j, 0] = (strTemp[strTemp.Count - 1].Trim(' '));
-                WriteNUTLog(UPSVariables[j, 0] + " is " + UPSVariables[j, 1]);
                 j++;
             }
 
