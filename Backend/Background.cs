@@ -8,19 +8,27 @@ using System.Timers;
 using System.Threading;
 using System.Net;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace NUTty_UPS_Client.Backend
 {
     class Background
     {
+        // Background thread worker
+        private System.ComponentModel.BackgroundWorker BGUPSPolling;
+        
+        // Experimenting with timers
         System.Timers.Timer UPSPollTimer;
+        System.Threading.Timer UPSPollTimer2 = null;
+
         public static int UPSPollingInterval = 5000;
         public static bool isSimulated = false;
+        public bool isPollingUPS = false;
         public static Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings;
 
         public Background()
         {
-            //_Background = this;
+            
 
         }
         public static void WriteNUTLog(string strOutput)
@@ -31,24 +39,38 @@ namespace NUTty_UPS_Client.Backend
         void OnTimedEvent(Object sender, ElapsedEventArgs e)
         {
             GC.KeepAlive(UPSPollTimer);
-            WriteNUTLog("Polling UPS");
-
-            // Runtime, charge and status code
-            Tuple<string, double, int> UPSBatteryStatus = NUT_Processor.GetBatteryStatus();
-
-            if(UPSBatteryStatus.Item2 <= 20)
+            WriteNUTLog("[TIMER] Triggered");
+            if (isPollingUPS)
             {
-                MessageBox.Show("Warning - UPS battery level is now 20%");
+                // Runtime, charge and status code
+                WriteNUTLog("Polling UPS");
+                Tuple<string, double, int> UPSBatteryStatus = NUT_Processor.GetBatteryStatus();
             }
+            
+        }
+
+        private void InitializeBackgroundWorker()
+        {
+            BGUPSPolling.DoWork += new System.ComponentModel.DoWorkEventHandler(BGUPSPolling_DoWork);
+        }
+
+        private void BGUPSPolling_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
 
         }
+
 
         public void StartBackgroundProcess()
         {
             UPSPollTimer = new System.Timers.Timer(UPSPollingInterval);
             UPSPollTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             UPSPollTimer.AutoReset = true;
-            //UPSPollTimer.Enabled = true;
+            UPSPollTimer.Enabled = true;
+            UPSPollTimer.Start();
+
+            //UPSPollTimer2 = new System.Threading.Timer(_ => WriteNUTLog("[TIMER2] Keeping Alive" ));
+            //UPSPollTimer2.Change(0, UPSPollingInterval);
 
             try
             {
@@ -75,8 +97,9 @@ namespace NUTty_UPS_Client.Backend
                 
             } finally
             {
-                StartSettings(); // Temporary - as the timer won't work
-                UPSPollTimer.Start();
+                //StartSettings(); // Temporary - as the timer won't work
+                Thread.Sleep(10000);
+                
             }
 
         }
@@ -84,7 +107,8 @@ namespace NUTty_UPS_Client.Backend
         public static void StartSettings()
         {
             Application.Run(new frmSettings());
-            frmSettings._frmSettings.Activate();
+            new Thread(() => new frmSettings().Show()).Start();
+            //frmSettings._frmSettings.Activate();
         }
     }
 }

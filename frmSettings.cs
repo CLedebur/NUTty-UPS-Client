@@ -17,7 +17,7 @@ namespace NUTty_UPS_Client
         public static frmSettings _frmSettings;
 
         public bool isPolled = false;
-        public bool isPollingUPS = false;
+        
         private double SimUPSDecayRate = 1;
 
         public frmSettings()
