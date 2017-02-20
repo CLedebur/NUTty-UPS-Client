@@ -83,6 +83,10 @@
             this.txtSimBatteryCharge = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.lblSimulator = new System.Windows.Forms.Label();
+            this.txtSimBatteryDecay = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.btnSimBatteryDecay = new System.Windows.Forms.Button();
             this.pnlSettings.SuspendLayout();
             this.pnlDebug.SuspendLayout();
             this.pnlAlarms.SuspendLayout();
@@ -176,7 +180,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(67, 19);
+            this.label3.Location = new System.Drawing.Point(61, 19);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(47, 13);
             this.label3.TabIndex = 14;
@@ -398,6 +402,10 @@
             // 
             // pnlSimulator
             // 
+            this.pnlSimulator.Controls.Add(this.btnSimBatteryDecay);
+            this.pnlSimulator.Controls.Add(this.label20);
+            this.pnlSimulator.Controls.Add(this.txtSimBatteryDecay);
+            this.pnlSimulator.Controls.Add(this.label12);
             this.pnlSimulator.Controls.Add(this.btnSimApply);
             this.pnlSimulator.Controls.Add(this.label19);
             this.pnlSimulator.Controls.Add(this.cmbSimUPSStatus);
@@ -429,7 +437,7 @@
             // 
             // btnSimApply
             // 
-            this.btnSimApply.Location = new System.Drawing.Point(122, 309);
+            this.btnSimApply.Location = new System.Drawing.Point(122, 346);
             this.btnSimApply.Name = "btnSimApply";
             this.btnSimApply.Size = new System.Drawing.Size(75, 23);
             this.btnSimApply.TabIndex = 25;
@@ -440,7 +448,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(3, 285);
+            this.label19.Location = new System.Drawing.Point(3, 287);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(55, 13);
             this.label19.TabIndex = 24;
@@ -452,7 +460,7 @@
             this.cmbSimUPSStatus.Items.AddRange(new object[] {
             "OL",
             "OB DISCHRG"});
-            this.cmbSimUPSStatus.Location = new System.Drawing.Point(124, 282);
+            this.cmbSimUPSStatus.Location = new System.Drawing.Point(124, 284);
             this.cmbSimUPSStatus.Name = "cmbSimUPSStatus";
             this.cmbSimUPSStatus.Size = new System.Drawing.Size(73, 21);
             this.cmbSimUPSStatus.TabIndex = 23;
@@ -626,6 +634,43 @@
             this.lblSimulator.TabIndex = 0;
             this.lblSimulator.Text = "Simulator Settings";
             // 
+            // txtSimBatteryDecay
+            // 
+            this.txtSimBatteryDecay.Location = new System.Drawing.Point(124, 318);
+            this.txtSimBatteryDecay.Name = "txtSimBatteryDecay";
+            this.txtSimBatteryDecay.Size = new System.Drawing.Size(55, 20);
+            this.txtSimBatteryDecay.TabIndex = 27;
+            this.txtSimBatteryDecay.Text = "1";
+            this.txtSimBatteryDecay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(3, 314);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(118, 26);
+            this.label12.TabIndex = 26;
+            this.label12.Text = "UPS Battery decay rate\r\n(in % points per poll)";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(182, 321);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(15, 13);
+            this.label20.TabIndex = 28;
+            this.label20.Text = "%";
+            // 
+            // btnSimBatteryDecay
+            // 
+            this.btnSimBatteryDecay.Location = new System.Drawing.Point(6, 346);
+            this.btnSimBatteryDecay.Name = "btnSimBatteryDecay";
+            this.btnSimBatteryDecay.Size = new System.Drawing.Size(75, 23);
+            this.btnSimBatteryDecay.TabIndex = 29;
+            this.btnSimBatteryDecay.Text = "Decay";
+            this.btnSimBatteryDecay.UseVisualStyleBackColor = true;
+            this.btnSimBatteryDecay.Click += new System.EventHandler(this.btnSimBatteryDecay_Click);
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -721,6 +766,10 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox txtSimInputVoltage;
         private System.Windows.Forms.Label lblSimInputVoltage;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox txtSimBatteryDecay;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button btnSimBatteryDecay;
     }
 }
 

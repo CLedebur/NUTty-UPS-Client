@@ -18,6 +18,7 @@ namespace NUTty_UPS_Client
 
         public bool isPolled = false;
         public bool isPollingUPS = false;
+        private double SimUPSDecayRate = 1;
 
         public frmSettings()
         {
@@ -278,6 +279,33 @@ namespace NUTty_UPS_Client
             NUT_Processor.ModifySimNUTData("output.voltage", txtSimOutputVoltage.Text);
             NUT_Processor.ModifySimNUTData("ups.status", cmbSimUPSStatus.Text);
 
+            SimUPSDecayRate = Convert.ToDouble(txtSimBatteryDecay.Text);
+
+            UPSPoll();
+        }
+
+        private void SimulateBatteryDecay()
+        {
+            double BattValue = Convert.ToDouble(NUT_Processor.SearchNUTData("battery.charge"));
+            Int32 BattRuntimeMax = Convert.ToInt32(txtSimBatteryRuntime.Text);
+            Int32 BattRuntimeBreakdown = (BattRuntimeMax / 100);
+            Int32 BattRuntime = Convert.ToInt32(NUT_Processor.SearchNUTData("battery.runtime"));
+
+            // Since it would be impossible for a battery to have a negative charge, it will set the charge to 0
+            if ((BattValue - SimUPSDecayRate) <= 0)
+            {
+                WriteNUTLog("[SIMULATOR] Battery decayed to empty");
+                NUT_Processor.ModifySimNUTData("battery.charge", "0");
+                NUT_Processor.ModifySimNUTData("battery.runtime", "0");
+            }
+            else
+            {
+                WriteNUTLog("[SIMULATOR] Battery decayed by " + SimUPSDecayRate + " from " + BattValue + " to " + (BattValue - SimUPSDecayRate));
+                NUT_Processor.ModifySimNUTData("battery.charge", Convert.ToString(BattValue - SimUPSDecayRate));
+                NUT_Processor.ModifySimNUTData("battery.runtime", Convert.ToString(BattRuntime - (BattRuntimeBreakdown * SimUPSDecayRate)));
+            }
+
+            // Refresh information 
             UPSPoll();
         }
 
@@ -294,6 +322,11 @@ namespace NUTty_UPS_Client
         private void txtPollFrequency_TextChanged(object sender, EventArgs e)
         {
             btnApply.Enabled = true;
+        }
+
+        private void btnSimBatteryDecay_Click(object sender, EventArgs e)
+        {
+            SimulateBatteryDecay();
         }
     }
 
