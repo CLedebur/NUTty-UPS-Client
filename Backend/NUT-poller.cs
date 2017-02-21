@@ -38,7 +38,7 @@ namespace NUTty_UPS_Client
 
             nutServer.WriteLine(nutUPSStatus);
             string nutOutput = nutServer.Read();
-            WriteNUTLog("[NUT Poller] Got data from server:\n" + nutOutput + "\n");
+            //WriteNUTLog("[NUT Poller] Got data from server:\n" + nutOutput + "\n");
 
             if (nutOutput.Contains("ERR ACCESS-DENIED")) 
             {

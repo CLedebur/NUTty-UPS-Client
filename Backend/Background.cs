@@ -13,14 +13,26 @@ namespace NUTty_UPS_Client.Backend
 {
     class Background
     {
-
-        public static int UPSPollingInterval = 5000;
         public static bool isSimulated = false;
         public static Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings;
 
         public static void WriteNUTLog(string strOutput)
         {
             Console.WriteLine("[BACKGROUND] " + strOutput);
+        }
+
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            Backend.Background BGProcess = new Backend.Background();
+
+            BGProcess.InitializeBg();
         }
 
         public void InitializeBg()
@@ -47,15 +59,14 @@ namespace NUTty_UPS_Client.Backend
                     return;
                 }
             }
-            catch
+            catch (Exception e)
             {
-                
+                WriteNUTLog("[BACKGROUND] Error occurred: " + e);
             }
             finally
             {
-                
+                Application.Run(new frmSettings());
             }
-            Application.Run(new frmSettings());
         }
         
     }

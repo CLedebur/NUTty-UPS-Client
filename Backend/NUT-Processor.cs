@@ -136,12 +136,12 @@ namespace NUTty_UPS_Client
 
         public static string SearchNUTData(string NUTVariable)
         {
-            WriteNUTLog("[SearchNUTData] Invoked. Searching for: " + NUTVariable);
+            //WriteNUTLog("[SearchNUTData] Invoked. Searching for: " + NUTVariable);
             for (int i = 0; i < UPSVariables.Length; i++)
             {
                 if (UPSVariables[i, 0].Equals(NUTVariable))
                 {
-                    WriteNUTLog("[SearchNUTData] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
+                    //WriteNUTLog("[SearchNUTData] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
                     return UPSVariables[i, 1];
                 }
             }

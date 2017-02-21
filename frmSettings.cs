@@ -18,9 +18,15 @@ namespace NUTty_UPS_Client
         public static frmSettings _frmSettings;
         public bool isPolled = false;
         public static bool isPollingUPS = false;
+        private bool IsSimulatingDecay = false;
+        private UInt16 AlarmPercentage;
+
+        IPAddress NUTServer;
+        UInt16 NUTPort;
 
         System.Timers.Timer UPSPollTimer; // Timer to poll the NUT server every UPSPollingInterval ms, default 5000 ms
         private double SimUPSDecayRate = 1;
+
 
         void OnTimedEvent(Object sender, ElapsedEventArgs e)
         {
@@ -28,11 +34,7 @@ namespace NUTty_UPS_Client
             {
                 // Runtime, charge and status code
                 WriteNUTLog("[TIMER] Polling UPS");
-
-                new Thread(delegate ()
-                {
-                    UPSPoll();
-                } ).Start();
+                UPSPoll();
             }
         }
 
@@ -46,7 +48,7 @@ namespace NUTty_UPS_Client
         {
             // Pulls latest data from UPSVariables
             Int16 nutPort = Convert.ToInt16(txtPort.Text);
-
+            
             // Determines whether it is in simulation mode (isSimulated) and whether it has already been polled
             if (Backend.Background.isSimulated && isPolled)
             {
@@ -71,6 +73,11 @@ namespace NUTty_UPS_Client
             // Error condition, unable to get data from NUT server for a variety of reasons
             if (!isPolled)
             {
+                // Checks to see if this is the first time this program has been run
+                string TempValue = Backend.NUT_Config.GetConfig("IP Address");
+                if (TempValue == null)
+                    return;
+
                 Console.WriteLine("Did not get data successfully");
                 MessageBox.Show("Was unable to retrieve data from NUT sever. Got an \"Access Denied\" message.\n\nA common cause of this is the IP address of this client not being whitelisted on the NUT server.");
                 isPollingUPS = false;
@@ -80,12 +87,21 @@ namespace NUTty_UPS_Client
                 isPollingUPS = true;
             }
 
-            // Refreshes the data on the form
-            lblUPSModel.Text = NUT_Processor.UPSStatistics();
-            Tuple<string, double, int> UPSBatteryStatus = NUT_Processor.GetBatteryStatus();
-            this.UpdateUPSStatus(UPSBatteryStatus.Item1, UPSBatteryStatus.Item3);
-            this.updateUPSModelLabel(NUT_Processor.UPSStatistics());
+            UInt16 BatteryPercentage = Convert.ToUInt16(NUT_Processor.SearchNUTData("battery.charge"));
+            if (BatteryPercentage <= AlarmPercentage)
+            {
+                PerformAlarmAction();
+            }
 
+            if (Backend.Background.isSimulated && IsSimulatingDecay)
+            {
+                SimulateBatteryDecay();
+            }
+
+            // Refreshes the data on the form
+            Tuple<string, double, int> UPSBatteryStatus = NUT_Processor.GetBatteryStatus();
+            lblUPSStatus.Invoke((MethodInvoker)(() => UpdateUPSStatus(UPSBatteryStatus.Item1, UPSBatteryStatus.Item3)));
+            lblUPSModel.Invoke ((MethodInvoker)(() => lblUPSModel.Text = (NUT_Processor.UPSStatistics())));
         }
 
 
@@ -97,6 +113,7 @@ namespace NUTty_UPS_Client
         public void UpdateUPSStatus(string UPSStatusMessage, int UPSStatusCode)
         {
             // Updates the UPS status and runtime on the bottom of the form
+            WriteNUTLog("Updating labels on form " + UPSStatusMessage);
             if (UPSStatusCode == 0)
             {
                 lblUPSStatus.Text = ("On AC Power - " + UPSStatusMessage);
@@ -139,16 +156,13 @@ namespace NUTty_UPS_Client
         private void frmSettings_Load(object sender, EventArgs e)
         {
 
-            UPSPollTimer = new System.Timers.Timer(Backend.Background.UPSPollingInterval);
+            UPSPollTimer = new System.Timers.Timer(5000);
             UPSPollTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             UPSPollTimer.AutoReset = true;
-            UPSPollTimer.Enabled = true;
-            UPSPollTimer.Start();
 
             // Checks to see if we are in a simulation environment
             if (Backend.Background.isSimulated) {
                 chkSimulate.Checked = true;
-                SimulatorPopulate();
             }
             else
             {
@@ -170,31 +184,49 @@ namespace NUTty_UPS_Client
             if (NUTConnectionSettings.Item1 != IPAddress.Parse("127.0.0.1"))
             {
                 txtIPAddress.Text = NUTConnectionSettings.Item1.ToString();
+                NUTServer = IPAddress.Parse(NUTConnectionSettings.Item1.ToString());
             }
 
             if (NUTConnectionSettings.Item2 != 0)
             {
                 txtPort.Text = NUTConnectionSettings.Item2.ToString();
+                NUTPort = Convert.ToUInt16(NUTConnectionSettings.Item2);
             }
 
             if (NUTConnectionSettings.Item3 != 0)
             {
                 txtPollFrequency.Text = NUTConnectionSettings.Item3.ToString();
+                UPSPollTimer.Interval = (Convert.ToUInt32(NUTConnectionSettings.Item3) * 1000);
             }
 
-            try
-            {
-                txtPollFrequency.Text = Backend.NUT_Config.GetConfig("Poll Interval");
-                cmbBatteryPercentage.Text = Backend.NUT_Config.GetConfig("Warn Threshold");
-                cmbAlarmAction.Text = Backend.NUT_Config.GetConfig("Threshold Action");
-                chkNotification.Checked = Convert.ToBoolean(Backend.NUT_Config.GetConfig("Notification"));
-                chkAlarm.Checked = Convert.ToBoolean(Backend.NUT_Config.GetConfig("Alarm"));
-                chkDebugLogging.Checked = Convert.ToBoolean(Backend.NUT_Config.GetConfig("Debug"));
-            }
-            catch
-            {
+            string TempValue;
+            UInt32 number;
 
+            TempValue = Backend.NUT_Config.GetConfig("Warn Threshold");
+            if (UInt32.TryParse(TempValue, out number))
+            {
+                AlarmPercentage = Convert.ToUInt16(TempValue);
+                cmbBatteryPercentage.Text = TempValue;
             }
+            else
+            {
+                cmbBatteryPercentage.Text = "20%";
+                AlarmPercentage = 20;
+            }
+
+            TempValue = Backend.NUT_Config.GetConfig("Threshold Action");
+            if (TempValue == null)
+                cmbAlarmAction.Text = "Hibernate";
+            else if (TempValue.Equals(""))
+                cmbAlarmAction.Text = "Hibernate";
+            else
+                cmbAlarmAction.Text = TempValue;
+
+
+
+            chkNotification.Checked = Convert.ToBoolean(Backend.NUT_Config.GetConfig("Notification"));
+            chkAlarm.Checked = Convert.ToBoolean(Backend.NUT_Config.GetConfig("Alarm"));
+            chkDebugLogging.Checked = Convert.ToBoolean(Backend.NUT_Config.GetConfig("Debug"));
 
             if (chkNotification.Checked)
             {
@@ -223,8 +255,13 @@ namespace NUTty_UPS_Client
                 Backend.NUT_Config.SetConfig("Debug", "false");
             }
 
-
             UPSPoll();
+
+            if (Backend.Background.isSimulated)
+            {
+                SimulatorPopulate();
+            }
+
             if (isPollingUPS)
             {
                 pnlSettings.Enabled = true;
@@ -232,6 +269,14 @@ namespace NUTty_UPS_Client
             }
 
             btnApply.Enabled = false;
+            UPSPollTimer.Enabled = true;
+            UPSPollTimer.Start();
+
+        }
+
+        private void PerformAlarmAction()
+        {
+
         }
 
         private void ntfUPSTray_DoubleClick(object Sender, EventArgs e)
@@ -276,8 +321,6 @@ namespace NUTty_UPS_Client
                 Backend.NUT_Config.SetConfig("Simulate", "false");
                 txtIPAddress.Enabled = true;
                 txtPort.Enabled = true;
-                lblUPSModel.Text = "Not connected";
-                lblUPSStatus.Text = "";
                 isPolled = false;
 
                 if (ValidateIPAddress())
@@ -293,12 +336,16 @@ namespace NUTty_UPS_Client
                 if (ValidatePollInterval())
                 {
                     Backend.NUT_Config.SetConfig("Poll Interval", txtPollFrequency.Text);
+                    UPSPollTimer.Interval = (Convert.ToInt32(txtPollFrequency.Text) * 1000);
                 }
+
+                if (isPollingUPS) UPSPoll();
 
             }
 
             // Poll interval (in ms)
             Backend.NUT_Config.SetConfig("Poll Interval", txtPollFrequency.Text);
+            
             // Low battery threshold percentage
             Backend.NUT_Config.SetConfig("Warn Threshold", cmbBatteryPercentage.Text);
             // Threshold action
@@ -413,11 +460,16 @@ namespace NUTty_UPS_Client
 
             SimUPSDecayRate = Convert.ToDouble(txtSimBatteryDecay.Text);
 
+            IsSimulatingDecay = chkSimulate.AutoCheck;
+
             UPSPoll();
         }
 
         private void SimulateBatteryDecay()
         {
+            if (txtSimBatteryRuntime.Text.Equals(""))
+                SimulatorPopulate();
+
             double BattValue = Convert.ToDouble(NUT_Processor.SearchNUTData("battery.charge"));
             Int32 BattRuntimeMax = Convert.ToInt32(txtSimBatteryRuntime.Text);
             Int32 BattRuntimeBreakdown = (BattRuntimeMax / 100);
@@ -438,7 +490,7 @@ namespace NUTty_UPS_Client
             }
 
             // Refresh information 
-            UPSPoll();
+            //UPSPoll();
         }
 
         private void txtIPAddress_TextChanged(object sender, EventArgs e)
