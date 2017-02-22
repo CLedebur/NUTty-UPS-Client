@@ -42,7 +42,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.pnlSettings = new System.Windows.Forms.Panel();
             this.pnlDebug = new System.Windows.Forms.Panel();
-            this.label5 = new System.Windows.Forms.Label();
             this.chkDebugLogging = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.pnlAlarms = new System.Windows.Forms.Panel();
@@ -92,6 +91,9 @@
             this.mnuNotify = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuNotifySettings = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuNotifyExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtScriptPath = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.pnlSettings.SuspendLayout();
             this.pnlDebug.SuspendLayout();
             this.pnlAlarms.SuspendLayout();
@@ -205,23 +207,12 @@
             // 
             // pnlDebug
             // 
-            this.pnlDebug.Controls.Add(this.label5);
             this.pnlDebug.Controls.Add(this.chkDebugLogging);
             this.pnlDebug.Controls.Add(this.label4);
-            this.pnlDebug.Location = new System.Drawing.Point(12, 245);
+            this.pnlDebug.Location = new System.Drawing.Point(12, 348);
             this.pnlDebug.Name = "pnlDebug";
-            this.pnlDebug.Size = new System.Drawing.Size(266, 140);
+            this.pnlDebug.Size = new System.Drawing.Size(266, 37);
             this.pnlDebug.TabIndex = 13;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(11, 36);
-            this.label5.MaximumSize = new System.Drawing.Size(252, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(251, 91);
-            this.label5.TabIndex = 21;
-            this.label5.Text = resources.GetString("label5.Text");
             // 
             // chkDebugLogging
             // 
@@ -245,6 +236,8 @@
             // 
             // pnlAlarms
             // 
+            this.pnlAlarms.Controls.Add(this.label5);
+            this.pnlAlarms.Controls.Add(this.txtScriptPath);
             this.pnlAlarms.Controls.Add(this.chkAlarm);
             this.pnlAlarms.Controls.Add(this.chkNotification);
             this.pnlAlarms.Controls.Add(this.label8);
@@ -255,7 +248,7 @@
             this.pnlAlarms.Enabled = false;
             this.pnlAlarms.Location = new System.Drawing.Point(12, 126);
             this.pnlAlarms.Name = "pnlAlarms";
-            this.pnlAlarms.Size = new System.Drawing.Size(266, 113);
+            this.pnlAlarms.Size = new System.Drawing.Size(266, 216);
             this.pnlAlarms.TabIndex = 14;
             // 
             // chkAlarm
@@ -336,7 +329,8 @@
             this.cmbAlarmAction.Items.AddRange(new object[] {
             "Do Nothing",
             "Hibernate",
-            "Shut Down"});
+            "Shut Down",
+            "Execute Script"});
             this.cmbAlarmAction.Location = new System.Drawing.Point(70, 38);
             this.cmbAlarmAction.Name = "cmbAlarmAction";
             this.cmbAlarmAction.Size = new System.Drawing.Size(128, 21);
@@ -712,6 +706,27 @@
             this.mnuNotifyExit.Text = "E&xit";
             this.mnuNotifyExit.Click += new System.EventHandler(this.mnuNotifyExit_Click_1);
             // 
+            // txtScriptPath
+            // 
+            this.txtScriptPath.Enabled = false;
+            this.txtScriptPath.Location = new System.Drawing.Point(14, 126);
+            this.txtScriptPath.Name = "txtScriptPath";
+            this.txtScriptPath.Size = new System.Drawing.Size(182, 20);
+            this.txtScriptPath.TabIndex = 19;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(11, 110);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(69, 13);
+            this.label5.TabIndex = 20;
+            this.label5.Text = "Path to script";
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -767,7 +782,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel pnlSettings;
         private System.Windows.Forms.Panel pnlDebug;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.CheckBox chkDebugLogging;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel pnlAlarms;
@@ -817,6 +831,9 @@
         private System.Windows.Forms.ContextMenuStrip mnuNotify;
         private System.Windows.Forms.ToolStripMenuItem mnuNotifyExit;
         private System.Windows.Forms.ToolStripMenuItem mnuNotifySettings;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtScriptPath;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 

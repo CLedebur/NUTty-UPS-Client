@@ -276,7 +276,15 @@ namespace NUTty_UPS_Client
 
         private void PerformAlarmAction()
         {
+            if (Backend.Background.isSimulated)
+            {
+                cmbAlarmAction.Invoke((MethodInvoker)(() => MessageBox.Show("This is a simulation. If this were a real event, the PC would be " + Backend.NUT_Config.GetConfig("Alarm Action"))));
+                UPSPollTimer.Stop();
+            }
+            else
+            {
 
+            }
         }
 
         private void ntfUPSTray_DoubleClick(object Sender, EventArgs e)
@@ -546,6 +554,14 @@ namespace NUTty_UPS_Client
 
         private void cmbAlarmAction_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cmbAlarmAction.Text.Equals("Execute Script"))
+            {
+                txtScriptPath.Enabled = true;
+            }
+            else
+            {
+                txtScriptPath.Enabled = false;
+            }
             btnApply.Enabled = true;
         }
 
@@ -561,6 +577,8 @@ namespace NUTty_UPS_Client
 
         private void chkDebugLogging_CheckedChanged(object sender, EventArgs e)
         {
+            if (chkDebugLogging.Checked)
+                MessageBox.Show("Note: This should only be checked when absolutely necessary, as everything is logged and added to the file each time the UPS is polled, which could result in very large log files.\n\nLogs are stored in the Logs folder under the application folder");
             btnApply.Enabled = true;
         }
     }
