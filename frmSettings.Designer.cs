@@ -93,7 +93,8 @@
             this.mnuNotifyExit = new System.Windows.Forms.ToolStripMenuItem();
             this.txtScriptPath = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.dlgScriptPath = new System.Windows.Forms.OpenFileDialog();
+            this.btnBrowse = new System.Windows.Forms.Button();
             this.pnlSettings.SuspendLayout();
             this.pnlDebug.SuspendLayout();
             this.pnlAlarms.SuspendLayout();
@@ -105,7 +106,7 @@
             // 
             // txtIPAddress
             // 
-            this.txtIPAddress.Location = new System.Drawing.Point(23, 42);
+            this.txtIPAddress.Location = new System.Drawing.Point(26, 42);
             this.txtIPAddress.Name = "txtIPAddress";
             this.txtIPAddress.Size = new System.Drawing.Size(100, 20);
             this.txtIPAddress.TabIndex = 0;
@@ -114,7 +115,7 @@
             // 
             // txtPort
             // 
-            this.txtPort.Location = new System.Drawing.Point(129, 42);
+            this.txtPort.Location = new System.Drawing.Point(132, 42);
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(44, 20);
             this.txtPort.TabIndex = 1;
@@ -124,7 +125,7 @@
             // lblIPAddress
             // 
             this.lblIPAddress.AutoSize = true;
-            this.lblIPAddress.Location = new System.Drawing.Point(23, 26);
+            this.lblIPAddress.Location = new System.Drawing.Point(25, 26);
             this.lblIPAddress.Name = "lblIPAddress";
             this.lblIPAddress.Size = new System.Drawing.Size(58, 13);
             this.lblIPAddress.TabIndex = 2;
@@ -133,7 +134,7 @@
             // lblPort
             // 
             this.lblPort.AutoSize = true;
-            this.lblPort.Location = new System.Drawing.Point(126, 26);
+            this.lblPort.Location = new System.Drawing.Point(129, 26);
             this.lblPort.Name = "lblPort";
             this.lblPort.Size = new System.Drawing.Size(26, 13);
             this.lblPort.TabIndex = 3;
@@ -141,7 +142,7 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(179, 26);
+            this.btnConnect.Location = new System.Drawing.Point(182, 26);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(99, 36);
             this.btnConnect.TabIndex = 4;
@@ -152,7 +153,7 @@
             // lblUPSModel
             // 
             this.lblUPSModel.AutoSize = true;
-            this.lblUPSModel.Location = new System.Drawing.Point(289, 9);
+            this.lblUPSModel.Location = new System.Drawing.Point(292, 9);
             this.lblUPSModel.Name = "lblUPSModel";
             this.lblUPSModel.Size = new System.Drawing.Size(79, 13);
             this.lblUPSModel.TabIndex = 6;
@@ -161,7 +162,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 9);
+            this.label1.Location = new System.Drawing.Point(15, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(102, 13);
             this.label1.TabIndex = 8;
@@ -170,7 +171,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 0);
+            this.label2.Location = new System.Drawing.Point(0, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(91, 13);
             this.label2.TabIndex = 12;
@@ -200,7 +201,7 @@
             this.pnlSettings.Controls.Add(this.txtPollFrequency);
             this.pnlSettings.Controls.Add(this.label2);
             this.pnlSettings.Enabled = false;
-            this.pnlSettings.Location = new System.Drawing.Point(12, 77);
+            this.pnlSettings.Location = new System.Drawing.Point(15, 77);
             this.pnlSettings.Name = "pnlSettings";
             this.pnlSettings.Size = new System.Drawing.Size(266, 43);
             this.pnlSettings.TabIndex = 12;
@@ -209,7 +210,7 @@
             // 
             this.pnlDebug.Controls.Add(this.chkDebugLogging);
             this.pnlDebug.Controls.Add(this.label4);
-            this.pnlDebug.Location = new System.Drawing.Point(12, 348);
+            this.pnlDebug.Location = new System.Drawing.Point(15, 348);
             this.pnlDebug.Name = "pnlDebug";
             this.pnlDebug.Size = new System.Drawing.Size(266, 37);
             this.pnlDebug.TabIndex = 13;
@@ -236,6 +237,7 @@
             // 
             // pnlAlarms
             // 
+            this.pnlAlarms.Controls.Add(this.btnBrowse);
             this.pnlAlarms.Controls.Add(this.label5);
             this.pnlAlarms.Controls.Add(this.txtScriptPath);
             this.pnlAlarms.Controls.Add(this.chkAlarm);
@@ -246,7 +248,7 @@
             this.pnlAlarms.Controls.Add(this.cmbAlarmAction);
             this.pnlAlarms.Controls.Add(this.label7);
             this.pnlAlarms.Enabled = false;
-            this.pnlAlarms.Location = new System.Drawing.Point(12, 126);
+            this.pnlAlarms.Location = new System.Drawing.Point(15, 126);
             this.pnlAlarms.Name = "pnlAlarms";
             this.pnlAlarms.Size = new System.Drawing.Size(266, 216);
             this.pnlAlarms.TabIndex = 14;
@@ -351,7 +353,7 @@
             this.panel1.Controls.Add(this.chkSimulate);
             this.panel1.Controls.Add(this.btnApply);
             this.panel1.Controls.Add(this.btnRevert);
-            this.panel1.Location = new System.Drawing.Point(12, 391);
+            this.panel1.Location = new System.Drawing.Point(15, 391);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(266, 33);
             this.panel1.TabIndex = 15;
@@ -359,7 +361,7 @@
             // chkSimulate
             // 
             this.chkSimulate.AutoSize = true;
-            this.chkSimulate.Location = new System.Drawing.Point(11, 8);
+            this.chkSimulate.Location = new System.Drawing.Point(14, 7);
             this.chkSimulate.Name = "chkSimulate";
             this.chkSimulate.Size = new System.Drawing.Size(72, 17);
             this.chkSimulate.TabIndex = 2;
@@ -390,7 +392,7 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.lblUPSStatus);
-            this.panel2.Location = new System.Drawing.Point(12, 430);
+            this.panel2.Location = new System.Drawing.Point(15, 430);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(446, 31);
             this.panel2.TabIndex = 16;
@@ -723,9 +725,19 @@
             this.label5.TabIndex = 20;
             this.label5.Text = "Path to script";
             // 
-            // openFileDialog1
+            // dlgScriptPath
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.dlgScriptPath.FileName = "openFileDialog1";
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Enabled = false;
+            this.btnBrowse.Location = new System.Drawing.Point(202, 124);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(61, 23);
+            this.btnBrowse.TabIndex = 21;
+            this.btnBrowse.Text = "Browse";
+            this.btnBrowse.UseVisualStyleBackColor = true;
             // 
             // frmSettings
             // 
@@ -833,7 +845,8 @@
         private System.Windows.Forms.ToolStripMenuItem mnuNotifySettings;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtScriptPath;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.OpenFileDialog dlgScriptPath;
+        private System.Windows.Forms.Button btnBrowse;
     }
 }
 

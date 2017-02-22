@@ -155,7 +155,6 @@ namespace NUTty_UPS_Client
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
-
             UPSPollTimer = new System.Timers.Timer(5000);
             UPSPollTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             UPSPollTimer.AutoReset = true;
@@ -557,10 +556,12 @@ namespace NUTty_UPS_Client
             if (cmbAlarmAction.Text.Equals("Execute Script"))
             {
                 txtScriptPath.Enabled = true;
+                btnBrowse.Enabled = true;
             }
             else
             {
                 txtScriptPath.Enabled = false;
+                btnBrowse.Enabled = false;
             }
             btnApply.Enabled = true;
         }

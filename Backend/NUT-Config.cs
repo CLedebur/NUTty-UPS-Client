@@ -11,7 +11,7 @@ namespace NUTty_UPS_Client.Backend
             try
             {
                 RegistryKey RegKey;
-                RegKey = Registry.LocalMachine.CreateSubKey("Software\\NUTty UPS Client");
+                RegKey = Registry.CurrentUser.CreateSubKey("Software\\NUTty UPS Client");
                 RegKey.SetValue(KeyName, KeyValue);
                 RegKey.Close();
             }
@@ -28,7 +28,7 @@ namespace NUTty_UPS_Client.Backend
         public static string GetConfig(string KeyName)
         {
             Console.WriteLine("[CONFIG] Checking for registry key: " + KeyName);
-            RegistryKey RegKey = Registry.LocalMachine.OpenSubKey("Software\\NUTty UPS Client", false);
+            RegistryKey RegKey = Registry.CurrentUser.OpenSubKey("Software\\NUTty UPS Client", false);
 
             object RegValue;
             try
