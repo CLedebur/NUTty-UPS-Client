@@ -171,12 +171,12 @@ namespace NUTty_UPS_Client
                 chkSimulate.Checked = false;
             }
 
-            
+
             // Constructing notify tray icon
             ntfUPSTray = new NotifyIcon(this.components);
             ntfUPSTray.Visible = true;
             ntfUPSTray.DoubleClick += new System.EventHandler(this.ntfUPSTray_DoubleClick);
-            
+
 
             // Checks settings in the registry and fills in the fields accordingly
             Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings = Backend.NUT_Config.GetConnectionSettings();
@@ -218,7 +218,13 @@ namespace NUTty_UPS_Client
                 cmbAlarmAction.Text = "Hibernate";
             else if (TempValue.Equals(""))
                 cmbAlarmAction.Text = "Hibernate";
-            else
+            else if (TempValue.Equals("Execute Script"))
+            { 
+                cmbAlarmAction.Text = "Execute Script";
+                txtScriptPath.Text = Backend.NUT_Config.GetConfig("Script Path");
+                txtScriptPath.Enabled = true;
+                btnBrowse.Enabled = true;
+            } else
                 cmbAlarmAction.Text = TempValue;
 
 
@@ -235,7 +241,7 @@ namespace NUTty_UPS_Client
             {
                 Backend.NUT_Config.SetConfig("Notification", "false");
             }
-            // Alarm
+            // Alarm 
             if (chkAlarm.Checked)
             {
                 Backend.NUT_Config.SetConfig("Alarm", "true");
@@ -275,13 +281,26 @@ namespace NUTty_UPS_Client
 
         private void PerformAlarmAction()
         {
-            if (Backend.Background.isSimulated)
+            if (Backend.Background.isSimulated && cmbSimUPSStatus.Text.Equals("OB DISCHRG"))
             {
-                cmbAlarmAction.Invoke((MethodInvoker)(() => MessageBox.Show("This is a simulation. If this were a real event, the PC would be " + Backend.NUT_Config.GetConfig("Alarm Action"))));
+                cmbAlarmAction.Invoke((MethodInvoker)(() => MessageBox.Show("This is a simulation. If this were a real event, the PC would be " + Backend.NUT_Config.GetConfig("Threshold Action"))));
                 UPSPollTimer.Stop();
             }
+            else if (Backend.Background.isSimulated)
+                return;
             else
             {
+                string AlarmAction = Backend.NUT_Config.GetConfig("Threshold Action");
+
+                if (AlarmAction.Equals("Do Nothing")) return;
+                else if (AlarmAction.Equals("Shut Down")) Console.WriteLine("Insert shutdown command");
+                else if (AlarmAction.Equals("Hibernate")) Console.WriteLine("Insert hibernate command");
+                else if (AlarmAction.Equals("Execute Script"))
+                {
+                    string ScriptPath = Backend.NUT_Config.GetConfig("Script Path");
+                    WriteNUTLog("Executing command: " + ScriptPath);
+                    System.Diagnostics.Process.Start("cmd.exe", ScriptPath);
+                }
 
             }
         }
@@ -305,6 +324,7 @@ namespace NUTty_UPS_Client
 
             if (chkSimulate.Checked)
             {
+                // Makes the required adjustments to get the simulator to work
                 frmSettings._frmSettings.Width = 686;
                 pnlSimulator.Visible = true;
                 lblUPSModel.Text = "Retrieving data...";
@@ -373,6 +393,14 @@ namespace NUTty_UPS_Client
             {
                 Backend.NUT_Config.SetConfig("Alarm", "false");
             }
+
+            // Alarm Path
+            if (cmbAlarmAction.Text.Equals("Execute Script"))
+            {
+                Backend.NUT_Config.SetConfig("Script Path", txtScriptPath.Text);
+            }
+            
+
             // Debug Logging
             if (chkDebugLogging.Checked)
             {
@@ -580,6 +608,17 @@ namespace NUTty_UPS_Client
         {
             if (chkDebugLogging.Checked)
                 MessageBox.Show("Note: This should only be checked when absolutely necessary, as everything is logged and added to the file each time the UPS is polled, which could result in very large log files.\n\nLogs are stored in the Logs folder under the application folder");
+            btnApply.Enabled = true;
+        }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            dlgScriptPath.ShowDialog();
+            txtScriptPath.Text = dlgScriptPath.FileName;
+        }
+
+        private void txtScriptPath_TextChanged(object sender, EventArgs e)
+        {
             btnApply.Enabled = true;
         }
     }

@@ -711,15 +711,16 @@
             // txtScriptPath
             // 
             this.txtScriptPath.Enabled = false;
-            this.txtScriptPath.Location = new System.Drawing.Point(14, 126);
+            this.txtScriptPath.Location = new System.Drawing.Point(14, 131);
             this.txtScriptPath.Name = "txtScriptPath";
             this.txtScriptPath.Size = new System.Drawing.Size(182, 20);
             this.txtScriptPath.TabIndex = 19;
+            this.txtScriptPath.TextChanged += new System.EventHandler(this.txtScriptPath_TextChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(11, 110);
+            this.label5.Location = new System.Drawing.Point(11, 115);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(69, 13);
             this.label5.TabIndex = 20;
@@ -732,12 +733,13 @@
             // btnBrowse
             // 
             this.btnBrowse.Enabled = false;
-            this.btnBrowse.Location = new System.Drawing.Point(202, 124);
+            this.btnBrowse.Location = new System.Drawing.Point(202, 129);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(61, 23);
+            this.btnBrowse.Size = new System.Drawing.Size(64, 23);
             this.btnBrowse.TabIndex = 21;
             this.btnBrowse.Text = "Browse";
             this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // frmSettings
             // 
