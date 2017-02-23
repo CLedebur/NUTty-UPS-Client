@@ -282,14 +282,21 @@ namespace NUTty_UPS_Client
             btnApply.Enabled = false;
             UPSPollTimer.Enabled = true;
             UPSPollTimer.Start();
+
+            if(IsConfigurationNeeded)
+            {
+                // If this is run for the first time, or the registry keys have been cleared it will bring up the
+                // settings form to make it a bit more convenient for the user.
+                _frmSettings.Show();
+                _frmSettings.WindowState = FormWindowState.Normal;
+            }
+
         }
 
         private void frmSettings_FormClosing(object sender, FormClosingEventArgs e)
         {
             WriteNUTLog("Unloading app");
-            UPSPollTimer.Enabled = false;
             Application.Exit();
-
         }
 
         private void PerformAlarmAction()
