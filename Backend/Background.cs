@@ -55,7 +55,6 @@ namespace NUTty_UPS_Client.Backend
                 if (NUTConnectionSettings.Item1 == IPAddress.Parse("127.0.0.1") || NUTConnectionSettings.Item2 == 0 || NUTConnectionSettings.Item3 == 0)
                 {
                     WriteNUTLog("Empty values found, starting Settings form");
-                    Application.Run(new frmSettings());
                     return;
                 }
             }

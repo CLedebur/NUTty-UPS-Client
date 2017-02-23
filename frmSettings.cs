@@ -155,9 +155,12 @@ namespace NUTty_UPS_Client
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
+            frmSettings_Resize("",EventArgs.Empty);
+
             UPSPollTimer = new System.Timers.Timer(5000);
             UPSPollTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             UPSPollTimer.AutoReset = true;
+            bool IsConfigurationNeeded = false;
 
             // Checks to see if we are in a simulation environment
             if (Backend.Background.isSimulated) {
@@ -185,18 +188,21 @@ namespace NUTty_UPS_Client
                 txtIPAddress.Text = NUTConnectionSettings.Item1.ToString();
                 NUTServer = IPAddress.Parse(NUTConnectionSettings.Item1.ToString());
             }
+            else IsConfigurationNeeded = true;
 
             if (NUTConnectionSettings.Item2 != 0)
             {
                 txtPort.Text = NUTConnectionSettings.Item2.ToString();
                 NUTPort = Convert.ToUInt16(NUTConnectionSettings.Item2);
             }
+            else IsConfigurationNeeded = true;
 
             if (NUTConnectionSettings.Item3 != 0)
             {
                 txtPollFrequency.Text = NUTConnectionSettings.Item3.ToString();
                 UPSPollTimer.Interval = (Convert.ToUInt32(NUTConnectionSettings.Item3) * 1000);
             }
+            else IsConfigurationNeeded = true;
 
             string TempValue;
             UInt32 number;
@@ -276,6 +282,13 @@ namespace NUTty_UPS_Client
             btnApply.Enabled = false;
             UPSPollTimer.Enabled = true;
             UPSPollTimer.Start();
+        }
+
+        private void frmSettings_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            WriteNUTLog("Unloading app");
+            UPSPollTimer.Enabled = false;
+            Application.Exit();
 
         }
 
@@ -621,6 +634,7 @@ namespace NUTty_UPS_Client
         {
             btnApply.Enabled = true;
         }
+
     }
 
 }

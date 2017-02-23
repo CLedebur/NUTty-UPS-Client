@@ -45,6 +45,9 @@
             this.chkDebugLogging = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.pnlAlarms = new System.Windows.Forms.Panel();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtScriptPath = new System.Windows.Forms.TextBox();
             this.chkAlarm = new System.Windows.Forms.CheckBox();
             this.chkNotification = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -91,10 +94,7 @@
             this.mnuNotify = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuNotifySettings = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuNotifyExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.txtScriptPath = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.dlgScriptPath = new System.Windows.Forms.OpenFileDialog();
-            this.btnBrowse = new System.Windows.Forms.Button();
             this.pnlSettings.SuspendLayout();
             this.pnlDebug.SuspendLayout();
             this.pnlAlarms.SuspendLayout();
@@ -252,6 +252,35 @@
             this.pnlAlarms.Name = "pnlAlarms";
             this.pnlAlarms.Size = new System.Drawing.Size(266, 216);
             this.pnlAlarms.TabIndex = 14;
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Enabled = false;
+            this.btnBrowse.Location = new System.Drawing.Point(202, 129);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(64, 23);
+            this.btnBrowse.TabIndex = 21;
+            this.btnBrowse.Text = "Browse";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(11, 115);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(69, 13);
+            this.label5.TabIndex = 20;
+            this.label5.Text = "Path to script";
+            // 
+            // txtScriptPath
+            // 
+            this.txtScriptPath.Enabled = false;
+            this.txtScriptPath.Location = new System.Drawing.Point(14, 131);
+            this.txtScriptPath.Name = "txtScriptPath";
+            this.txtScriptPath.Size = new System.Drawing.Size(182, 20);
+            this.txtScriptPath.TabIndex = 19;
+            this.txtScriptPath.TextChanged += new System.EventHandler(this.txtScriptPath_TextChanged);
             // 
             // chkAlarm
             // 
@@ -708,38 +737,9 @@
             this.mnuNotifyExit.Text = "E&xit";
             this.mnuNotifyExit.Click += new System.EventHandler(this.mnuNotifyExit_Click_1);
             // 
-            // txtScriptPath
-            // 
-            this.txtScriptPath.Enabled = false;
-            this.txtScriptPath.Location = new System.Drawing.Point(14, 131);
-            this.txtScriptPath.Name = "txtScriptPath";
-            this.txtScriptPath.Size = new System.Drawing.Size(182, 20);
-            this.txtScriptPath.TabIndex = 19;
-            this.txtScriptPath.TextChanged += new System.EventHandler(this.txtScriptPath_TextChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(11, 115);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(69, 13);
-            this.label5.TabIndex = 20;
-            this.label5.Text = "Path to script";
-            // 
             // dlgScriptPath
             // 
             this.dlgScriptPath.FileName = "openFileDialog1";
-            // 
-            // btnBrowse
-            // 
-            this.btnBrowse.Enabled = false;
-            this.btnBrowse.Location = new System.Drawing.Point(202, 129);
-            this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(64, 23);
-            this.btnBrowse.TabIndex = 21;
-            this.btnBrowse.Text = "Browse";
-            this.btnBrowse.UseVisualStyleBackColor = true;
-            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // frmSettings
             // 
@@ -763,6 +763,8 @@
             this.Name = "frmSettings";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "NUTty UPS Client";
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSettings_FormClosing);
             this.Load += new System.EventHandler(this.frmSettings_Load);
             this.Resize += new System.EventHandler(this.frmSettings_Resize);
             this.pnlSettings.ResumeLayout(false);
