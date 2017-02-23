@@ -295,8 +295,18 @@ namespace NUTty_UPS_Client
 
         private void frmSettings_FormClosing(object sender, FormClosingEventArgs e)
         {
-            WriteNUTLog("Unloading app");
-            Application.Exit();
+
+            DialogResult = MessageBox.Show("Closing the application will also stop the UPS monitoring. Continue?", "Exiting " + Application.ProductName, MessageBoxButtons.YesNo);
+
+            if (DialogResult == DialogResult.Yes)
+            {
+                WriteNUTLog("Application is now closing.");
+            }
+            else
+            {
+                e.Cancel = true;
+                return;
+            }
         }
 
         private void PerformAlarmAction()

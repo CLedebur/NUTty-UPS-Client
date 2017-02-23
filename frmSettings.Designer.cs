@@ -759,6 +759,7 @@
             this.Controls.Add(this.lblIPAddress);
             this.Controls.Add(this.txtPort);
             this.Controls.Add(this.txtIPAddress);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmSettings";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
