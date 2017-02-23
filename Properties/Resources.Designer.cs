@@ -59,15 +59,5 @@ namespace NUTty_UPS_Client.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Settings_24 {
-            get {
-                object obj = ResourceManager.GetObject("Settings-24", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

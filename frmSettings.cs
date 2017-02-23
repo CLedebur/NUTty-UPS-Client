@@ -296,7 +296,7 @@ namespace NUTty_UPS_Client
         private void frmSettings_FormClosing(object sender, FormClosingEventArgs e)
         {
 
-            DialogResult = MessageBox.Show("Closing the application will also stop the UPS monitoring. Continue?", "Exiting " + Application.ProductName, MessageBoxButtons.YesNo);
+            DialogResult = MessageBox.Show("Closing the application will also stop the UPS monitoring. Close anyway?", "Exiting " + Application.ProductName, MessageBoxButtons.YesNo);
 
             if (DialogResult == DialogResult.Yes)
             {
