@@ -322,9 +322,25 @@ namespace NUTty_UPS_Client
             {
                 string AlarmAction = Backend.NUT_Config.GetConfig("Threshold Action");
 
-                if (AlarmAction.Equals("Do Nothing")) return;
-                else if (AlarmAction.Equals("Shut Down")) Console.WriteLine("Insert shutdown command");
-                else if (AlarmAction.Equals("Hibernate")) Console.WriteLine("Insert hibernate command");
+                if (AlarmAction.Equals("Do Nothing"))
+                {
+                    return;
+                }
+                else if (AlarmAction.Equals("Shut Down"))
+                {
+                    WriteNUTLog("Shutting down PC");
+                    var psi = new System.Diagnostics.ProcessStartInfo("shutdown", "/s /t 0");
+                    psi.CreateNoWindow = true;
+                    psi.UseShellExecute = false;
+                    System.Diagnostics.Process.Start(psi);
+                    
+                }
+                else if (AlarmAction.Equals("Hibernate"))
+                {
+                    WriteNUTLog("Hibernating PC");
+                    Application.SetSuspendState(PowerState.Hibernate, true, true);
+
+                }
                 else if (AlarmAction.Equals("Execute Script"))
                 {
                     string ScriptPath = Backend.NUT_Config.GetConfig("Script Path");
