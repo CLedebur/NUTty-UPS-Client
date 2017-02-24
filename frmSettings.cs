@@ -329,6 +329,7 @@ namespace NUTty_UPS_Client
                 else if (AlarmAction.Equals("Shut Down"))
                 {
                     WriteNUTLog("Shutting down PC");
+                    UPSPollTimer.Enabled = false;
                     var psi = new System.Diagnostics.ProcessStartInfo("shutdown", "/s /t 0");
                     psi.CreateNoWindow = true;
                     psi.UseShellExecute = false;
@@ -337,6 +338,7 @@ namespace NUTty_UPS_Client
                 }
                 else if (AlarmAction.Equals("Hibernate"))
                 {
+                    UPSPollTimer.Enabled = false;
                     WriteNUTLog("Hibernating PC");
                     Application.SetSuspendState(PowerState.Hibernate, true, true);
 
