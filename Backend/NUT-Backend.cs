@@ -15,11 +15,8 @@ namespace NUTty_UPS_Client.Backend
     {
         public static bool isSimulated = false;
         public static Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings;
+        public static bool isLogging = false;
 
-        public static void WriteNUTLog(string strOutput)
-        {
-            Console.WriteLine("[BACKGROUND] " + strOutput);
-        }
 
         /// <summary>
         /// The main entry point for the application.
@@ -35,8 +32,25 @@ namespace NUTty_UPS_Client.Backend
             BGProcess.InitializeBg();
         }
 
+        public static void WriteNUTLog(string strOutput)
+        {
+            Console.WriteLine(strOutput);
+            if (isLogging)
+            {
+                String CurDateTime = DateTime.Now.ToString("dd/MM/yy hh:mm:ss");
+                System.IO.File.AppendAllText(Application.StartupPath + @"\NUTtyUPS.log", "[" + CurDateTime + "]" + strOutput + "\r\n");
+            }
+        }
+
         public void InitializeBg()
         {
+
+            string DebugLogging = Backend.NUT_Config.GetConfig("Debug");
+            if (DebugLogging == null)
+                Backend.Background.WriteNUTLog("[BACKEND] No registry entry exists for debug logging");
+            else if (DebugLogging.Equals("true"))
+                Backend.Background.isLogging = true;
+
             WriteNUTLog("[INITIALIZE] Started");
 
             try
@@ -54,13 +68,13 @@ namespace NUTty_UPS_Client.Backend
                 NUTConnectionSettings = NUT_Config.GetConnectionSettings();
                 if (NUTConnectionSettings.Item1 == IPAddress.Parse("127.0.0.1") || NUTConnectionSettings.Item2 == 0 || NUTConnectionSettings.Item3 == 0)
                 {
-                    WriteNUTLog("Empty values found, starting Settings form");
+                    WriteNUTLog("[BACKEND] Empty values found, starting Settings form");
                     return;
                 }
             }
             catch (Exception e)
             {
-                WriteNUTLog("[BACKGROUND] Error occurred: " + e);
+                WriteNUTLog("[BACKEND] Error occurred: " + e);
             }
             finally
             {

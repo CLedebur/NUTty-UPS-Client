@@ -11,22 +11,17 @@ namespace NUTty_UPS_Client
     {
         public static string[,] UPSVariables;
 
-        private static void WriteNUTLog(string strOutput)
-        {
-            Console.WriteLine(strOutput);
-        }
-
         public static string ParseNUTOutput(string nutOutput)
         {
             nutOutput = Regex.Replace(nutOutput, @"\r\n?|\n", Environment.NewLine); // Replaces UNIX linefeeds with ANSI
 
-            WriteNUTLog("Attempting to sanitize output");
+            Backend.Background.WriteNUTLog("[PROCESSOR] Attempting to sanitize output");
             List<string> nutList = new List<string>(nutOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
 
             // Sanity check! 
             if (nutList[0].Contains("BEGIN LIST VAR ups") && nutList[nutList.Count - 1].Contains("END LIST VAR ups"))
             {
-                WriteNUTLog("Data structure is correct. Let's continue.");
+                Backend.Background.WriteNUTLog("[PROCESSOR] Data structure is correct. Let's continue.");
             }
 
             UPSVariables = new string[nutList.Count -1, 2];
@@ -136,35 +131,33 @@ namespace NUTty_UPS_Client
 
         public static string SearchNUTData(string NUTVariable)
         {
-            //WriteNUTLog("[SearchNUTData] Invoked. Searching for: " + NUTVariable);
             for (int i = 0; i < UPSVariables.Length; i++)
             {
                 if (UPSVariables[i, 0].Equals(NUTVariable))
                 {
-                    //WriteNUTLog("[SearchNUTData] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
                     return UPSVariables[i, 1];
                 }
             }
 
-            WriteNUTLog("[SearchNUTData] Could not find requested variable");
+            Backend.Background.WriteNUTLog("[SEARCHNUTDATA] Could not find requested variable");
             return "INVALID";
         }
 
         public static void ModifySimNUTData(string NUTVariable, string NUTValue)
         {
-            WriteNUTLog("Array length is " + Convert.ToString(UPSVariables.GetLength(0)));
-            WriteNUTLog("[ModifySimNUTData] Invoked. Searching for: " + NUTVariable);
+            Backend.Background.WriteNUTLog("[MODNUTDATA] Array length is " + Convert.ToString(UPSVariables.GetLength(0)));
+            Backend.Background.WriteNUTLog("[MODNUTDATA] Invoked. Searching for: " + NUTVariable);
             for (int i = 0; i < UPSVariables.GetLength(0); i++)
             {
                 if (UPSVariables[i, 0].Equals(NUTVariable))
                 {
-                    WriteNUTLog("[SearchNUTData] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
+                    Backend.Background.WriteNUTLog("[SEARCHNUTDATA] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
                     UPSVariables[i, 1] = NUTValue;
                     return;
                 }
             }
 
-            WriteNUTLog("[SearchNUTData] Could not find requested variable");
+            Backend.Background.WriteNUTLog("[SEARCHNUTDATA] Could not find requested variable");
             return;
         }
 

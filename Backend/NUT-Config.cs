@@ -17,64 +17,62 @@ namespace NUTty_UPS_Client.Backend
             }
             catch (Exception e)
             {
-                Console.WriteLine("[CONFIG] Could not set registry key: " + KeyName + " wtih value " + KeyValue + "\nException:" + e);
+                Backend.Background.WriteNUTLog("[CONFIG] Could not set registry key: " + KeyName + " wtih value " + KeyValue + "\nException:" + e);
                 return false;
             }
-            Console.WriteLine("[CONFIG] Set registry key " + KeyName + " with value " + KeyValue);
+            Backend.Background.WriteNUTLog("[CONFIG] Set registry key " + KeyName + " with value " + KeyValue);
             return true;
 
         }
 
         public static string GetConfig(string KeyName)
         {
-            Console.WriteLine("[CONFIG] Checking for registry key: " + KeyName);
+            Backend.Background.WriteNUTLog("[CONFIG] Checking for registry key: " + KeyName);
             RegistryKey RegKey = Registry.CurrentUser.OpenSubKey("Software\\NUTty UPS Client", false);
 
             object RegValue;
             try
             {
                 RegValue = RegKey.GetValue(KeyName);
-                Console.WriteLine(RegValue.ToString());
+                Backend.Background.WriteNUTLog("[CONFIG] Got: " + RegValue.ToString());
                 switch (RegKey.GetValueKind(KeyName))
                 {
                     case RegistryValueKind.String:
                         return RegValue.ToString();
                     case RegistryValueKind.ExpandString:
-                        Console.WriteLine("Value = " + RegValue);
+                        Backend.Background.WriteNUTLog("[CONFIG] Got: " + RegValue);
                         break;
                     case RegistryValueKind.Binary:
                         foreach (byte b in (byte[])RegValue)
                         {
                             Console.Write("{0:x2} ", b);
                         }
-                        Console.WriteLine();
                         break;
                     case RegistryValueKind.DWord:
-                        Console.WriteLine("Value = " + Convert.ToString((Int32)RegValue));
+                        Backend.Background.WriteNUTLog("[CONFIG] Got: " + Convert.ToString((Int32)RegValue));
                         break;
                     case RegistryValueKind.QWord:
-                        Console.WriteLine("Value = " + Convert.ToString((Int64)RegValue));
+                        Backend.Background.WriteNUTLog("[CONFIG] Got: " + Convert.ToString((Int64)RegValue));
                         break;
                     case RegistryValueKind.MultiString:
                         foreach (string s in (string[])RegValue)
                         {
                             Console.Write("[{0:s}], ", s);
                         }
-                        Console.WriteLine();
                         break;
                     default:
-                        Console.WriteLine("Value = (Unknown)");
+                        Backend.Background.WriteNUTLog("[CONFIG] Got: Unknown");
                         break;
                 }
 
             }
             catch (NullReferenceException)
             {
-                Console.WriteLine("[CONFIG] Registry key does not exist: " + KeyName);
+                Backend.Background.WriteNUTLog("[CONFIG] Registry key does not exist: " + KeyName);
                 return null;
             }
             catch (Exception e) {
-                Console.WriteLine("[CONFIG] Failed to read registry key: " + e);
+                Backend.Background.WriteNUTLog("[CONFIG] Failed to read registry key: " + e);
                 return null;
             }
 

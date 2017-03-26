@@ -11,10 +11,6 @@ namespace NUTty_UPS_Client
     public class NUT_Poller
     {
 
-        private static void WriteNUTLog(string strOutput)
-        {
-            Console.WriteLine(strOutput);
-        }
         public static Tuple<string, bool> PollNUTServer(string nutIP, int nutPort)
         {
             if (Backend.Background.isSimulated)
@@ -29,20 +25,20 @@ namespace NUTty_UPS_Client
             TelnetConnection nutServer = new TelnetConnection(nutIP, nutPort);
             string nutUPSStatus = "LIST VAR ups";
 
-            WriteNUTLog("Connecting to NUT server " + nutIP + " at " + nutPort);
+            Backend.Background.WriteNUTLog("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
 
             if(nutServer.IsConnected)
             {
-                WriteNUTLog("Connected to NUT server");
+                Backend.Background.WriteNUTLog("[POLLER] Connected to NUT server");
             }
 
             nutServer.WriteLine(nutUPSStatus);
             string nutOutput = nutServer.Read();
-            //WriteNUTLog("[NUT Poller] Got data from server:\n" + nutOutput + "\n");
+            //Backend.Background.WriteNUTLog("[NUT Poller] Got data from server:\n" + nutOutput + "\n");
 
             if (nutOutput.Contains("ERR ACCESS-DENIED")) 
             {
-                WriteNUTLog("[NUT Poller] Got ACCESS DENIED when trying to retrieve data");
+                Backend.Background.WriteNUTLog("[POLLER] Got ACCESS DENIED when trying to retrieve data");
             } else
             {
                 isSuccessful = true;

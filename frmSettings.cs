@@ -33,7 +33,7 @@ namespace NUTty_UPS_Client
             if (isPollingUPS)
             {
                 // Runtime, charge and status code
-                WriteNUTLog("[TIMER] Polling UPS");
+                Backend.Background.WriteNUTLog("[TIMER] Polling UPS");
                 UPSPoll();
             }
         }
@@ -105,15 +105,9 @@ namespace NUTty_UPS_Client
         }
 
 
-        public void WriteNUTLog(string strOutput)
-        {
-            Console.WriteLine(strOutput);
-        }
-
         public void UpdateUPSStatus(string UPSStatusMessage, int UPSStatusCode)
         {
             // Updates the UPS status and runtime on the bottom of the form
-            WriteNUTLog("Updating labels on form " + UPSStatusMessage);
             if (UPSStatusCode == 0)
             {
                 lblUPSStatus.Text = ("On AC Power - " + UPSStatusMessage);
@@ -174,7 +168,6 @@ namespace NUTty_UPS_Client
                 chkSimulate.Checked = false;
             }
 
-
             // Constructing notify tray icon
             ntfUPSTray = new NotifyIcon(this.components);
             ntfUPSTray.Visible = true;
@@ -182,6 +175,7 @@ namespace NUTty_UPS_Client
 
 
             // Checks settings in the registry and fills in the fields accordingly
+
             Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings = Backend.NUT_Config.GetConnectionSettings();
             if (NUTConnectionSettings.Item1 != IPAddress.Parse("127.0.0.1"))
             {
@@ -232,8 +226,6 @@ namespace NUTty_UPS_Client
                 btnBrowse.Enabled = true;
             } else
                 cmbAlarmAction.Text = TempValue;
-
-
 
             chkNotification.Checked = Convert.ToBoolean(Backend.NUT_Config.GetConfig("Notification"));
             chkAlarm.Checked = Convert.ToBoolean(Backend.NUT_Config.GetConfig("Alarm"));
@@ -300,7 +292,7 @@ namespace NUTty_UPS_Client
 
             if (DialogResult == DialogResult.Yes)
             {
-                WriteNUTLog("Application is now closing.");
+                Backend.Background.WriteNUTLog("[APP] Application is now closing.");
             }
             else
             {
@@ -328,7 +320,7 @@ namespace NUTty_UPS_Client
                 }
                 else if (AlarmAction.Equals("Shut Down"))
                 {
-                    WriteNUTLog("Shutting down PC");
+                    Backend.Background.WriteNUTLog("[APP] Shutting down PC");
                     UPSPollTimer.Enabled = false;
                     var psi = new System.Diagnostics.ProcessStartInfo("shutdown", "/s /t 0");
                     psi.CreateNoWindow = true;
@@ -339,14 +331,14 @@ namespace NUTty_UPS_Client
                 else if (AlarmAction.Equals("Hibernate"))
                 {
                     UPSPollTimer.Enabled = false;
-                    WriteNUTLog("Hibernating PC");
+                    Backend.Background.WriteNUTLog("[APP] Hibernating PC");
                     Application.SetSuspendState(PowerState.Hibernate, true, true);
 
                 }
                 else if (AlarmAction.Equals("Execute Script"))
                 {
                     string ScriptPath = Backend.NUT_Config.GetConfig("Script Path");
-                    WriteNUTLog("Executing command: " + ScriptPath);
+                    Backend.Background.WriteNUTLog("[APP] Executing command: " + ScriptPath);
                     System.Diagnostics.Process.Start("cmd.exe", ScriptPath);
                 }
 
@@ -453,15 +445,17 @@ namespace NUTty_UPS_Client
             if (chkDebugLogging.Checked)
             {
                 Backend.NUT_Config.SetConfig("Debug", "true");
+                Backend.Background.isLogging = true;
+                Backend.Background.WriteNUTLog("[BACKEND] Debug Logging Enabled");
             }
             else
             {
                 Backend.NUT_Config.SetConfig("Debug", "false");
+                Backend.Background.isLogging = false;
+                Backend.Background.WriteNUTLog("[BACKEND] Debug Logging Disabled");
             }
 
-
             btnApply.Enabled = false;
-
         }
 
         private bool ValidateIPAddress()
@@ -561,13 +555,13 @@ namespace NUTty_UPS_Client
             // Since it would be impossible for a battery to have a negative charge, it will set the charge to 0
             if ((BattValue - SimUPSDecayRate) <= 0)
             {
-                WriteNUTLog("[SIMULATOR] Battery decayed to empty");
+                Backend.Background.WriteNUTLog("[SIMULATOR] Battery decayed to empty");
                 NUT_Processor.ModifySimNUTData("battery.charge", "0");
                 NUT_Processor.ModifySimNUTData("battery.runtime", "0");
             }
             else
             {
-                WriteNUTLog("[SIMULATOR] Battery decayed by " + SimUPSDecayRate + " from " + BattValue + " to " + (BattValue - SimUPSDecayRate));
+                Backend.Background.WriteNUTLog("[SIMULATOR] Battery decayed by " + SimUPSDecayRate + " from " + BattValue + " to " + (BattValue - SimUPSDecayRate));
                 NUT_Processor.ModifySimNUTData("battery.charge", Convert.ToString(BattValue - SimUPSDecayRate));
                 NUT_Processor.ModifySimNUTData("battery.runtime", Convert.ToString(BattRuntime - (BattRuntimeBreakdown * SimUPSDecayRate)));
             }
@@ -655,7 +649,7 @@ namespace NUTty_UPS_Client
         private void chkDebugLogging_CheckedChanged(object sender, EventArgs e)
         {
             if (chkDebugLogging.Checked)
-                MessageBox.Show("Note: This should only be checked when absolutely necessary, as everything is logged and added to the file each time the UPS is polled, which could result in very large log files.\n\nLogs are stored in the Logs folder under the application folder");
+                MessageBox.Show("Note: Debug logging has been enabled. This should only be enabled when absolutely necessary, as everything is logged and added to the file each time the UPS is polled, which could result in very large log files.\n\nLogs are stored in the Logs folder under the application folder path below:\n\n" + Application.StartupPath);
             btnApply.Enabled = true;
         }
 
