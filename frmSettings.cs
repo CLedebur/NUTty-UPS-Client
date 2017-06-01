@@ -285,23 +285,27 @@ namespace NUTty_UPS_Client
 
         }
 
-        private void frmSettings_FormClosing(object sender, FormClosingEventArgs e)
-        {
+        /*        private void frmSettings_FormClosing(object sender, FormClosingEventArgs e, System.EventArgs f)
+                {
 
-            DialogResult = MessageBox.Show("Closing the application will also stop the UPS monitoring. Close anyway?", "Exiting " + Application.ProductName, MessageBoxButtons.YesNo);
+                    DialogResult = MessageBox.Show("Closing the application will also stop the UPS monitoring. Close anyway?", "Exiting " + Application.ProductName, MessageBoxButtons.YesNo);
 
-            if (DialogResult == DialogResult.Yes)
-            {
-                Backend.Background.WriteNUTLog("[APP] Application is now closing.");
-            }
-            else
-            {
-                e.Cancel = true;
-                return;
-            }
-        }
+                    if (f = )
 
-        private void PerformAlarmAction()
+                    if (DialogResult == DialogResult.Yes)
+                    {
+                        Backend.Background.WriteNUTLog("[APP] Application is now closing.");
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                    
+    }
+    */
+
+    private void PerformAlarmAction()
         {
             if (Backend.Background.isSimulated && cmbSimUPSStatus.Text.Equals("OB DISCHRG"))
             {

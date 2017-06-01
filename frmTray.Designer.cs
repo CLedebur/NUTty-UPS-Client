@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.lblBatteryPercentage = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblRuntime = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblBatteryPercentage
@@ -45,18 +45,18 @@
             this.lblBatteryPercentage.Text = "100%";
             this.lblBatteryPercentage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label1
+            // lblRuntime
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(2, 56);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.MinimumSize = new System.Drawing.Size(125, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(125, 32);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "50 min";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblRuntime.AutoSize = true;
+            this.lblRuntime.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRuntime.Location = new System.Drawing.Point(2, 56);
+            this.lblRuntime.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblRuntime.MinimumSize = new System.Drawing.Size(125, 0);
+            this.lblRuntime.Name = "lblRuntime";
+            this.lblRuntime.Size = new System.Drawing.Size(125, 32);
+            this.lblRuntime.TabIndex = 1;
+            this.lblRuntime.Text = "50 min";
+            this.lblRuntime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // frmTray
             // 
@@ -65,10 +65,10 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(383, 99);
             this.ControlBox = false;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblRuntime);
             this.Controls.Add(this.lblBatteryPercentage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmTray";
@@ -83,6 +83,6 @@
         #endregion
 
         private System.Windows.Forms.Label lblBatteryPercentage;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblRuntime;
     }
 }

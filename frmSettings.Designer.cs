@@ -765,7 +765,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "NUTty UPS Client";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSettings_FormClosing);
+            //this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSettings_FormClosing);
             this.Load += new System.EventHandler(this.frmSettings_Load);
             this.Resize += new System.EventHandler(this.frmSettings_Resize);
             this.pnlSettings.ResumeLayout(false);

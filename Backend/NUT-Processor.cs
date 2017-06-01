@@ -161,6 +161,5 @@ namespace NUTty_UPS_Client
             return;
         }
 
-
     }
 }
