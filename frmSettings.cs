@@ -285,7 +285,8 @@ namespace NUTty_UPS_Client
 
         }
 
-        /*        private void frmSettings_FormClosing(object sender, FormClosingEventArgs e, System.EventArgs f)
+        /*      Commented out, as we do not want it prompt anymore (as it interrupts shutdown)
+         *        private void frmSettings_FormClosing(object sender, FormClosingEventArgs e, System.EventArgs f)
                 {
 
                     DialogResult = MessageBox.Show("Closing the application will also stop the UPS monitoring. Close anyway?", "Exiting " + Application.ProductName, MessageBoxButtons.YesNo);
