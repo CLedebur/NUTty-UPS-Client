@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUTtyUPSClient.Views; 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,7 +31,15 @@ namespace nuttyupsclient
         #region NavigationView Event Handlers
         private void nvTopLevelNav_Loaded(object ssender, RoutedEventArgs e)
         {
-
+            foreach(NavigationViewItemBase item in nvTopLevelNav.MenuItems)
+            {
+                if (item is NavigationViewItem && item.Tag.ToString() == "Home_Page")
+                {
+                    nvTopLevelNav.SelectedItem = item;
+                    break;
+                }
+            }
+            contentFrame.Navigate(typeof(navHome));
         }
 
         private void nvTopLevelNav_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -40,7 +49,22 @@ namespace nuttyupsclient
 
         private void nvTopLevelNav_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-
+            TextBlock ItemContent = args.InvokedItem as TextBlock;
+            if (ItemContent != null)
+            {
+                switch (ItemContent.Tag)
+                {
+                    case "Nav_Home":
+                        contentFrame.Navigate(typeof(navHome));
+                        break;
+                    case "Nav_Settings":
+                        contentFrame.Navigate(typeof(navSettings));
+                        break;
+                    case "Nav_Debugging":
+                        contentFrame.Navigate(typeof(navDebugging));
+                        break;
+                }
+            }
         }
 
         #endregion

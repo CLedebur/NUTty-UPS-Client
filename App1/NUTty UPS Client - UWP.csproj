@@ -119,10 +119,21 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Backend\NUT-Backend.cs" />
+    <Compile Include="Backend\NUT-Config.cs" />
+    <Compile Include="Backend\NUT-poller.cs" />
+    <Compile Include="Backend\NUT-Processor.cs" />
+    <Compile Include="Backend\TelnetInterface.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\navDebugging.xaml.cs">
+      <DependentUpon>navDebugging.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\navHome.xaml.cs">
+      <DependentUpon>navHome.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\navSettings.xaml.cs">
       <DependentUpon>navSettings.xaml</DependentUpon>
     </Compile>
@@ -151,6 +162,14 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\navDebugging.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\navHome.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\navSettings.xaml">
       <SubType>Designer</SubType>

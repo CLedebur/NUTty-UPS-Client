@@ -16,13 +16,27 @@
                     PaneDisplayMode="Top"
                     IsTabStop="False"
                     IsSettingsVisible="False"
-                    Header="NUTty UPS Client" HorizontalContentAlignment="Center">
+                    IsBackButtonVisible="Collapsed"
+                    HorizontalContentAlignment="Center" FontFamily="Segoe UI">
         <NavigationView.MenuItems>
-            <NavigationViewItem Icon="Home" Content="Home" Tag="Home_Page" />
-            <NavigationViewItem Icon="Setting" Content="Settings" Tag="Settings_Page" />
-            <NavigationViewItem Icon="Repair" Content="Debugging" Tag="Debugging_Page" />
+            
+            <NavigationViewItem Icon="Home" Tag="Home_Page">
+                <TextBlock Tag="Nav_Home">Home</TextBlock>
+            </NavigationViewItem>
+            <NavigationViewItem Icon="Setting" Tag="Settings_Page">
+                <TextBlock Tag="Nav_Settings">Settings</TextBlock>
+            </NavigationViewItem>
+            <NavigationViewItem Icon="Repair" Tag="Debugging_Page">
+                <TextBlock Tag="Nav_Debugging" FontFamily="Segoe UI">Debugging</TextBlock>
+            </NavigationViewItem>
+            
         </NavigationView.MenuItems>
-        <Frame x:Name="contentFrame"></Frame>
+        <NavigationView.Header>
+            <TextBlock x:Name="navHeader" HorizontalAlignment="Right" Padding="0,0,5,0" Foreground="Green" Margin="0,0,5,0" FontSize="28" FontFamily="Segoe UI" Text="Charging, 87%"/>
+        </NavigationView.Header>
+                
+        <Frame x:Name="contentFrame" FontFamily="Segoe UI"></Frame>
+        
     </NavigationView>
     
         

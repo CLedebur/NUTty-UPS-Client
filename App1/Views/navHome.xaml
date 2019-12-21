@@ -1,0 +1,18 @@
+﻿<Page
+    x:Class="NUTtyUPSClient.Views.navHome"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NUTtyUPSClient.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <ScrollViewer>
+        <StackPanel>
+            <!--<TextBlock HorizontalAlignment="Left" Margin="5,5,0,0" Text="Home" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource SubheaderTextBlockStyle}"/>-->
+            <TextBlock HorizontalAlignment="Left" Margin="5,5,0,0" Text="UPS Status" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Style="{StaticResource SubheaderTextBlockStyle}"/>
+            <TextBlock x:Name="lblUPSModel" HorizontalAlignment="Left" Text="Not connected" Margin="10,5,0,0" TextWrapping="WrapWholeWords" VerticalAlignment="Top" MinWidth="300" Height="auto" Style="{StaticResource BodyTextBlockStyle}" />
+        </StackPanel>
+    </ScrollViewer>
+</Page>
