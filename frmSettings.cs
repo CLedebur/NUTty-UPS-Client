@@ -116,6 +116,10 @@ namespace NUTty_UPS_Client
             {
                 lblUPSStatus.Text = ("On Battery Power - " + UPSStatusMessage);
                 lblUPSStatus.ForeColor = System.Drawing.Color.Orange;
+            } else if (UPSStatusCode == 2)
+            {
+                lblUPSStatus.Text = ("Charging - " + UPSStatusMessage);
+                lblUPSStatus.ForeColor = System.Drawing.Color.Green;
             } else if (UPSStatusCode == -1)
             {
                 lblUPSStatus.Text = ("No data");
@@ -150,6 +154,7 @@ namespace NUTty_UPS_Client
         private void frmSettings_Load(object sender, EventArgs e)
         {
             frmSettings_Resize("",EventArgs.Empty);
+            // PerformAutoScale();
 
             UPSPollTimer = new System.Timers.Timer(5000);
             UPSPollTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
@@ -611,7 +616,7 @@ namespace NUTty_UPS_Client
         {
             if (FormWindowState.Minimized == WindowState)
             {
-                frmSettings._frmSettings.Hide();
+                //_frmSettings.Hide();
             }
         }
 

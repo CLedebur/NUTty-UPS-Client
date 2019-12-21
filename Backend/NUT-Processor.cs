@@ -47,15 +47,22 @@ namespace NUTty_UPS_Client
         {
             // Input voltage and nominal voltage
             decimal UPSInputVoltage = Convert.ToDecimal(SearchNUTData("input.voltage"));
+            Console.WriteLine("[PROCESSOR] UPS input voltage is " + UPSInputVoltage);
             decimal UPSInputNominalVoltage = Convert.ToDecimal(SearchNUTData("input.voltage.nominal"));
+            Console.WriteLine("[PROCESSOR] UPS nominal input voltage is " + UPSInputNominalVoltage);
 
             // Battery voltage and nominal voltage
-            decimal UPSBatteryVoltage = Convert.ToDecimal(SearchNUTData("battery.voltage"));
+            // TODO: Make this smarter, and skip if battery voltage info is not available
+            /*decimal UPSBatteryVoltage = Convert.ToDecimal(SearchNUTData("battery.voltage"));
+            Console.WriteLine("[PROCESSOR] UPS battery voltage is " + UPSBatteryVoltage);
             decimal UPSBatteryNominalVoltage = Convert.ToDecimal(SearchNUTData("battery.voltage.nominal"));
+            Console.WriteLine("[PROCESSOR] UPS battery nominal voltage is " + UPSBatteryNominalVoltage);*/
 
             // Output voltage and nominal voltage
             decimal UPSOutputVoltage = Convert.ToDecimal(SearchNUTData("output.voltage"));
-            UPSOutputVoltage = UPSOutputVoltage - UPSBatteryVoltage; // It adds the battery voltage to the output voltage. Fixing this.
+            Console.WriteLine("[PROCESSOR] UPS output voltage before correction is " + UPSOutputVoltage);
+            //UPSOutputVoltage = UPSOutputVoltage - UPSBatteryVoltage; // It adds the battery voltage to the output voltage. Fixing this.
+            Console.WriteLine("[PROCESSOR] UPS output voltage after correction is " + UPSOutputVoltage);
 
             // UPS alarm
             bool UPSBeeper = false;
@@ -68,7 +75,6 @@ namespace NUTty_UPS_Client
                     + "\nSerial: " + SearchNUTData("device.serial")
                     + "\n\nBattery charge: " + SearchNUTData("battery.charge") + "%"
                     + "\nInput Voltage: " + UPSInputVoltage + "v / " + UPSInputNominalVoltage
-                    + "\nBattery Voltage: " + UPSBatteryVoltage + "v / " + UPSBatteryNominalVoltage
                     + "\nOutput Voltage: " + UPSOutputVoltage + "v"
                     + "\n\nUPS Beeper enabled: " + UPSBeeper
                 );
@@ -125,6 +131,20 @@ namespace NUTty_UPS_Client
                     UPSStatusMessage = (Math.Round(UPSBatteryRuntime, 0) + " min remaining"); // Breaks it down into minutes
                 }
             }
+            else if (UPSStatus.Equals("OL CHRG"))
+            {
+                UPSStatusCode = 2;
+                if (UPSBatteryRuntime <= 60)
+                {
+                    UPSStatusMessage = (UPSBatteryCharge + "% " + Math.Round(UPSBatteryRuntime, 0) + " sec remaining"); // Only display in seconds, since it's exactly a minute (or less)
+                }
+                else
+                {
+                    UPSBatteryRuntime = Math.Round((UPSBatteryRuntime / 60), 0);
+                    UPSStatusMessage = (UPSBatteryCharge + "% " + Math.Round(UPSBatteryRuntime, 0) + " min remaining"); // Breaks it down into minutes
+                }
+            }
+
 
             return Tuple.Create(UPSStatusMessage, UPSBatteryCharge, UPSStatusCode);
         }
