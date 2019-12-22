@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.960
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUTty UPS Client - Win32", "win32\NUTty UPS Client - Win32.csproj", "{E582AA31-6E7C-4B26-AFA5-87B872834415}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUTty UPS Client", "NUTty UPS Client.csproj", "{E582AA31-6E7C-4B26-AFA5-87B872834415}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUTty UPS Client - UWP", "uwp\NUTty UPS Client - UWP.csproj", "{B01EFA55-2AC6-4C34-B8BD-7657C6B41492}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUTty UPS Client - UWP", "App1\NUTty UPS Client - UWP.csproj", "{B01EFA55-2AC6-4C34-B8BD-7657C6B41492}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
