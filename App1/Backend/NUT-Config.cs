@@ -1,82 +1,62 @@
 ﻿using System;
-using Microsoft.Win32;
 using System.Net;
 
-namespace NUTty_UPS_Client.Backend
+
+namespace nuttyupsclient.Backend
 {
     class NUT_Config
     {
-        public static bool SetConfig(string KeyName, string KeyValue, RegistryValueKind RegKind = RegistryValueKind.String)
+
+
+        public void InitializeContainer() 
+            {
+            // Declares the application data container
+           Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+        }
+
+        public static bool SetConfig(string KeyName, string KeyValue)
         {
             try
             {
-                RegistryKey RegKey;
-                RegKey = Registry.CurrentUser.CreateSubKey("Software\\NUTty UPS Client");
-                RegKey.SetValue(KeyName, KeyValue);
-                RegKey.Close();
+                Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                Windows.Storage.ApplicationDataContainer container = localSettings.CreateContainer("NUTtyUPSClient", Windows.Storage.ApplicationDataCreateDisposition.Always);
+
+                if (localSettings.Containers.ContainsKey(KeyName))
+                {
+                    localSettings.Containers["NUTtyUPSClient"].Values[KeyName] = KeyValue;
+                }
             }
             catch (Exception e)
             {
-                Backend.Background.WriteNUTLog("[CONFIG] Could not set registry key: " + KeyName + " wtih value " + KeyValue + "\nException:" + e);
+                MainPage.debugLog.Error("[CONFIG] Could not save setting: " + KeyName + " with value " + KeyValue + "\nException:" + e);
                 return false;
             }
-            Backend.Background.WriteNUTLog("[CONFIG] Set registry key " + KeyName + " with value " + KeyValue);
+            MainPage.debugLog.Trace("[CONFIG] Set registry key " + KeyName + " with value " + KeyValue);
             return true;
-
         }
 
         public static string GetConfig(string KeyName)
         {
-            Backend.Background.WriteNUTLog("[CONFIG] Checking for registry key: " + KeyName);
-            RegistryKey RegKey = Registry.CurrentUser.OpenSubKey("Software\\NUTty UPS Client", false);
+            MainPage.debugLog.Trace("[CONFIG] Checking for existince of setting: " + KeyName);
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            Windows.Storage.ApplicationDataContainer container = localSettings.CreateContainer("NUTtyUPSClient", Windows.Storage.ApplicationDataCreateDisposition.Always);
 
-            object RegValue;
             try
             {
-                RegValue = RegKey.GetValue(KeyName);
-                Backend.Background.WriteNUTLog("[CONFIG] Got: " + RegValue.ToString());
-                switch (RegKey.GetValueKind(KeyName))
-                {
-                    case RegistryValueKind.String:
-                        return RegValue.ToString();
-                    case RegistryValueKind.ExpandString:
-                        Backend.Background.WriteNUTLog("[CONFIG] Got: " + RegValue);
-                        break;
-                    case RegistryValueKind.Binary:
-                        foreach (byte b in (byte[])RegValue)
-                        {
-                            Console.Write("{0:x2} ", b);
-                        }
-                        break;
-                    case RegistryValueKind.DWord:
-                        Backend.Background.WriteNUTLog("[CONFIG] Got: " + Convert.ToString((Int32)RegValue));
-                        break;
-                    case RegistryValueKind.QWord:
-                        Backend.Background.WriteNUTLog("[CONFIG] Got: " + Convert.ToString((Int64)RegValue));
-                        break;
-                    case RegistryValueKind.MultiString:
-                        foreach (string s in (string[])RegValue)
-                        {
-                            Console.Write("[{0:s}], ", s);
-                        }
-                        break;
-                    default:
-                        Backend.Background.WriteNUTLog("[CONFIG] Got: Unknown");
-                        break;
-                }
+
 
             }
             catch (NullReferenceException)
             {
-                Backend.Background.WriteNUTLog("[CONFIG] Registry key does not exist: " + KeyName);
+                MainPage.debugLog.Error("[CONFIG] Registry key does not exist: " + KeyName);
                 return null;
             }
             catch (Exception e) {
-                Backend.Background.WriteNUTLog("[CONFIG] Failed to read registry key: " + e);
+                MainPage.debugLog.Error("[CONFIG] Failed to read registry key: " + e);
                 return null;
             }
 
-            return RegValue.ToString();
+            return "test";
         }
 
         public static Tuple<IPAddress, UInt16, UInt32> GetConnectionSettings()

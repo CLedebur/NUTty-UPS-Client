@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
 using System.Net;
-using System.Windows.Forms;
 using System.ComponentModel;
 
-namespace NUTty_UPS_Client.Backend
+namespace nuttyupsclient.Backend
 {
     class Background
     {
@@ -17,41 +16,16 @@ namespace NUTty_UPS_Client.Backend
         public static Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings;
         public static bool isLogging = false;
 
-
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            Backend.Background BGProcess = new Backend.Background();
-
-            BGProcess.InitializeBg();
-        }
-
-        public static void WriteNUTLog(string strOutput)
-        {
-            Console.WriteLine(strOutput);
-            if (isLogging)
-            {
-                String CurDateTime = DateTime.Now.ToString("dd/MM/yy hh:mm:ss");
-                System.IO.File.AppendAllText(Application.StartupPath + @"\NUTtyUPS.log", "[" + CurDateTime + "]" + strOutput + "\r\n");
-            }
-        }
-
-        public void InitializeBg()
+        public static void InitializeBg()
         {
 
             string DebugLogging = Backend.NUT_Config.GetConfig("Debug");
             if (DebugLogging == null)
-                Backend.Background.WriteNUTLog("[BACKEND] No registry entry exists for debug logging");
+                MainPage.debugLog.Info("[BACKEND] No registry entry exists for debug logging");
             else if (DebugLogging.Equals("true"))
                 Backend.Background.isLogging = true;
 
-            WriteNUTLog("[INITIALIZE] Started");
+            MainPage.debugLog.Info("[INITIALIZE] Started");
 
             try
             {
@@ -68,18 +42,16 @@ namespace NUTty_UPS_Client.Backend
                 NUTConnectionSettings = NUT_Config.GetConnectionSettings();
                 if (NUTConnectionSettings.Item1 == IPAddress.Parse("127.0.0.1") || NUTConnectionSettings.Item2 == 0 || NUTConnectionSettings.Item3 == 0)
                 {
-                    WriteNUTLog("[BACKEND] Empty values found, starting Settings form");
+                    MainPage.debugLog.Info("[BACKEND] Empty values found, starting Settings form");
                     return;
                 }
             }
             catch (Exception e)
             {
-                WriteNUTLog("[BACKEND] Error occurred: " + e);
+                MainPage.debugLog.Fatal("[BACKEND] Error occurred: " + e);
             }
-            finally
-            {
-                Application.Run(new frmSettings());
-            }
+         
+
         }
         
     }

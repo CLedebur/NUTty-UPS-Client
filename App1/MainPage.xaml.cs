@@ -1,4 +1,4 @@
-﻿using NUTtyUPSClient.Views; 
+﻿using nuttyupsclient.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,20 +13,26 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+using MetroLog;
+using MetroLog.Targets;
 
 namespace nuttyupsclient
-{
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+{   
     public sealed partial class MainPage : Page
     {
+        public static ILogger debugLog = LogManagerFactory.DefaultLogManager.GetLogger<MainPage>();
+
         public MainPage()
         {
             this.InitializeComponent();
+            debugLog.Trace("[MAIN] Application starting");
+
+            // Triggers the initialization process
+            Backend.Background.InitializeBg();
+            debugLog.Trace(Backend.NUT_Poller.PollNUTServer("192.168.253.6",3493).ToString());
         }
+
+        
 
         #region NavigationView Event Handlers
         private void nvTopLevelNav_Loaded(object ssender, RoutedEventArgs e)

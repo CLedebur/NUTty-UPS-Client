@@ -6,39 +6,38 @@ using System.Net.Sockets;
 using System.IO;
 using System.Collections.Generic;
 
-namespace NUTty_UPS_Client
+namespace nuttyupsclient.Backend
 {
     public class NUT_Poller
     {
 
         public static Tuple<string, bool> PollNUTServer(string nutIP, int nutPort)
         {
-            if (Backend.Background.isSimulated)
+            if (Background.isSimulated)
             {
                 // If simulation is enabled, then it will receive data from the simulator instead of the UPS
                 // It will simulate the CyberPower UPS for now
                 return SimulateNUTServer();
             }
-
+            
             bool isSuccessful = false;
 
             TelnetConnection nutServer = new TelnetConnection(nutIP, nutPort);
             string nutUPSStatus = "LIST VAR ups";
 
-            Backend.Background.WriteNUTLog("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
+            MainPage.debugLog.Debug("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
 
             if(nutServer.IsConnected)
             {
-                Backend.Background.WriteNUTLog("[POLLER] Connected to NUT server");
+                MainPage.debugLog.Debug("[POLLER] Connected to NUT server");
             }
 
             nutServer.WriteLine(nutUPSStatus);
             string nutOutput = nutServer.Read();
-            //Backend.Background.WriteNUTLog("[NUT Poller] Got data from server:\n" + nutOutput + "\n");
 
             if (nutOutput.Contains("ERR ACCESS-DENIED")) 
             {
-                Backend.Background.WriteNUTLog("[POLLER] Got ACCESS DENIED when trying to retrieve data");
+                MainPage.debugLog.Debug("[POLLER] Got ACCESS DENIED when trying to retrieve data");
             } else
             {
                 isSuccessful = true;

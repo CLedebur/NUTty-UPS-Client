@@ -122,7 +122,6 @@
     <Compile Include="Backend\NUT-Backend.cs" />
     <Compile Include="Backend\NUT-Config.cs" />
     <Compile Include="Backend\NUT-poller.cs" />
-    <Compile Include="Backend\NUT-Processor.cs" />
     <Compile Include="Backend\TelnetInterface.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -177,8 +176,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="MetroLog">
+      <Version>1.0.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.8</Version>
+      <Version>6.2.9</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.3.191211002</Version>

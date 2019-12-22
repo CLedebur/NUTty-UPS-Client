@@ -15,6 +15,7 @@ namespace NUTty_UPS_Client
         {
             nutOutput = Regex.Replace(nutOutput, @"\r\n?|\n", Environment.NewLine); // Replaces UNIX linefeeds with ANSI
 
+            
             Backend.Background.WriteNUTLog("[PROCESSOR] Attempting to sanitize output");
             List<string> nutList = new List<string>(nutOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
 
