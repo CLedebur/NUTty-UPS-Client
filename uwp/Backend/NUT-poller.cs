@@ -5,13 +5,41 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Collections.Generic;
+using PrimS.Telnet;
+using Windows.Networking;
+using System.Threading.Tasks;
 
 namespace nuttyupsclient.Backend
 {
+
+
     public class NUT_Poller
     {
+        
+        private static string NUTOutput { get => NUTOutput; set => NUTOutput = value; }
 
-        public static Tuple<string, bool> PollNUTServer(string nutIP, int nutPort)
+        private static async Task TelnetClient(string nutIP, UInt16 nutPort)
+        {
+            MainPage.debugLog.Debug("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
+            using (var Client = new Client(nutIP, nutPort, new CancellationToken()))
+            {
+                while (true)
+                {
+                    // Gets the NUT server to return the list of UPS variables
+                    await Client.WriteLine("LIST VAR ups");
+
+                    var s = await Client.TerminatedReadAsync("END LIST VAR ups");
+
+                    MainPage.debugLog.Debug("[POLLER] NUT server returned:\r\n" + s.ToString());
+
+                    NUTOutput = s;
+                    return;
+                }
+            }
+
+        }
+
+        public static Tuple<string, bool> PollNUTServer(String nutIP, UInt16 nutPort)
         {
             if (Background.isSimulated)
             {
@@ -22,28 +50,20 @@ namespace nuttyupsclient.Backend
             
             bool isSuccessful = false;
 
-            TelnetConnection nutServer = new TelnetConnection(nutIP, nutPort);
-            string nutUPSStatus = "LIST VAR ups";
+            Task NUTConnection = Task.Factory.StartNew(async () =>
+           {
+               MainPage.debugLog.Debug("[POLLER] Executing telnet client task");
+               await TelnetClient(nutIP, nutPort);
+           });
 
-            MainPage.debugLog.Debug("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
-
-            if(nutServer.IsConnected)
+            while (!NUTConnection.IsCompleted)
             {
-                MainPage.debugLog.Debug("[POLLER] Connected to NUT server");
+                MainPage.debugLog.Trace("[POLLER] Waiting for task to complete. Waiting 500ms.");
+                Thread.Sleep(500);
             }
+            NUTConnection.Dispose();
 
-            nutServer.WriteLine(nutUPSStatus);
-            string nutOutput = nutServer.Read();
-
-            if (nutOutput.Contains("ERR ACCESS-DENIED")) 
-            {
-                MainPage.debugLog.Debug("[POLLER] Got ACCESS DENIED when trying to retrieve data");
-            } else
-            {
-                isSuccessful = true;
-            }
-
-            return Tuple.Create(nutOutput, isSuccessful);
+            return Tuple.Create(NUTOutput, isSuccessful);
             
         }
         

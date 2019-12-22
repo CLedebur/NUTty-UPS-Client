@@ -5,24 +5,49 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace NUTty_UPS_Client
+namespace nuttyupsclient.Backend
 {
     class NUT_Processor
     {
         public static string[,] UPSVariables;
 
-        public static string ParseNUTOutput(string nutOutput)
+        public static bool ValidateNUTOutput(string NUTOutput)
         {
-            nutOutput = Regex.Replace(nutOutput, @"\r\n?|\n", Environment.NewLine); // Replaces UNIX linefeeds with ANSI
-
+            NUTOutput = SanitizeNUTOutput(NUTOutput);
             
-            Backend.Background.WriteNUTLog("[PROCESSOR] Attempting to sanitize output");
-            List<string> nutList = new List<string>(nutOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
+            MainPage.debugLog.Debug("[PROCESSOR:VALIDATOR] Attempting to validate output");
+            List<string> nutList = new List<string>(NUTOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
 
             // Sanity check! 
             if (nutList[0].Contains("BEGIN LIST VAR ups") && nutList[nutList.Count - 1].Contains("END LIST VAR ups"))
             {
-                Backend.Background.WriteNUTLog("[PROCESSOR] Data structure is correct. Let's continue.");
+                MainPage.debugLog.Debug("[PROCESSOR:VALIDATOR] Data structure is correct.");
+                return true;
+            }
+            MainPage.debugLog.Fatal("[PROCESSOR:VALIDATOR] Data structure is not correct.");
+            return false;
+
+        }
+
+        public static string SanitizeNUTOutput(string NUTOutput)
+        {
+            MainPage.debugLog.Debug("[PROCESSOR:SANITIZER] Attempting to sanitize output");
+            return Regex.Replace(NUTOutput, @"\r\n?|\n", Environment.NewLine); // Replaces UNIX linefeeds with ANSI
+        }
+
+        public static string ParseNUTOutput(string NUTOutput)
+        {
+            // TODO: Update for new sanity check/validator methods
+
+
+            
+            MainPage.debugLog.Debug("[PROCESSOR] Attempting to sanitize output");
+            List<string> nutList = new List<string>(NUTOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
+
+            // Sanity check! 
+            if (nutList[0].Contains("BEGIN LIST VAR ups") && nutList[nutList.Count - 1].Contains("END LIST VAR ups"))
+            {
+                MainPage.debugLog.Debug("[PROCESSOR] Data structure is correct. Let's continue.");
             }
 
             UPSVariables = new string[nutList.Count -1, 2];
@@ -160,25 +185,25 @@ namespace NUTty_UPS_Client
                 }
             }
 
-            Backend.Background.WriteNUTLog("[SEARCHNUTDATA] Could not find requested variable");
+            MainPage.debugLog.Debug("[SEARCHNUTDATA] Could not find requested variable");
             return "INVALID";
         }
 
         public static void ModifySimNUTData(string NUTVariable, string NUTValue)
         {
-            Backend.Background.WriteNUTLog("[MODNUTDATA] Array length is " + Convert.ToString(UPSVariables.GetLength(0)));
-            Backend.Background.WriteNUTLog("[MODNUTDATA] Invoked. Searching for: " + NUTVariable);
+            MainPage.debugLog.Debug("[MODNUTDATA] Array length is " + Convert.ToString(UPSVariables.GetLength(0)));
+            MainPage.debugLog.Debug("[MODNUTDATA] Invoked. Searching for: " + NUTVariable);
             for (int i = 0; i < UPSVariables.GetLength(0); i++)
             {
                 if (UPSVariables[i, 0].Equals(NUTVariable))
                 {
-                    Backend.Background.WriteNUTLog("[SEARCHNUTDATA] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
+                    MainPage.debugLog.Debug("[SEARCHNUTDATA] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
                     UPSVariables[i, 1] = NUTValue;
                     return;
                 }
             }
 
-            Backend.Background.WriteNUTLog("[SEARCHNUTDATA] Could not find requested variable");
+            MainPage.debugLog.Debug("[SEARCHNUTDATA] Could not find requested variable");
             return;
         }
 

@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using MetroLog;
 using MetroLog.Targets;
+using Windows.Networking;
 
 namespace nuttyupsclient
 {   
@@ -28,8 +29,12 @@ namespace nuttyupsclient
             debugLog.Trace("[MAIN] Application starting");
 
             // Triggers the initialization process
-            Backend.Background.InitializeBg();
-            debugLog.Trace(Backend.NUT_Poller.PollNUTServer("192.168.253.6",3493).ToString());
+            // Backend.Background.InitializeBg();
+
+            
+            debugLog.Trace(Backend.NUT_Poller.PollNUTServer("192.168.253.6", 3493).ToString());
+            
+            
         }
 
         
