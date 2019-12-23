@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 namespace nuttyupsclient.Backend
 {
 
-
     public class NUT_Poller
     {
-        
-        private static string NUTOutput { get => NUTOutput; set => NUTOutput = value; }
+
+        private static string NUTOutput;
+        //private static string NUTOutput { get => NUTOutput; set => NUTOutput = value; }
 
         private static async Task TelnetClient(string nutIP, UInt16 nutPort)
         {

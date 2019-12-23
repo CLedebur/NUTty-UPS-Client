@@ -26,5 +26,10 @@ namespace nuttyupsclient.Views
         {
             this.InitializeComponent();
         }
+
+        private void LblUPSModel_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

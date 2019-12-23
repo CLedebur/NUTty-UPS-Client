@@ -6,8 +6,6 @@ namespace nuttyupsclient.Backend
 {
     class NUT_Config
     {
-
-
         public void InitializeContainer() 
             {
             // Declares the application data container
@@ -59,7 +57,7 @@ namespace nuttyupsclient.Backend
             return "test";
         }
 
-        public static Tuple<IPAddress, UInt16, UInt32> GetConnectionSettings()
+        public static Tuple<String, UInt16, UInt32> GetConnectionSettings()
         {
             string NUTServerIP = GetConfig("IP Address");
             string NUTServerPort = GetConfig("Port");
@@ -70,7 +68,7 @@ namespace nuttyupsclient.Backend
                 NUTServerIP = "127.0.0.1";
             }
 
-            return Tuple.Create(IPAddress.Parse(NUTServerIP), Convert.ToUInt16(NUTServerPort), Convert.ToUInt32(NUTPollInterval));
+            return Tuple.Create(NUTServerIP.ToString(), Convert.ToUInt16(NUTServerPort), Convert.ToUInt32(NUTPollInterval));
 
         }
     }

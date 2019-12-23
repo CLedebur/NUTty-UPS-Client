@@ -31,9 +31,11 @@ namespace nuttyupsclient
             // Triggers the initialization process
             // Backend.Background.InitializeBg();
 
-            
-            debugLog.Trace(Backend.NUT_Poller.PollNUTServer("192.168.253.6", 3493).ToString());
-            
+
+            // Below is for testing purposes only
+            Tuple<String, bool> NUTData;
+            NUTData = Backend.NUT_Poller.PollNUTServer("192.168.253.6",3493);
+            Backend.NUT_Processor.ParseNUTOutput(NUTData.Item1);           
             
         }
 

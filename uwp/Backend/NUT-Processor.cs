@@ -11,21 +11,23 @@ namespace nuttyupsclient.Backend
     {
         public static string[,] UPSVariables;
 
-        public static bool ValidateNUTOutput(string NUTOutput)
+        public static Tuple<List<string>,bool> ValidateNUTOutput(string NUTOutput)
         {
-            NUTOutput = SanitizeNUTOutput(NUTOutput);
+
+            MainPage.debugLog.Debug("[PROCESSOR:VALIDATOR] Received data:\n" + NUTOutput);
+            //NUTOutput = SanitizeNUTOutput(NUTOutput);
             
             MainPage.debugLog.Debug("[PROCESSOR:VALIDATOR] Attempting to validate output");
-            List<string> nutList = new List<string>(NUTOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
+            List<string> NUTList = new List<string>(NUTOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
 
             // Sanity check! 
-            if (nutList[0].Contains("BEGIN LIST VAR ups") && nutList[nutList.Count - 1].Contains("END LIST VAR ups"))
+            if (NUTList[0].Contains("BEGIN LIST VAR ups") && NUTList[NUTList.Count - 1].Contains("END LIST VAR ups"))
             {
                 MainPage.debugLog.Debug("[PROCESSOR:VALIDATOR] Data structure is correct.");
-                return true;
+                return Tuple.Create(NUTList,true);
             }
             MainPage.debugLog.Fatal("[PROCESSOR:VALIDATOR] Data structure is not correct.");
-            return false;
+            return Tuple.Create(NUTList,false);
 
         }
 
@@ -37,33 +39,26 @@ namespace nuttyupsclient.Backend
 
         public static string ParseNUTOutput(string NUTOutput)
         {
-            // TODO: Update for new sanity check/validator methods
 
+            Tuple<List<string>, bool> NUTValidatedData = ValidateNUTOutput(NUTOutput);
+
+            List<string> NUTList = NUTValidatedData.Item1;
 
             
-            MainPage.debugLog.Debug("[PROCESSOR] Attempting to sanitize output");
-            List<string> nutList = new List<string>(NUTOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
-
-            // Sanity check! 
-            if (nutList[0].Contains("BEGIN LIST VAR ups") && nutList[nutList.Count - 1].Contains("END LIST VAR ups"))
-            {
-                MainPage.debugLog.Debug("[PROCESSOR] Data structure is correct. Let's continue.");
-            }
-
-            UPSVariables = new string[nutList.Count -1, 2];
+            UPSVariables = new string[NUTList.Count -1, 2]; // Truncating list by two to remove the `BEGIN LAST VAR` and `END LIST VAR` lines
 
             int j = 0;
-            for (int i = 1; i < nutList.Count - 1; i++)
+            for (int i = 1; i < NUTList.Count - 1; i++)
             {
-                List<string> strUPSVarList = new List<string>(nutList[i].Split(new String[] { "\"" }, StringSplitOptions.RemoveEmptyEntries));
+                List<string> NUTVarNames = new List<string>(NUTList[i].Split(new String[] { "\"" }, StringSplitOptions.RemoveEmptyEntries));
 
-                List<string> strTemp = new List<string>(strUPSVarList[0].Split(new String[] { " " }, StringSplitOptions.RemoveEmptyEntries));
+                // We're now putting the variable names and values alongside each other in the list, giving us an easy lookup table
+                UPSVariables[j, 0] = NUTVarNames[0].Trim(' ').Substring(8); // Only needs the data in between the quotes
+                UPSVariables[j, 1] = NUTVarNames[1].Trim(' ');
 
-                UPSVariables[j, 0] = strTemp[strTemp.Count - 1].Trim(' '); // Removes trailing spaces
-                UPSVariables[j, 1] = strUPSVarList[strUPSVarList.Count - 2]; // Only needs the data in between the quotes
                 j++;
             }
-
+            
             string UPSStatusMessage = UPSStatistics();
             return UPSStatusMessage;
 
@@ -171,21 +166,21 @@ namespace nuttyupsclient.Backend
                 }
             }
 
-
             return Tuple.Create(UPSStatusMessage, UPSBatteryCharge, UPSStatusCode);
         }
 
         public static string SearchNUTData(string NUTVariable)
         {
+            MainPage.debugLog.Trace("[PROCESSOR:SEARCH] Searching for " + NUTVariable);
             for (int i = 0; i < UPSVariables.Length; i++)
             {
-                if (UPSVariables[i, 0].Equals(NUTVariable))
+                if (UPSVariables[i, 0].Contains(NUTVariable))
                 {
                     return UPSVariables[i, 1];
                 }
             }
 
-            MainPage.debugLog.Debug("[SEARCHNUTDATA] Could not find requested variable");
+            MainPage.debugLog.Debug("[PROCESSOR:SEARCHNUTDATA] Could not find requested variable");
             return "INVALID";
         }
 

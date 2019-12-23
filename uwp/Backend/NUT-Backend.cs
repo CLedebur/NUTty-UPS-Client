@@ -13,7 +13,7 @@ namespace nuttyupsclient.Backend
     class Background
     {
         public static bool isSimulated = false;
-        public static Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings;
+        public static Tuple<String, UInt16, UInt32> NUTConnectionSettings;
         public static bool isLogging = false;
 
         public static void InitializeBg()
@@ -40,7 +40,7 @@ namespace nuttyupsclient.Backend
             {
                 // Checking Registry for settings
                 NUTConnectionSettings = NUT_Config.GetConnectionSettings();
-                if (NUTConnectionSettings.Item1 == IPAddress.Parse("127.0.0.1") || NUTConnectionSettings.Item2 == 0 || NUTConnectionSettings.Item3 == 0)
+                if (NUTConnectionSettings.Item1 == ("127.0.0.1") || NUTConnectionSettings.Item2 == 0 || NUTConnectionSettings.Item3 == 0)
                 {
                     MainPage.debugLog.Info("[BACKEND] Empty values found, starting Settings form");
                     return;

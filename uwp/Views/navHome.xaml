@@ -12,7 +12,7 @@
         <StackPanel>
             <!--<TextBlock HorizontalAlignment="Left" Margin="5,5,0,0" Text="Home" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource SubheaderTextBlockStyle}"/>-->
             <TextBlock HorizontalAlignment="Left" Margin="5,5,0,0" Text="UPS Status" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Style="{StaticResource SubheaderTextBlockStyle}"/>
-            <TextBlock x:Name="lblUPSModel" HorizontalAlignment="Left" Text="Not connected" Margin="10,5,0,0" TextWrapping="WrapWholeWords" VerticalAlignment="Top" MinWidth="300" Height="auto" Style="{StaticResource BodyTextBlockStyle}" />
+            <TextBlock x:Name="lblUPSModel" HorizontalAlignment="Left" Text="Not connected" Margin="10,5,0,0" TextWrapping="WrapWholeWords" VerticalAlignment="Top" MinWidth="300" Height="auto" Style="{StaticResource BodyTextBlockStyle}" SelectionChanged="LblUPSModel_SelectionChanged"  />
         </StackPanel>
     </ScrollViewer>
 </Page>
