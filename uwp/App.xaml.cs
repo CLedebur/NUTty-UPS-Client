@@ -40,8 +40,9 @@ namespace nuttyupsclient
 #if DEBUG
             LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Trace, LogLevel.Fatal, new StreamingFileTarget());
 #else
-LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Error, LogLevel.Fatal, new StreamingFileTarget());
+            LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Error, LogLevel.Fatal, new StreamingFileTarget());
 #endif
+            Backend.NUT_Background.debugLog.Trace("[CORE] Application is starting");
 
         }
 
@@ -88,6 +89,7 @@ LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Error, LogLevel.Fatal,
             }
         }
 
+
         /// <summary>
         /// Invoked when Navigation to a certain page fails
         /// </summary>
@@ -109,6 +111,7 @@ LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Error, LogLevel.Fatal,
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+            Backend.NUT_Background.debugLog.Trace("[CORE] Application is entering a suspended state");
             deferral.Complete();
         }
     }

@@ -22,14 +22,34 @@ namespace nuttyupsclient.Views
     /// </summary>
     public sealed partial class navHome : Page
     {
+
+
         public navHome()
         {
             this.InitializeComponent();
+
+            InitializeValues();
+
         }
 
-        private void LblUPSModel_SelectionChanged(object sender, RoutedEventArgs e)
+        public void InitializeValues()
         {
-
+            Backend.NUT_Background.debugLog.Trace("[UI:MAIN] Updating statistics text");
+            TXTUPSStatus = Backend.NUT_Processor.UPSStatistics();
         }
+
+        public string TXTUPSStatus
+        {
+            get { return (string)GetValue(TXTUPSStatusProperty); }
+            set { SetValue(TXTUPSStatusProperty, value); }
+        }
+
+        #region TXTUPSStatus DP
+        private const string TXTUPSStatusName = "TXTUPSStatus";
+        private static readonly DependencyProperty _TXTUPSStatusProperty =
+            DependencyProperty.Register(TXTUPSStatusName, typeof(string), typeof(navDebugging), new PropertyMetadata(""));
+
+        public static DependencyProperty TXTUPSStatusProperty { get { return _TXTUPSStatusProperty; } }
+        #endregion
     }
 }

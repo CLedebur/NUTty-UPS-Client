@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using Windows.UI;
+using Windows.UI.Xaml;
+
 
 namespace nuttyupsclient.Backend
 {
@@ -14,26 +18,26 @@ namespace nuttyupsclient.Backend
         public static Tuple<List<string>,bool> ValidateNUTOutput(string NUTOutput)
         {
 
-            MainPage.debugLog.Debug("[PROCESSOR:VALIDATOR] Received data:\n" + NUTOutput);
+            Backend.NUT_Background.debugLog.Debug("[PROCESSOR:VALIDATOR] Received data:\n" + NUTOutput);
             //NUTOutput = SanitizeNUTOutput(NUTOutput);
             
-            MainPage.debugLog.Debug("[PROCESSOR:VALIDATOR] Attempting to validate output");
+            Backend.NUT_Background.debugLog.Debug("[PROCESSOR:VALIDATOR] Attempting to validate output");
             List<string> NUTList = new List<string>(NUTOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
 
             // Sanity check! 
             if (NUTList[0].Contains("BEGIN LIST VAR ups") && NUTList[NUTList.Count - 1].Contains("END LIST VAR ups"))
             {
-                MainPage.debugLog.Debug("[PROCESSOR:VALIDATOR] Data structure is correct.");
+                Backend.NUT_Background.debugLog.Debug("[PROCESSOR:VALIDATOR] Data structure is correct.");
                 return Tuple.Create(NUTList,true);
             }
-            MainPage.debugLog.Fatal("[PROCESSOR:VALIDATOR] Data structure is not correct.");
+            Backend.NUT_Background.debugLog.Fatal("[PROCESSOR:VALIDATOR] Data structure is not correct.");
             return Tuple.Create(NUTList,false);
 
         }
 
         public static string SanitizeNUTOutput(string NUTOutput)
         {
-            MainPage.debugLog.Debug("[PROCESSOR:SANITIZER] Attempting to sanitize output");
+            Backend.NUT_Background.debugLog.Debug("[PROCESSOR:SANITIZER] Attempting to sanitize output");
             return Regex.Replace(NUTOutput, @"\r\n?|\n", Environment.NewLine); // Replaces UNIX linefeeds with ANSI
         }
 
@@ -66,41 +70,69 @@ namespace nuttyupsclient.Backend
 
         public static string UPSStatistics()
         {
-            // Input voltage and nominal voltage
-            decimal UPSInputVoltage = Convert.ToDecimal(SearchNUTData("input.voltage"));
-            Console.WriteLine("[PROCESSOR] UPS input voltage is " + UPSInputVoltage);
-            decimal UPSInputNominalVoltage = Convert.ToDecimal(SearchNUTData("input.voltage.nominal"));
-            Console.WriteLine("[PROCESSOR] UPS nominal input voltage is " + UPSInputNominalVoltage);
+            string UPSInfo = "";
+            try
+            {
+                // Input voltage and nominal voltage
+                decimal UPSInputVoltage = Convert.ToDecimal(SearchNUTData("input.voltage"));
+                Console.WriteLine("[PROCESSOR] UPS input voltage is " + UPSInputVoltage);
+                decimal UPSInputNominalVoltage = Convert.ToDecimal(SearchNUTData("input.voltage.nominal"));
+                Console.WriteLine("[PROCESSOR] UPS nominal input voltage is " + UPSInputNominalVoltage);
 
-            // Battery voltage and nominal voltage
-            // TODO: Make this smarter, and skip if battery voltage info is not available
-            /*decimal UPSBatteryVoltage = Convert.ToDecimal(SearchNUTData("battery.voltage"));
-            Console.WriteLine("[PROCESSOR] UPS battery voltage is " + UPSBatteryVoltage);
-            decimal UPSBatteryNominalVoltage = Convert.ToDecimal(SearchNUTData("battery.voltage.nominal"));
-            Console.WriteLine("[PROCESSOR] UPS battery nominal voltage is " + UPSBatteryNominalVoltage);*/
+                // Battery voltage and nominal voltage
+                // TODO: Make this smarter, and skip if battery voltage info is not available
+                /*decimal UPSBatteryVoltage = Convert.ToDecimal(SearchNUTData("battery.voltage"));
+                Console.WriteLine("[PROCESSOR] UPS battery voltage is " + UPSBatteryVoltage);
+                decimal UPSBatteryNominalVoltage = Convert.ToDecimal(SearchNUTData("battery.voltage.nominal"));
+                Console.WriteLine("[PROCESSOR] UPS battery nominal voltage is " + UPSBatteryNominalVoltage);*/
 
-            // Output voltage and nominal voltage
-            decimal UPSOutputVoltage = Convert.ToDecimal(SearchNUTData("output.voltage"));
-            Console.WriteLine("[PROCESSOR] UPS output voltage before correction is " + UPSOutputVoltage);
-            //UPSOutputVoltage = UPSOutputVoltage - UPSBatteryVoltage; // It adds the battery voltage to the output voltage. Fixing this.
-            Console.WriteLine("[PROCESSOR] UPS output voltage after correction is " + UPSOutputVoltage);
+                // Output voltage and nominal voltage
+                decimal UPSOutputVoltage = Convert.ToDecimal(SearchNUTData("output.voltage"));
+                Console.WriteLine("[PROCESSOR] UPS output voltage before correction is " + UPSOutputVoltage);
+                //UPSOutputVoltage = UPSOutputVoltage - UPSBatteryVoltage; // It adds the battery voltage to the output voltage. Fixing this.
+                Console.WriteLine("[PROCESSOR] UPS output voltage after correction is " + UPSOutputVoltage);
 
-            // UPS alarm
-            bool UPSBeeper = false;
-            if (SearchNUTData("ups.beeper.status").Equals("enabled")) { UPSBeeper = true; }
+                // UPS alarm
+                bool UPSBeeper = false;
+                if (SearchNUTData("ups.beeper.status").Equals("enabled")) { UPSBeeper = true; }
 
-            // Strings all the information 
-            string UPSInfo = (
-                    "Manufacturer: " + SearchNUTData("device.mfr")
-                    + "\nModel: " + SearchNUTData("device.model")
-                    + "\nSerial: " + SearchNUTData("device.serial")
-                    + "\n\nBattery charge: " + SearchNUTData("battery.charge") + "%"
-                    + "\nInput Voltage: " + UPSInputVoltage + "v / " + UPSInputNominalVoltage
-                    + "\nOutput Voltage: " + UPSOutputVoltage + "v"
-                    + "\n\nUPS Beeper enabled: " + UPSBeeper
-                );
+                // Strings all the information 
+                UPSInfo = (
+                        "Manufacturer: " + SearchNUTData("device.mfr")
+                        + "\nModel: " + SearchNUTData("device.model")
+                        + "\nSerial: " + SearchNUTData("device.serial")
+                        + "\n\nBattery charge: " + SearchNUTData("battery.charge") + "%"
+                        + "\nInput Voltage: " + UPSInputVoltage + "v / " + UPSInputNominalVoltage
+                        + "\nOutput Voltage: " + UPSOutputVoltage + "v"
+                        + "\n\nUPS Beeper enabled: " + UPSBeeper
+                    );
+            }
+            catch (Exception e)
+            {
+                UPSInfo = "No data has been received from the UPS.";
+                if (NUT_Background.isDebug) UPSInfo = (UPSInfo + "\n" + e);
+            }
 
             return UPSInfo;
+
+        }
+
+        public static string ParseUPSVariables()
+        {
+            if (UPSVariables == null || UPSVariables.GetLength(0) == 0) return "No data has been collected from the UPS yet.";
+
+            string UPSFormattedVariables = "";
+            try
+            {
+                for (int i = 0; i < UPSVariables.GetLength(0); i++)
+                {
+                    UPSFormattedVariables = (UPSFormattedVariables + UPSVariables[i, 0] + "\t" + UPSVariables[i, 1] + "\n");
+                }
+            } catch (Exception e)
+            {
+                return ("Error: " + e);
+            }
+            return UPSFormattedVariables;
 
         }
 
@@ -171,8 +203,8 @@ namespace nuttyupsclient.Backend
 
         public static string SearchNUTData(string NUTVariable)
         {
-            MainPage.debugLog.Trace("[PROCESSOR:SEARCH] Searching for " + NUTVariable);
-            for (int i = 0; i < UPSVariables.Length; i++)
+            Backend.NUT_Background.debugLog.Trace("[PROCESSOR:SEARCH] Searching for " + NUTVariable);
+            for (int i = 0; i < UPSVariables.GetLength(0); i++)
             {
                 if (UPSVariables[i, 0].Contains(NUTVariable))
                 {
@@ -180,25 +212,25 @@ namespace nuttyupsclient.Backend
                 }
             }
 
-            MainPage.debugLog.Debug("[PROCESSOR:SEARCHNUTDATA] Could not find requested variable");
+            Backend.NUT_Background.debugLog.Debug("[PROCESSOR:SEARCHNUTDATA] Could not find requested variable");
             return "INVALID";
         }
 
         public static void ModifySimNUTData(string NUTVariable, string NUTValue)
         {
-            MainPage.debugLog.Debug("[MODNUTDATA] Array length is " + Convert.ToString(UPSVariables.GetLength(0)));
-            MainPage.debugLog.Debug("[MODNUTDATA] Invoked. Searching for: " + NUTVariable);
+            Backend.NUT_Background.debugLog.Debug("[MODNUTDATA] Array length is " + Convert.ToString(UPSVariables.GetLength(0)));
+            Backend.NUT_Background.debugLog.Debug("[MODNUTDATA] Invoked. Searching for: " + NUTVariable);
             for (int i = 0; i < UPSVariables.GetLength(0); i++)
             {
                 if (UPSVariables[i, 0].Equals(NUTVariable))
                 {
-                    MainPage.debugLog.Debug("[SEARCHNUTDATA] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
+                    Backend.NUT_Background.debugLog.Debug("[SEARCHNUTDATA] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
                     UPSVariables[i, 1] = NUTValue;
                     return;
                 }
             }
 
-            MainPage.debugLog.Debug("[SEARCHNUTDATA] Could not find requested variable");
+            Backend.NUT_Background.debugLog.Debug("[SEARCHNUTDATA] Could not find requested variable");
             return;
         }
 

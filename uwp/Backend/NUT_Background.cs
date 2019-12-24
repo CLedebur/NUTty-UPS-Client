@@ -7,25 +7,29 @@ using System.IO;
 using System.Threading;
 using System.Net;
 using System.ComponentModel;
+using MetroLog;
+using MetroLog.Targets;
 
 namespace nuttyupsclient.Backend
 {
-    class Background
+    class NUT_Background
     {
         public static bool isSimulated = false;
         public static Tuple<String, UInt16, UInt32> NUTConnectionSettings;
         public static bool isLogging = false;
+        public static bool isDebug = false;
+        public static ILogger debugLog = LogManagerFactory.DefaultLogManager.GetLogger<NUT_Background>();
 
         public static void InitializeBg()
         {
 
-            string DebugLogging = Backend.NUT_Config.GetConfig("Debug");
+            string DebugLogging = NUT_Config.GetConfig("Debug");
             if (DebugLogging == null)
-                MainPage.debugLog.Info("[BACKEND] No registry entry exists for debug logging");
+                debugLog.Info("[BACKEND] No registry entry exists for debug logging");
             else if (DebugLogging.Equals("true"))
-                Backend.Background.isLogging = true;
+                isLogging = true;
 
-            MainPage.debugLog.Info("[INITIALIZE] Started");
+            debugLog.Info("[INITIALIZE] Started");
 
             try
             {
@@ -42,13 +46,13 @@ namespace nuttyupsclient.Backend
                 NUTConnectionSettings = NUT_Config.GetConnectionSettings();
                 if (NUTConnectionSettings.Item1 == ("127.0.0.1") || NUTConnectionSettings.Item2 == 0 || NUTConnectionSettings.Item3 == 0)
                 {
-                    MainPage.debugLog.Info("[BACKEND] Empty values found, starting Settings form");
+                    debugLog.Info("[BACKEND] Empty values found, starting Settings form");
                     return;
                 }
             }
             catch (Exception e)
             {
-                MainPage.debugLog.Fatal("[BACKEND] Error occurred: " + e);
+                debugLog.Fatal("[BACKEND] Error occurred: " + e);
             }
          
 

@@ -119,10 +119,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Backend\NUT-Backend.cs" />
-    <Compile Include="Backend\NUT-Config.cs" />
-    <Compile Include="Backend\NUT-Poller.cs" />
-    <Compile Include="Backend\NUT-Processor.cs" />
+    <Compile Include="Backend\NUT_Background.cs" />
+    <Compile Include="Backend\NUT_Config.cs" />
+    <Compile Include="Backend\NUT_Poller.cs" />
+    <Compile Include="Backend\NUT_Processor.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

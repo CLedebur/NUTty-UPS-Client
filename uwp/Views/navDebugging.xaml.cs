@@ -25,6 +25,29 @@ namespace nuttyupsclient.Views
         public navDebugging()
         {
             this.InitializeComponent();
+            InitializeValues();
         }
+
+        public void InitializeValues()
+        {
+            Backend.NUT_Background.debugLog.Trace("[UI:DEBUGGING] Updating raw output text");
+            TXTDebugRawOutput = Backend.NUT_Processor.ParseUPSVariables();
+        }
+
+        public string TXTDebugRawOutput
+        {
+            get { return (string)GetValue(TXTDebugRawOutputProperty); }
+            set { SetValue(TXTDebugRawOutputProperty, value); }
+        }
+
+        #region TXTDebugRawOutput DP
+        private const string TXTDebugRawOutputName = "TXTDebugRawOutput";
+        private static readonly DependencyProperty _TXTDebugRawOutputProperty =
+            DependencyProperty.Register(TXTDebugRawOutputName, typeof(string), typeof(navDebugging), new PropertyMetadata(""));
+
+        public static DependencyProperty TXTDebugRawOutputProperty { get { return _TXTDebugRawOutputProperty; } }
+        #endregion
+
+
     }
 }

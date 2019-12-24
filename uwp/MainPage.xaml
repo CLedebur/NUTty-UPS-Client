@@ -32,15 +32,11 @@
             
         </NavigationView.MenuItems>
         <NavigationView.Header>
-            <TextBlock x:Name="navHeader" HorizontalAlignment="Right" Padding="0,0,5,0" Foreground="Green" Margin="0,0,5,0" FontSize="28" FontFamily="Segoe UI" Text="Charging, 87%"/>
+            <TextBlock HorizontalAlignment="Right" Padding="0,0,5,0" Foreground="Black" Margin="0,0,5,0" FontSize="28" FontFamily="Segoe UI" Text="{x:Bind TXTChargeText, Mode=OneWay}"/>
         </NavigationView.Header>
                 
         <Frame x:Name="contentFrame" FontFamily="Segoe UI"></Frame>
         
     </NavigationView>
-    
-        
-        <!--<TextBlock HorizontalAlignment="Right" Text="Charging - 87%" TextWrapping="NoWrap" VerticalAlignment="Bottom" FontSize="28" FontFamily="Segoe UI" Foreground="Green" Grid.Row="1" Grid.Column="1" Margin="0,0,5,5"></TextBlock>-->
 
-    
 </Page>

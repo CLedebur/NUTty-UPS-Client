@@ -20,7 +20,7 @@ namespace nuttyupsclient.Backend
 
         private static async Task TelnetClient(string nutIP, UInt16 nutPort)
         {
-            MainPage.debugLog.Debug("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
+            Backend.NUT_Background.debugLog.Debug("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
             using (var Client = new Client(nutIP, nutPort, new CancellationToken()))
             {
                 while (true)
@@ -30,7 +30,7 @@ namespace nuttyupsclient.Backend
 
                     var s = await Client.TerminatedReadAsync("END LIST VAR ups");
 
-                    MainPage.debugLog.Debug("[POLLER] NUT server returned:\r\n" + s.ToString());
+                    Backend.NUT_Background.debugLog.Debug("[POLLER] NUT server returned:\r\n" + s.ToString());
 
                     NUTOutput = s;
                     return;
@@ -41,7 +41,7 @@ namespace nuttyupsclient.Backend
 
         public static Tuple<string, bool> PollNUTServer(String nutIP, UInt16 nutPort)
         {
-            if (Background.isSimulated)
+            if (NUT_Background.isSimulated)
             {
                 // If simulation is enabled, then it will receive data from the simulator instead of the UPS
                 // It will simulate the CyberPower UPS for now
@@ -52,13 +52,13 @@ namespace nuttyupsclient.Backend
 
             Task NUTConnection = Task.Factory.StartNew(async () =>
            {
-               MainPage.debugLog.Debug("[POLLER] Executing telnet client task");
+               Backend.NUT_Background.debugLog.Debug("[POLLER] Executing telnet client task");
                await TelnetClient(nutIP, nutPort);
            });
 
             while (!NUTConnection.IsCompleted)
             {
-                MainPage.debugLog.Trace("[POLLER] Waiting for task to complete. Waiting 500ms.");
+                Backend.NUT_Background.debugLog.Trace("[POLLER] Waiting for task to complete. Waiting 500ms.");
                 Thread.Sleep(500);
             }
             NUTConnection.Dispose();
