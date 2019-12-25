@@ -52,7 +52,6 @@ namespace NUTty_UPS_Client
             Console.WriteLine("[PROCESSOR] UPS nominal input voltage is " + UPSInputNominalVoltage);
 
             // Battery voltage and nominal voltage
-            // TODO: Make this smarter, and skip if battery voltage info is not available
             /*decimal UPSBatteryVoltage = Convert.ToDecimal(SearchNUTData("battery.voltage"));
             Console.WriteLine("[PROCESSOR] UPS battery voltage is " + UPSBatteryVoltage);
             decimal UPSBatteryNominalVoltage = Convert.ToDecimal(SearchNUTData("battery.voltage.nominal"));

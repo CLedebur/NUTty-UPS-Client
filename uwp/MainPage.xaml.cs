@@ -14,11 +14,15 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Networking;
+using Windows.UI;
+using Windows.UI.Core;
+using System.Timers;
 
 namespace nuttyupsclient
 {   
     public sealed partial class MainPage : Page
     {
+        System.Timers.Timer UpdateUPSCharge;
 
         public MainPage()
         {
@@ -27,19 +31,57 @@ namespace nuttyupsclient
             // Triggers the initialization process
             // Backend.NUT_Background.InitializeBg();
 
+            UpdateUPSCharge = new System.Timers.Timer(Backend.NUT_Background.PollFrequency);
+            UpdateUPSCharge.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            UpdateUPSCharge.AutoReset = true;
+            UpdateUPSCharge.Enabled = true;
 
             // Below is for testing purposes only
             /*Tuple<String, bool> NUTData;
             NUTData = Backend.NUT_Poller.PollNUTServer("192.168.253.6",3493);
-            Backend.NUT_Processor.ParseNUTOutput(NUTData.Item1);           
+            Backend.NUT_Processor.ParseNUTOutput(NUTData.Item1);
             */
-            
+
+            InitializeValues();
+
         }
 
-        public void InitializeValues()
+        void OnTimedEvent(Object sender, ElapsedEventArgs e)
         {
-            Backend.NUT_Background.debugLog.Trace("[UI:HOME] Updating battery charge status");
-            TXTChargeText = Backend.NUT_Processor.ParseUPSVariables();
+            Backend.NUT_Background.debugLog.Trace("[UI:MAIN] Timer fired");
+            InitializeValues();
+        }
+
+
+        public async void InitializeValues()
+        {
+            Backend.NUT_Background.debugLog.Info("[UI:MAIN] Updating battery charge status");
+
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                try
+                {
+                    if (!Backend.NUT_Background.isPolling)
+                    {
+                        Backend.NUT_Background.debugLog.Info("[UI:MAIN] No data from UPS. Will not update charge status.");
+                        TXTChargeText = "Not connected to UPS";
+                    }
+                    else
+                    {
+                        Backend.NUT_Background.debugLog.Info("[UI:MAIN] Was able to acquire data. Updating charge status.");
+                        Tuple<string, int> ChargeStatus = Backend.NUT_Processor.ChargeStatus();
+                        TXTChargeText = ChargeStatus.Item1;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Backend.NUT_Background.debugLog.Fatal("[UI:MAIN] Error trying to update the charging status.\n" + e);
+
+                }
+            }
+            );
+
+
         }
 
         public string TXTChargeText
@@ -55,7 +97,7 @@ namespace nuttyupsclient
 
         public static DependencyProperty TXTChargeTextProperty { get { return _TXTChargeTextProperty; } }
         #endregion
-        /*
+        
         public string TXTChargeColor
         {
             get { return (string)GetValue(TXTChargeColorProperty); }
@@ -65,11 +107,11 @@ namespace nuttyupsclient
         #region TXTChargeColor DP
         private const string TXTChargeColorName = "TXTChargeColor";
         private static readonly DependencyProperty _TXTChargeColorProperty =
-            DependencyProperty.Register(TXTChargeColorName, typeof(string), typeof(navDebugging), new PropertyMetadata(""));
+            DependencyProperty.Register(TXTChargeColorName, typeof(Color), typeof(navDebugging), new PropertyMetadata(""));
 
         public static DependencyProperty TXTChargeColorProperty { get { return _TXTChargeColorProperty; } }
         #endregion
-    */
+    
 
         #region NavigationView Event Handlers
         private void nvTopLevelNav_Loaded(object ssender, RoutedEventArgs e)

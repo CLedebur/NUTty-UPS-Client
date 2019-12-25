@@ -32,7 +32,7 @@
             
         </NavigationView.MenuItems>
         <NavigationView.Header>
-            <TextBlock HorizontalAlignment="Right" Padding="0,0,5,0" Foreground="Black" Margin="0,0,5,0" FontSize="28" FontFamily="Segoe UI" Text="{x:Bind TXTChargeText, Mode=OneWay}"/>
+            <TextBlock HorizontalAlignment="Right" Padding="0,0,5,0" Foreground="Black" Margin="0,0,5,0" FontSize="28" FontFamily="Segoe UI" Text="{x:Bind TXTChargeText, Mode=TwoWay}" />
         </NavigationView.Header>
                 
         <Frame x:Name="contentFrame" FontFamily="Segoe UI"></Frame>

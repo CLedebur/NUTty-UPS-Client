@@ -12,6 +12,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Timers;
+using Windows.UI.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -23,20 +25,49 @@ namespace nuttyupsclient.Views
     public sealed partial class navHome : Page
     {
 
+        Timer UpdateUPSStatistics;
 
         public navHome()
         {
             this.InitializeComponent();
 
+            // Sets up the timer that updates the UPS statistics at the set interval
+            UpdateUPSStatistics = new Timer(Backend.NUT_Background.PollFrequency);
+            UpdateUPSStatistics.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            UpdateUPSStatistics.AutoReset = true;
+            UpdateUPSStatistics.Enabled = true;
+
+            // Updates the initial values
             InitializeValues();
 
         }
 
-        public void InitializeValues()
+
+        void OnTimedEvent(Object sender, ElapsedEventArgs e)
         {
-            Backend.NUT_Background.debugLog.Trace("[UI:MAIN] Updating statistics text");
-            TXTUPSStatus = Backend.NUT_Processor.UPSStatistics();
+            Backend.NUT_Background.debugLog.Trace("[UI:HOME] Timer fired");
+            InitializeValues();
         }
+
+        public async void InitializeValues()
+        {
+            Backend.NUT_Background.debugLog.Trace("[UI:HOME] Updating statistics text");
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        try
+                        {
+                            TXTUPSStatus = (Backend.NUT_Processor.UPSStatistics());
+                        }
+                        catch (Exception e)
+                        {
+                            Backend.NUT_Background.debugLog.Fatal("[UI:HOME] Error trying to update the statistics text.\n" + e);
+
+                        }
+                    }
+            );
+                
+        }
+
 
         public string TXTUPSStatus
         {
@@ -50,6 +81,17 @@ namespace nuttyupsclient.Views
             DependencyProperty.Register(TXTUPSStatusName, typeof(string), typeof(navDebugging), new PropertyMetadata(""));
 
         public static DependencyProperty TXTUPSStatusProperty { get { return _TXTUPSStatusProperty; } }
+
         #endregion
+
+        private void Button_ContextCanceled(UIElement sender, RoutedEventArgs args)
+        {
+
+        }
+
+        private void BTNPollUPS_Click(object sender, RoutedEventArgs e)
+        {
+            InitializeValues();
+        }
     }
 }

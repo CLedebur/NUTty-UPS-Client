@@ -12,26 +12,51 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Core;
+using System.Timers;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace nuttyupsclient.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class navDebugging : Page
     {
+        Timer UPSRawData;
         public navDebugging()
         {
             this.InitializeComponent();
+
+            UPSRawData = new System.Timers.Timer(Backend.NUT_Background.PollFrequency);
+            UPSRawData.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            UPSRawData.AutoReset = true;
+            UPSRawData.Enabled = true;
+
             InitializeValues();
         }
 
-        public void InitializeValues()
+        void OnTimedEvent(Object sender, ElapsedEventArgs e)
+        {
+            Backend.NUT_Background.debugLog.Trace("[UI:DEBUGGING] Timer fired");
+            InitializeValues();
+        }
+
+
+        public async void InitializeValues()
         {
             Backend.NUT_Background.debugLog.Trace("[UI:DEBUGGING] Updating raw output text");
-            TXTDebugRawOutput = Backend.NUT_Processor.ParseUPSVariables();
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                try
+                {
+                    TXTDebugRawOutput = Backend.NUT_Processor.ParseUPSVariables();
+                }
+                catch (Exception e)
+                {
+                    Backend.NUT_Background.debugLog.Fatal("[UI:DEBUGGING] Error trying to update the raw output text.\n" + e);
+
+                }
+            }
+            );
         }
 
         public string TXTDebugRawOutput

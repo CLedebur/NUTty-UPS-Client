@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using PrimS.Telnet;
 using Windows.Networking;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace nuttyupsclient.Backend
 {
@@ -16,11 +17,10 @@ namespace nuttyupsclient.Backend
     {
 
         private static string NUTOutput;
-        //private static string NUTOutput { get => NUTOutput; set => NUTOutput = value; }
 
         private static async Task TelnetClient(string nutIP, UInt16 nutPort)
         {
-            Backend.NUT_Background.debugLog.Debug("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
+            NUT_Background.debugLog.Debug("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
             using (var Client = new Client(nutIP, nutPort, new CancellationToken()))
             {
                 while (true)
@@ -30,7 +30,7 @@ namespace nuttyupsclient.Backend
 
                     var s = await Client.TerminatedReadAsync("END LIST VAR ups");
 
-                    Backend.NUT_Background.debugLog.Debug("[POLLER] NUT server returned:\r\n" + s.ToString());
+                    NUT_Background.debugLog.Trace("[POLLER] NUT server returned:\r\n" + s.ToString());
 
                     NUTOutput = s;
                     return;
@@ -39,40 +39,78 @@ namespace nuttyupsclient.Backend
 
         }
 
-        public static Tuple<string, bool> PollNUTServer(String nutIP, UInt16 nutPort)
+        #region Poll Timer
+
+        System.Timers.Timer PollUPS;
+        public void InitializeUPSPolling()
         {
+            PollUPS = new System.Timers.Timer(NUT_Background.PollFrequency);
+            PollUPS.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            PollUPS.AutoReset = true;
+            PollUPS.Enabled = true;
+            PollNUTServer("192.168.253.6", 3493);
+        }
+
+        public void PauseUPSPolling()
+        {
+            PollUPS.Enabled = false;
+            NUT_Background.isPolling = false;
+        }
+
+        public void ResumeUPSPolling()
+        {
+            PollUPS.Interval = NUT_Background.PollFrequency;
+            PollUPS.Enabled = true;
+        }
+
+        void OnTimedEvent(Object sender, ElapsedEventArgs e)
+        {
+            NUT_Background.debugLog.Trace("[POLLER] Timer fired");
+            // TODO: Make this respect server config
+            PollUPS.Enabled = false;
+            PollNUTServer("192.168.253.6", 3493);
+            PollUPS.Enabled = true;
+        }
+
+        #endregion
+
+        public static void PollNUTServer(String nutIP, UInt16 nutPort)
+        {            
+
             if (NUT_Background.isSimulated)
             {
                 // If simulation is enabled, then it will receive data from the simulator instead of the UPS
-                // It will simulate the CyberPower UPS for now
-                return SimulateNUTServer();
+
+                // TODO: Format simulation files to adhere to UPS variable format
+                //NUT_Processor.UPSVariables = Tuple.Create(SimulateNUTServer());
+                return;
             }
             
-            bool isSuccessful = false;
-
             Task NUTConnection = Task.Factory.StartNew(async () =>
            {
-               Backend.NUT_Background.debugLog.Debug("[POLLER] Executing telnet client task");
+               NUT_Background.debugLog.Trace("[POLLER] Executing telnet client task");
                await TelnetClient(nutIP, nutPort);
            });
 
             while (!NUTConnection.IsCompleted)
             {
-                Backend.NUT_Background.debugLog.Trace("[POLLER] Waiting for task to complete. Waiting 500ms.");
+                NUT_Background.debugLog.Trace("[POLLER] Waiting for task to complete. Waiting 500ms.");
                 Thread.Sleep(500);
             }
             NUTConnection.Dispose();
 
-            return Tuple.Create(NUTOutput, isSuccessful);
+            NUT_Background.isPolling = true;
+            NUT_Processor.ParseNUTOutput(NUTOutput); // Pipes to the parser so that the new data can be processed
+            return;
             
         }
         
-        public static Tuple<string, bool> SimulateNUTServer()
+        public static string SimulateNUTServer()
         {
             TextReader SimFile = new StreamReader(@"Assets\Simulated\CraigUPS.txt");
             string SimFileContents = SimFile.ReadToEnd();
 
-            return Tuple.Create(SimFileContents, true);
+            return SimFileContents;
 
         }
     }

@@ -38,11 +38,14 @@ namespace nuttyupsclient
 
 
 #if DEBUG
-            LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Trace, LogLevel.Fatal, new StreamingFileTarget());
+            LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Debug, LogLevel.Fatal, new StreamingFileTarget());
 #else
             LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Error, LogLevel.Fatal, new StreamingFileTarget());
 #endif
-            Backend.NUT_Background.debugLog.Trace("[CORE] Application is starting");
+            Backend.NUT_Background.debugLog.Trace("\n\n\n\n[CORE] Application is starting");
+
+            Backend.NUT_Poller nutPoller = new Backend.NUT_Poller();
+            nutPoller.InitializeUPSPolling();
 
         }
 

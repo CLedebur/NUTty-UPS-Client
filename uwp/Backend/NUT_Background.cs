@@ -17,7 +17,9 @@ namespace nuttyupsclient.Backend
         public static bool isSimulated = false;
         public static Tuple<String, UInt16, UInt32> NUTConnectionSettings;
         public static bool isLogging = false;
-        public static bool isDebug = false;
+        public static bool isDebug = true;
+        public static bool isPolling = false;
+        public static UInt64 PollFrequency = 5000;
         public static ILogger debugLog = LogManagerFactory.DefaultLogManager.GetLogger<NUT_Background>();
 
         public static void InitializeBg()
@@ -37,6 +39,7 @@ namespace nuttyupsclient.Backend
             }
             catch
             {
+                debugLog.Info("[BACKEND] No simulation setting found, so defaulting to collecting real data");
                 isSimulated = false;
             }
 

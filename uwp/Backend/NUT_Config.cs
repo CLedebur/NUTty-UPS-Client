@@ -26,16 +26,16 @@ namespace nuttyupsclient.Backend
             }
             catch (Exception e)
             {
-                Backend.NUT_Background.debugLog.Error("[CONFIG] Could not save setting: " + KeyName + " with value " + KeyValue + "\nException:" + e);
+                NUT_Background.debugLog.Error("[CONFIG] Could not save setting: " + KeyName + " with value " + KeyValue + "\nException:" + e);
                 return false;
             }
-            Backend.NUT_Background.debugLog.Trace("[CONFIG] Set registry key " + KeyName + " with value " + KeyValue);
+            NUT_Background.debugLog.Trace("[CONFIG] Set registry key " + KeyName + " with value " + KeyValue);
             return true;
         }
 
         public static string GetConfig(string KeyName)
         {
-            Backend.NUT_Background.debugLog.Trace("[CONFIG] Checking for existince of setting: " + KeyName);
+            NUT_Background.debugLog.Trace("[CONFIG] Checking for existince of setting: " + KeyName);
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             Windows.Storage.ApplicationDataContainer container = localSettings.CreateContainer("NUTtyUPSClient", Windows.Storage.ApplicationDataCreateDisposition.Always);
 
@@ -46,11 +46,11 @@ namespace nuttyupsclient.Backend
             }
             catch (NullReferenceException)
             {
-                Backend.NUT_Background.debugLog.Error("[CONFIG] Registry key does not exist: " + KeyName);
+                NUT_Background.debugLog.Error("[CONFIG] Registry key does not exist: " + KeyName);
                 return null;
             }
             catch (Exception e) {
-                Backend.NUT_Background.debugLog.Error("[CONFIG] Failed to read registry key: " + e);
+                NUT_Background.debugLog.Error("[CONFIG] Failed to read registry key: " + e);
                 return null;
             }
 
