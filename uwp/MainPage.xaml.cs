@@ -28,13 +28,18 @@ namespace nuttyupsclient
         {
             this.InitializeComponent();
 
-            // Triggers the initialization process
-            // Backend.NUT_Background.InitializeBg();
-
-            UpdateUPSCharge = new System.Timers.Timer(Backend.NUT_Background.PollFrequency);
-            UpdateUPSCharge.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            UpdateUPSCharge.AutoReset = true;
-            UpdateUPSCharge.Enabled = true;
+            if (Backend.NUT_Background.NeedConfig)
+            {
+                // Empty configuration detected, so we're going to hold off on starting the polling process and switch focus to the Settings tab
+                contentFrame.Navigate(typeof(navSettings));
+            }
+            else
+            {
+                UpdateUPSCharge = new System.Timers.Timer(Backend.NUT_Background.PollFrequency);
+                UpdateUPSCharge.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+                UpdateUPSCharge.AutoReset = true;
+                UpdateUPSCharge.Enabled = true;
+            }
 
             // Below is for testing purposes only
             /*Tuple<String, bool> NUTData;
@@ -48,8 +53,11 @@ namespace nuttyupsclient
 
         void OnTimedEvent(Object sender, ElapsedEventArgs e)
         {
-            Backend.NUT_Background.debugLog.Trace("[UI:MAIN] Timer fired");
-            InitializeValues();
+            if (Backend.NUT_Background.isPolling)
+            {
+                Backend.NUT_Background.debugLog.Trace("[UI:MAIN] Timer fired");
+                InitializeValues();
+            }
         }
 
 
@@ -69,8 +77,8 @@ namespace nuttyupsclient
                     else
                     {
                         Backend.NUT_Background.debugLog.Info("[UI:MAIN] Was able to acquire data. Updating charge status.");
-                        Tuple<string, int> ChargeStatus = Backend.NUT_Processor.ChargeStatus();
-                        TXTChargeText = ChargeStatus.Item1;
+                        Tuple<string, int, double> ChargeStatus = Backend.NUT_Processor.ChargeStatus();
+                        TXTChargeText = (ChargeStatus.Item3 + "%, " + ChargeStatus.Item1);
                     }
                 }
                 catch (Exception e)
@@ -118,7 +126,13 @@ namespace nuttyupsclient
         {
             foreach(NavigationViewItemBase item in nvTopLevelNav.MenuItems)
             {
-                if (item is NavigationViewItem && item.Tag.ToString() == "Home_Page")
+                if (Backend.NUT_Background.NeedConfig)
+                {
+                    nvTopLevelNav.SelectedItem = "Nav_Settings";
+                    contentFrame.Navigate(typeof(navSettings));
+                    break;
+                }
+                    else if (item is NavigationViewItem && item.Tag.ToString() == "Home_Page")
                 {
                     nvTopLevelNav.SelectedItem = item;
                     break;

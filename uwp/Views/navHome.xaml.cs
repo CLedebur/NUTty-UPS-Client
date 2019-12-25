@@ -45,25 +45,28 @@ namespace nuttyupsclient.Views
 
         void OnTimedEvent(Object sender, ElapsedEventArgs e)
         {
-            Backend.NUT_Background.debugLog.Trace("[UI:HOME] Timer fired");
-            InitializeValues();
+            if (Backend.NUT_Background.isPolling)
+            {
+                Backend.NUT_Background.debugLog.Trace("[UI:HOME] Timer fired");
+                InitializeValues();
+            }
         }
 
         public async void InitializeValues()
         {
             Backend.NUT_Background.debugLog.Trace("[UI:HOME] Updating statistics text");
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    try
                     {
-                        try
-                        {
-                            TXTUPSStatus = (Backend.NUT_Processor.UPSStatistics());
-                        }
-                        catch (Exception e)
-                        {
-                            Backend.NUT_Background.debugLog.Fatal("[UI:HOME] Error trying to update the statistics text.\n" + e);
-
-                        }
+                        TXTUPSStatus = (Backend.NUT_Processor.UPSStatistics());
                     }
+                    catch (Exception e)
+                    {
+                        Backend.NUT_Background.debugLog.Fatal("[UI:HOME] Error trying to update the statistics text.\n" + e);
+
+                    }
+                }
             );
                 
         }

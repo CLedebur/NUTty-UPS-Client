@@ -42,10 +42,13 @@ namespace nuttyupsclient
 #else
             LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Error, LogLevel.Fatal, new StreamingFileTarget());
 #endif
-            Backend.NUT_Background.debugLog.Trace("\n\n\n\n[CORE] Application is starting");
+            Backend.NUT_Background.debugLog.Info("\n\n\n\n[CORE] Application is starting");
 
             Backend.NUT_Poller nutPoller = new Backend.NUT_Poller();
-            nutPoller.InitializeUPSPolling();
+            //nutPoller.InitializeUPSPolling();
+
+            // Now we start loading the stored configuration, if any
+            Backend.NUT_Background.InitializeBg();
 
         }
 

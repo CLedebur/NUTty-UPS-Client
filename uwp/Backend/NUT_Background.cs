@@ -19,19 +19,21 @@ namespace nuttyupsclient.Backend
         public static bool isLogging = false;
         public static bool isDebug = true;
         public static bool isPolling = false;
+        public static bool NeedConfig = false;
         public static UInt64 PollFrequency = 5000;
+        public static UInt64 PollCount = 0;
         public static ILogger debugLog = LogManagerFactory.DefaultLogManager.GetLogger<NUT_Background>();
 
         public static void InitializeBg()
         {
+            debugLog.Info("[BACKGROUND] Attempting to load stored configuration");
 
             string DebugLogging = NUT_Config.GetConfig("Debug");
             if (DebugLogging == null)
-                debugLog.Info("[BACKEND] No registry entry exists for debug logging");
+                debugLog.Info("[BACKGROUND] No registry entry exists for debug logging");
             else if (DebugLogging.Equals("true"))
                 isLogging = true;
 
-            debugLog.Info("[INITIALIZE] Started");
 
             try
             {
@@ -39,7 +41,7 @@ namespace nuttyupsclient.Backend
             }
             catch
             {
-                debugLog.Info("[BACKEND] No simulation setting found, so defaulting to collecting real data");
+                debugLog.Info("[BACKGROUND] No simulation setting found, so defaulting to collecting real data");
                 isSimulated = false;
             }
 
@@ -47,15 +49,16 @@ namespace nuttyupsclient.Backend
             {
                 // Checking Registry for settings
                 NUTConnectionSettings = NUT_Config.GetConnectionSettings();
-                if (NUTConnectionSettings.Item1 == ("127.0.0.1") || NUTConnectionSettings.Item2 == 0 || NUTConnectionSettings.Item3 == 0)
+                if (NUTConnectionSettings.Item1 == null || NUTConnectionSettings.Item2 == null || NUTConnectionSettings.Item3 == null)
                 {
-                    debugLog.Info("[BACKEND] Empty values found, starting Settings form");
+                    debugLog.Info("[BACKGROUND] Empty values found, starting setup workflow");
+                    NeedConfig = true;
                     return;
                 }
             }
             catch (Exception e)
             {
-                debugLog.Fatal("[BACKEND] Error occurred: " + e);
+                debugLog.Fatal("[BACKGROUND] Error occurred: " + e);
             }
          
 

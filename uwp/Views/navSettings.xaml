@@ -11,13 +11,19 @@
     <ScrollViewer>
         <StackPanel HorizontalAlignment="Left">
             <TextBlock HorizontalAlignment="Left" Text="Settings" Margin="10,0,0,0" Style="{StaticResource SubheaderTextBlockStyle}"/>
-            <TextBlock HorizontalAlignment="Left" Text="NUT Server" TextWrapping="Wrap" FontSize="20" VerticalAlignment="Stretch" Margin="10,20,0,0"/>
+            
+            <!-- Connectivity settings -->
+            <TextBlock HorizontalAlignment="Left" Text="NUT Server" TextWrapping="Wrap" VerticalAlignment="Stretch" Margin="10,20,0,0" Style="{StaticResource SubtitleTextBlockStyle}"/>
             <TextBlock Text="IP Address" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="10,5,0,0"/>
             <TextBox x:Name="txtIPAddress" HorizontalAlignment="Left" Text="127.0.0.1" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="10,5,0,0"/>
             <TextBlock HorizontalAlignment="Stretch" Text="Port" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="10,5,0,0"/>
             <TextBox x:Name="txtPort" HorizontalAlignment="Left" Text="3493" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="10,5,0,0"/>
             <Button x:Name="btnConnect" Content="Test Connection" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,5,0,3"/>
-            <TextBlock Text="Alarms" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="20" FontFamily="Segoe UI" Margin="10,20,0,0"/>
+            <TextBlock HorizontalAlignment="Stretch" Text="Polling Frequency (in seconds)" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="10,5,0,0"/>
+            <TextBox x:Name="txtPollFrequency" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="10,5,0,0" PlaceholderText="5"/>
+
+            <!-- Alarm Settings -->
+            <TextBlock Text="Alarms" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,20,0,0" Style="{StaticResource SubtitleTextBlockStyle}" />
             <TextBlock HorizontalAlignment="Stretch" Text="When the battery reaches" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="10,5,0,0"/>
             <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,5,0,0">
                 <ComboBoxItem Content="95%" />
@@ -53,9 +59,18 @@
                 <Button x:Name="btnPathBrowse" Content="Browse" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,5,0,0"/>
             </StackPanel>
 
-            <TextBlock HorizontalAlignment="Stretch" Text="Polling Frequency (in seconds)" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="10,5,0,0"/>
-            <TextBox x:Name="txtPollFrequency" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="10,5,0,0" PlaceholderText="5"/>
+            <!-- Alarm Switches -->
+            <TextBlock HorizontalAlignment="Stretch" Text="Notifications" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,5,0,0" Style="{StaticResource SubtitleTextBlockStyle}" />
+            <ToggleSwitch Header="Windows Notification"  HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True" />
+            <ToggleSwitch Header="Email Notification"  HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True" />
 
+            <TextBlock HorizontalAlignment="Stretch" Text="Alert on the following events:" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource SubtitleTextBlockStyle}" Margin="10,5,0,0"/>
+            
+            <ToggleSwitch Header="Power loss"  HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True" />
+            <ToggleSwitch Header="Input Overvoltage" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True"/>
+            <ToggleSwitch Header="Input Undervoltage" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True"/>
+            <ToggleSwitch Header="Overload" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True"/>
+            <ToggleSwitch Header="Overtemperature" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True"/>
 
         </StackPanel>
     </ScrollViewer>

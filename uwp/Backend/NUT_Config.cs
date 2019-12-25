@@ -39,9 +39,11 @@ namespace nuttyupsclient.Backend
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             Windows.Storage.ApplicationDataContainer container = localSettings.CreateContainer("NUTtyUPSClient", Windows.Storage.ApplicationDataCreateDisposition.Always);
 
+            string s;
+
             try
             {
-
+                s = localSettings.Containers["NUTtyUPSClient"].Values[KeyName].ToString();
 
             }
             catch (NullReferenceException)
@@ -54,7 +56,7 @@ namespace nuttyupsclient.Backend
                 return null;
             }
 
-            return "test";
+            return s;
         }
 
         public static Tuple<String, UInt16, UInt32> GetConnectionSettings()
@@ -62,11 +64,6 @@ namespace nuttyupsclient.Backend
             string NUTServerIP = GetConfig("IP Address");
             string NUTServerPort = GetConfig("Port");
             string NUTPollInterval = GetConfig("Poll Interval");
-
-            if (NUTServerIP == null)
-            {
-                NUTServerIP = "127.0.0.1";
-            }
 
             return Tuple.Create(NUTServerIP.ToString(), Convert.ToUInt16(NUTServerPort), Convert.ToUInt32(NUTPollInterval));
 

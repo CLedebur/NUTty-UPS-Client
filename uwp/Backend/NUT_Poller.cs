@@ -20,6 +20,7 @@ namespace nuttyupsclient.Backend
 
         private static async Task TelnetClient(string nutIP, UInt16 nutPort)
         {
+            NUT_Background.PollCount++;
             NUT_Background.debugLog.Debug("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
             using (var Client = new Client(nutIP, nutPort, new CancellationToken()))
             {

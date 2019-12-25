@@ -36,8 +36,11 @@ namespace nuttyupsclient.Views
 
         void OnTimedEvent(Object sender, ElapsedEventArgs e)
         {
-            Backend.NUT_Background.debugLog.Trace("[UI:DEBUGGING] Timer fired");
-            InitializeValues();
+            if (Backend.NUT_Background.isPolling)
+            {
+                Backend.NUT_Background.debugLog.Trace("[UI:DEBUGGING] Timer fired");
+                InitializeValues();
+            }
         }
 
 

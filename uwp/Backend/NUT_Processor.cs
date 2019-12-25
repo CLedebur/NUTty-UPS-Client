@@ -41,7 +41,7 @@ namespace nuttyupsclient.Backend
 
             List<string> NUTList = NUTValidatedData.Item1;
             
-            UPSVariables = new string[NUTList.Count -1, 2]; // Truncating list by two to remove the `BEGIN LAST VAR` and `END LIST VAR` lines
+            UPSVariables = new string[NUTList.Count -1, 2]; // Truncating list by two to remove the `BEGIN LIST VAR` and `END LIST VAR` lines
 
             int j = 0;
             for (int i = 1; i < NUTList.Count - 1; i++)
@@ -198,19 +198,19 @@ namespace nuttyupsclient.Backend
                 UPSStatusCode = 2;
                 if (UPSBatteryRuntime <= 60)
                 {
-                    UPSStatusMessage = (UPSBatteryCharge + "% " + Math.Round(UPSBatteryRuntime, 0) + " sec remaining"); // Only display in seconds, since it's exactly a minute (or less)
+                    UPSStatusMessage = (Math.Round(UPSBatteryRuntime, 0) + " sec remaining"); // Only display in seconds, since it's exactly a minute (or less)
                 }
                 else
                 {
                     UPSBatteryRuntime = Math.Round((UPSBatteryRuntime / 60), 0);
-                    UPSStatusMessage = (UPSBatteryCharge + "% " + Math.Round(UPSBatteryRuntime, 0) + " min remaining"); // Breaks it down into minutes
+                    UPSStatusMessage = (Math.Round(UPSBatteryRuntime, 0) + " min remaining"); // Breaks it down into minutes
                 }
             }
 
             return Tuple.Create(UPSStatusMessage, UPSBatteryCharge, UPSStatusCode);
         }
 
-        public static Tuple<string, int> ChargeStatus()
+        public static Tuple<string, int, double> ChargeStatus()
         {
             Tuple<string, double, int> BatteryStatus = GetBatteryStatus();
             string StatusMessage = "";
@@ -220,14 +220,14 @@ namespace nuttyupsclient.Backend
             else if (BatteryStatus.Item3 == 2) StatusMessage = ("Charging, " + BatteryStatus.Item1);
             else if (BatteryStatus.Item3 == 3) StatusMessage = ("Not connected to UPS");
             
-            return Tuple.Create(StatusMessage,BatteryStatus.Item3);
+            return Tuple.Create(StatusMessage,BatteryStatus.Item3,BatteryStatus.Item2);
         }
 
         public static string SearchNUTData(string NUTVariable)
         {
             if (UPSVariables == null || UPSVariables.GetLength(0) == 0)
             {
-                return "INVALID";
+                return "";
             }
                 NUT_Background.debugLog.Trace("[PROCESSOR:SEARCH] Searching for " + NUTVariable);
             for (int i = 0; i < UPSVariables.GetLength(0); i++)
@@ -239,7 +239,7 @@ namespace nuttyupsclient.Backend
             }
 
             NUT_Background.debugLog.Debug("[PROCESSOR:SEARCHNUTDATA] Could not find requested variable");
-            return "INVALID";
+            return "";
         }
 
         public static void ModifySimNUTData(string NUTVariable, string NUTValue)
