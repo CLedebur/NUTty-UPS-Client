@@ -9,7 +9,15 @@ namespace nuttyupsclient.Backend
         public void InitializeContainer() 
             {
             // Declares the application data container
-           Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            NUT_Background.debugLog.Info("[CONFIG] Initializing Application Data Container");
+        }
+
+        public void DeleteContainer()
+        {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            NUT_Background.debugLog.Info("[CONFIG] Clearing all settings");
+            localSettings.DeleteContainer("NUTtyUPSClient");
         }
 
         public static bool SetConfig(string KeyName, string KeyValue)
@@ -19,10 +27,7 @@ namespace nuttyupsclient.Backend
                 Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
                 Windows.Storage.ApplicationDataContainer container = localSettings.CreateContainer("NUTtyUPSClient", Windows.Storage.ApplicationDataCreateDisposition.Always);
 
-                if (localSettings.Containers.ContainsKey(KeyName))
-                {
                     localSettings.Containers["NUTtyUPSClient"].Values[KeyName] = KeyValue;
-                }
             }
             catch (Exception e)
             {
@@ -39,7 +44,7 @@ namespace nuttyupsclient.Backend
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             Windows.Storage.ApplicationDataContainer container = localSettings.CreateContainer("NUTtyUPSClient", Windows.Storage.ApplicationDataCreateDisposition.Always);
 
-            string s;
+            object s;
 
             try
             {
@@ -56,7 +61,7 @@ namespace nuttyupsclient.Backend
                 return null;
             }
 
-            return s;
+            return s.ToString();
         }
 
         public static Tuple<String, UInt16, UInt32> GetConnectionSettings()
@@ -64,6 +69,11 @@ namespace nuttyupsclient.Backend
             string NUTServerIP = GetConfig("IP Address");
             string NUTServerPort = GetConfig("Port");
             string NUTPollInterval = GetConfig("Poll Interval");
+
+            if (NUTServerIP == null || NUTServerPort == null || NUTPollInterval == null)
+            {
+                return Tuple.Create((string)null, (UInt16)3493, (UInt32)5);
+            }
 
             return Tuple.Create(NUTServerIP.ToString(), Convert.ToUInt16(NUTServerPort), Convert.ToUInt32(NUTPollInterval));
 

@@ -9,9 +9,9 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <ScrollViewer>
-        <StackPanel>
-            <TextBlock HorizontalAlignment="Left" Margin="5,5,0,0" Text="UPS Status" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Style="{StaticResource SubheaderTextBlockStyle}"/>
-            <TextBlock HorizontalAlignment="Stretch" Text="{x:Bind TXTUPSStatus, Mode=OneWay}" Margin="5,5,0,0" TextWrapping="WrapWholeWords" VerticalAlignment="Top" MinWidth="300" Width="auto" Height="auto" Style="{StaticResource BodyTextBlockStyle}" />
+        <StackPanel Margin="12,0,0,64">
+            <TextBlock HorizontalAlignment="Left" Margin="0,5,0,0" Text="UPS Status" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Style="{StaticResource SubheaderTextBlockStyle}"/>
+            <TextBlock HorizontalAlignment="Stretch" Text="{x:Bind TXTUPSStatus, Mode=OneWay}" Margin="0,5,0,0" TextWrapping="WrapWholeWords" VerticalAlignment="Top" MinWidth="300" Width="auto" Height="auto" Style="{StaticResource BodyTextBlockStyle}" />
         </StackPanel>
     </ScrollViewer>
 </Page>

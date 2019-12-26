@@ -74,8 +74,27 @@ namespace nuttyupsclient.Views
             DependencyProperty.Register(TXTDebugRawOutputName, typeof(string), typeof(navDebugging), new PropertyMetadata(""));
 
         public static DependencyProperty TXTDebugRawOutputProperty { get { return _TXTDebugRawOutputProperty; } }
+
         #endregion
 
+        private async void ClearAllSettings(object sender, RoutedEventArgs e)
+        {
+            ContentDialog Confirmation = new ContentDialog
+            {
+                Title = "Warning",
+                Content = "This will delete all stored data and settings for this application, and then the application will close. Continue?",
+                PrimaryButtonText = "OK",
+                CloseButtonText = "Cancel"
+            };
+            ContentDialogResult result = await Confirmation.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                var nutConfig = new Backend.NUT_Config();
+                nutConfig.DeleteContainer();
+                Application.Current.Exit();
 
+            }
+
+        }
     }
 }

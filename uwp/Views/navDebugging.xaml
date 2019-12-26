@@ -11,23 +11,23 @@
 
     <ScrollViewer>
         <StackPanel>
-            <TextBlock HorizontalAlignment="Left" Margin="5,5,0,0" Text="Debugging" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource SubheaderTextBlockStyle}" />
-        
+            <TextBlock HorizontalAlignment="Left" Margin="12,5,0,0" Text="Debugging" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource SubheaderTextBlockStyle}" />
+
             <StackPanel x:Name="pnlDebug">
-                <TextBlock HorizontalAlignment="Stretch" Text="Debugging" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="20" FontFamily="Segoe UI" Margin="10,20,0,0"/>
-                <ToggleSwitch Header="Debug Logging" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" />
-                <ToggleSwitch Header="Simulation" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" />
+                <TextBlock HorizontalAlignment="Stretch" Text="Debugging" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="20" FontFamily="Segoe UI" Margin="12,20,0,0"/>
+                <ToggleSwitch Header="Debug Logging" HorizontalAlignment="Left" Margin="12,10,0,0" VerticalAlignment="Center" />
+                <ToggleSwitch Header="Simulation" HorizontalAlignment="Left" Margin="12,10,0,0" VerticalAlignment="Center" />
             </StackPanel>
 
             <StackPanel x:Name="pnlSimulator">
-                <TextBlock HorizontalAlignment="Stretch" Text="Simulator" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="20" FontFamily="Segoe UI" Margin="10,20,0,0"/>
-            </StackPanel>
-        
-            <StackPanel x:Name="pnlRawOutput">
-                <TextBlock HorizontalAlignment="Stretch" Text="Raw Output" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="20" FontFamily="Segoe UI" Margin="10,20,0,0"/>
-                <TextBlock HorizontalAlignment="Stretch" Text="{x:Bind TXTDebugRawOutput, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="12" FontFamily="Segoe UI" Margin="10,20,0,0"/>
+                <TextBlock HorizontalAlignment="Stretch" Text="Simulator" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="20" FontFamily="Segoe UI" Margin="12,20,0,0"/>
             </StackPanel>
 
+            <StackPanel x:Name="pnlRawOutput">
+                <TextBlock HorizontalAlignment="Stretch" Text="Raw Output" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="20" FontFamily="Segoe UI" Margin="12,20,0,0"/>
+                <TextBlock HorizontalAlignment="Stretch" Text="{x:Bind TXTDebugRawOutput, Mode=OneWay}" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="12" FontFamily="Segoe UI" Margin="12,20,0,0"/>
+            </StackPanel>
+            <Button HorizontalAlignment="Stretch" Content="Clear all stored settings" VerticalAlignment="Center" Margin="12,5,12,0" Click="ClearAllSettings"/>
         </StackPanel>
     </ScrollViewer>
 </Page>

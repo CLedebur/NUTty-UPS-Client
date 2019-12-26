@@ -48,8 +48,11 @@ namespace nuttyupsclient.Backend
             PollUPS = new System.Timers.Timer(NUT_Background.PollFrequency);
             PollUPS.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             PollUPS.AutoReset = true;
-            PollUPS.Enabled = true;
-            PollNUTServer("192.168.253.6", 3493);
+            if (!NUT_Background.NeedConfig)
+            {
+                PollUPS.Enabled = true;
+                PollNUTServer(NUT_Background.NUTConnectionSettings.Item1, NUT_Background.NUTConnectionSettings.Item2);
+            }
         }
 
         public void PauseUPSPolling()
@@ -67,10 +70,13 @@ namespace nuttyupsclient.Backend
         void OnTimedEvent(Object sender, ElapsedEventArgs e)
         {
             NUT_Background.debugLog.Trace("[POLLER] Timer fired");
-            // TODO: Make this respect server config
-            PollUPS.Enabled = false;
-            PollNUTServer("192.168.253.6", 3493);
-            PollUPS.Enabled = true;
+            // Will only poll if configuration is not needed
+            if (!NUT_Background.NeedConfig)
+            {
+                PollUPS.Enabled = false;
+                PollNUTServer(NUT_Background.NUTConnectionSettings.Item1, NUT_Background.NUTConnectionSettings.Item2);
+                PollUPS.Enabled = true;
+            }
         }
 
         #endregion

@@ -41,12 +41,6 @@ namespace nuttyupsclient
                 UpdateUPSCharge.Enabled = true;
             }
 
-            // Below is for testing purposes only
-            /*Tuple<String, bool> NUTData;
-            NUTData = Backend.NUT_Poller.PollNUTServer("192.168.253.6",3493);
-            Backend.NUT_Processor.ParseNUTOutput(NUTData.Item1);
-            */
-
             InitializeValues();
 
         }
@@ -126,13 +120,7 @@ namespace nuttyupsclient
         {
             foreach(NavigationViewItemBase item in nvTopLevelNav.MenuItems)
             {
-                if (Backend.NUT_Background.NeedConfig)
-                {
-                    nvTopLevelNav.SelectedItem = "Nav_Settings";
-                    contentFrame.Navigate(typeof(navSettings));
-                    break;
-                }
-                    else if (item is NavigationViewItem && item.Tag.ToString() == "Home_Page")
+                if (item is NavigationViewItem && item.Tag.ToString() == "Home_Page")
                 {
                     nvTopLevelNav.SelectedItem = item;
                     break;

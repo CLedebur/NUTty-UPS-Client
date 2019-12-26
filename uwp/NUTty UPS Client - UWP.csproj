@@ -123,6 +123,7 @@
     <Compile Include="Backend\NUT_Config.cs" />
     <Compile Include="Backend\NUT_Poller.cs" />
     <Compile Include="Backend\NUT_Processor.cs" />
+    <Compile Include="Backend\NUT_Validator.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

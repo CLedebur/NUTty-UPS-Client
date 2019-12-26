@@ -8,24 +8,24 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <ScrollViewer>
-        <StackPanel HorizontalAlignment="Left">
-            <TextBlock HorizontalAlignment="Left" Text="Settings" Margin="10,0,0,0" Style="{StaticResource SubheaderTextBlockStyle}"/>
-            
+    <ScrollViewer Loading="OnLoading">
+        <StackPanel HorizontalAlignment="Left" Margin="12,0,0,64">
+            <TextBlock HorizontalAlignment="Left" Text="Settings" Margin="12,0,0,0" Style="{StaticResource SubheaderTextBlockStyle}"/>
+
             <!-- Connectivity settings -->
-            <TextBlock HorizontalAlignment="Left" Text="NUT Server" TextWrapping="Wrap" VerticalAlignment="Stretch" Margin="10,20,0,0" Style="{StaticResource SubtitleTextBlockStyle}"/>
-            <TextBlock Text="IP Address" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="10,5,0,0"/>
-            <TextBox x:Name="txtIPAddress" HorizontalAlignment="Left" Text="127.0.0.1" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="10,5,0,0"/>
-            <TextBlock HorizontalAlignment="Stretch" Text="Port" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="10,5,0,0"/>
-            <TextBox x:Name="txtPort" HorizontalAlignment="Left" Text="3493" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="10,5,0,0"/>
-            <Button x:Name="btnConnect" Content="Test Connection" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,5,0,3"/>
-            <TextBlock HorizontalAlignment="Stretch" Text="Polling Frequency (in seconds)" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="10,5,0,0"/>
-            <TextBox x:Name="txtPollFrequency" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="10,5,0,0" PlaceholderText="5"/>
+            <TextBlock HorizontalAlignment="Left" Text="NUT Server" TextWrapping="Wrap" VerticalAlignment="Stretch" Margin="12,20,0,0" Style="{StaticResource SubtitleTextBlockStyle}"/>
+            <TextBlock Text="IP Address" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="12,5,0,0"/>
+            <TextBox x:Name="txtIPAddress" HorizontalAlignment="Left" Text="127.0.0.1" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="12,5,0,0"/>
+            <TextBlock HorizontalAlignment="Stretch" Text="Port" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="12,5,0,0"/>
+            <TextBox x:Name="txtPort" HorizontalAlignment="Left" Text="3493" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="12,5,0,0"/>
+            <Button x:Name="btnConnect" Content="Test Connection" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="12,5,0,3"/>
+            <TextBlock HorizontalAlignment="Stretch" Text="Polling Frequency (in seconds)" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="12,5,0,0"/>
+            <TextBox x:Name="txtPollFrequency" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="12,5,0,0" PlaceholderText="5"/>
 
             <!-- Alarm Settings -->
-            <TextBlock Text="Alarms" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,20,0,0" Style="{StaticResource SubtitleTextBlockStyle}" />
-            <TextBlock HorizontalAlignment="Stretch" Text="When the battery reaches" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="10,5,0,0"/>
-            <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,5,0,0">
+            <TextBlock Text="Alarms" TextWrapping="Wrap" VerticalAlignment="Top" Margin="12,20,0,0" Style="{StaticResource SubtitleTextBlockStyle}" />
+            <TextBlock HorizontalAlignment="Stretch" Text="When the battery reaches" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="12,5,0,0"/>
+            <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="12,5,0,0">
                 <ComboBoxItem Content="95%" />
                 <ComboBoxItem Content="90%" />
                 <ComboBoxItem Content="85%" />
@@ -46,33 +46,46 @@
                 <ComboBoxItem Content="10%" />
                 <ComboBoxItem Content="5%" />
             </ComboBox>
-            <TextBlock HorizontalAlignment="Stretch" Text="This device will" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="10,5,0,0"/>
-            <ComboBox x:Name="cmbAlarmAction" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,5,0,0" SelectionChanged="ComboBox_SelectionChanged">
+            <TextBlock HorizontalAlignment="Stretch" Text="This device will" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="12,5,0,0"/>
+            <ComboBox x:Name="cmbAlarmAction" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="12,5,0,0" SelectionChanged="ComboBox_SelectionChanged">
                 <ComboBoxItem Content="Sleep"/>
                 <ComboBoxItem Content="Shut down"/>
                 <ComboBoxItem Content="Hibernate"/>
                 <ComboBoxItem Content="Run a program or script"/>
             </ComboBox>
-            <StackPanel x:Name="pnlPath" Visibility="Visible">
-                <TextBlock HorizontalAlignment="Stretch" Text="Path to program/script" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="10,5,0,0"/>
-                <TextBox x:Name="txtPath" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="10,5,0,0"/>
-                <Button x:Name="btnPathBrowse" Content="Browse" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,5,0,0"/>
+            <StackPanel x:Name="pnlPath" Visibility="Visible" Margin="12,0,0,0">
+                <TextBlock HorizontalAlignment="Stretch" Text="Path to program/script" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" FontFamily="Segoe UI" Margin="12,5,0,0"/>
+                <TextBox x:Name="txtPath" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" FontFamily="Segoe UI" Width="300" Margin="0,5,0,0"/>
+                <Button x:Name="btnPathBrowse" Content="Browse" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="12,5,0,0"/>
             </StackPanel>
 
             <!-- Alarm Switches -->
-            <TextBlock HorizontalAlignment="Stretch" Text="Notifications" TextWrapping="Wrap" VerticalAlignment="Top" Margin="10,5,0,0" Style="{StaticResource SubtitleTextBlockStyle}" />
-            <ToggleSwitch Header="Windows Notification"  HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True" />
-            <ToggleSwitch Header="Email Notification"  HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True" />
+            <TextBlock HorizontalAlignment="Stretch" Text="Notifications" TextWrapping="Wrap" VerticalAlignment="Top" Margin="12,5,0,0" Style="{StaticResource SubtitleTextBlockStyle}" />
+            <ToggleSwitch Header="Windows Notification"  HorizontalAlignment="Left" Margin="12,10,0,0" VerticalAlignment="Center" IsOn="True" />
+            <ToggleSwitch Header="Email Notification"  HorizontalAlignment="Left" Margin="12,10,0,0" VerticalAlignment="Center" IsOn="True" />
 
             <TextBlock HorizontalAlignment="Stretch" Text="Alert on the following events:" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource SubtitleTextBlockStyle}" Margin="10,5,0,0"/>
-            
+
             <ToggleSwitch Header="Power loss"  HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True" />
             <ToggleSwitch Header="Input Overvoltage" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True"/>
             <ToggleSwitch Header="Input Undervoltage" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True"/>
             <ToggleSwitch Header="Overload" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True"/>
             <ToggleSwitch Header="Overtemperature" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Center" IsOn="True"/>
 
+            <Grid Margin="12,12,0,0" HorizontalAlignment="Stretch" MinWidth="300">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Content="Revert" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="0"/>
+                <Button Content="Save" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Column="2" Click="BtnSave"/>
+            </Grid>
+            
         </StackPanel>
     </ScrollViewer>
-    
+
 </Page>

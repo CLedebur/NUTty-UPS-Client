@@ -49,17 +49,18 @@ namespace nuttyupsclient.Backend
             {
                 // Checking Registry for settings
                 NUTConnectionSettings = NUT_Config.GetConnectionSettings();
-                if (NUTConnectionSettings.Item1 == null || NUTConnectionSettings.Item2 == null || NUTConnectionSettings.Item3 == null)
+                if (NUTConnectionSettings.Item1 == null || NUTConnectionSettings.Item2 == 0 || NUTConnectionSettings.Item3 == 0)
                 {
                     debugLog.Info("[BACKGROUND] Empty values found, starting setup workflow");
                     NeedConfig = true;
-                    return;
                 }
             }
             catch (Exception e)
             {
                 debugLog.Fatal("[BACKGROUND] Error occurred: " + e);
+                
             }
+            NUTConnectionSettings = NUT_Config.GetConnectionSettings();
          
 
         }

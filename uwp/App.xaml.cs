@@ -44,11 +44,14 @@ namespace nuttyupsclient
 #endif
             Backend.NUT_Background.debugLog.Info("\n\n\n\n[CORE] Application is starting");
 
-            Backend.NUT_Poller nutPoller = new Backend.NUT_Poller();
-            //nutPoller.InitializeUPSPolling();
-
             // Now we start loading the stored configuration, if any
+            var InitContainer = new Backend.NUT_Config();
+            InitContainer.InitializeContainer();
             Backend.NUT_Background.InitializeBg();
+
+            Backend.NUT_Poller nutPoller = new Backend.NUT_Poller();
+            nutPoller.InitializeUPSPolling();
+
 
         }
 
