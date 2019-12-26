@@ -20,7 +20,7 @@ namespace nuttyupsclient.Backend
 
             NUT_Background.debugLog.Trace("[PROCESSOR:VALIDATOR] Received data:\n" + NUTOutput);
             
-            NUT_Background.debugLog.Debug("[PROCESSOR:VALIDATOR] Attempting to validate output");
+            NUT_Background.debugLog.Trace("[PROCESSOR:VALIDATOR] Attempting to validate output");
             List<string> NUTList = new List<string>(NUTOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
 
             // Sanity check! 
@@ -69,9 +69,7 @@ namespace nuttyupsclient.Backend
             {
                 // Input voltage and nominal voltage
                 decimal UPSInputVoltage = Convert.ToDecimal(SearchNUTData("input.voltage"));
-                Console.WriteLine("[PROCESSOR] UPS input voltage is " + UPSInputVoltage);
                 decimal UPSInputNominalVoltage = Convert.ToDecimal(SearchNUTData("input.voltage.nominal"));
-                Console.WriteLine("[PROCESSOR] UPS nominal input voltage is " + UPSInputNominalVoltage);
 
                 // Battery voltage and nominal voltage
                 // TODO: Make this smarter, and skip if battery voltage info is not available
@@ -85,9 +83,8 @@ namespace nuttyupsclient.Backend
 
                 // Output voltage and nominal voltage
                 decimal UPSOutputVoltage = Convert.ToDecimal(SearchNUTData("output.voltage"));
-                Console.WriteLine("[PROCESSOR] UPS output voltage before correction is " + UPSOutputVoltage);
+                //TODO: See if this is still necessary
                 //UPSOutputVoltage = UPSOutputVoltage - UPSBatteryVoltage; // It adds the battery voltage to the output voltage. Fixing this.
-                Console.WriteLine("[PROCESSOR] UPS output voltage after correction is " + UPSOutputVoltage);
 
                 // UPS alarm
                 bool UPSBeeper = false;

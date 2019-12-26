@@ -57,7 +57,7 @@ namespace nuttyupsclient
 
         public async void InitializeValues()
         {
-            Backend.NUT_Background.debugLog.Info("[UI:MAIN] Updating battery charge status");
+            Backend.NUT_Background.debugLog.Trace("[UI:MAIN] Updating battery charge status");
 
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
@@ -65,12 +65,12 @@ namespace nuttyupsclient
                 {
                     if (!Backend.NUT_Background.isPolling)
                     {
-                        Backend.NUT_Background.debugLog.Info("[UI:MAIN] No data from UPS. Will not update charge status.");
+                        Backend.NUT_Background.debugLog.Trace("[UI:MAIN] No data from UPS. Will not update charge status.");
                         TXTChargeText = "Not connected to UPS";
                     }
                     else
                     {
-                        Backend.NUT_Background.debugLog.Info("[UI:MAIN] Was able to acquire data. Updating charge status.");
+                        Backend.NUT_Background.debugLog.Trace("[UI:MAIN] Was able to acquire data. Updating charge status.");
                         Tuple<string, int, double> ChargeStatus = Backend.NUT_Processor.ChargeStatus();
                         TXTChargeText = (ChargeStatus.Item3 + "%, " + ChargeStatus.Item1);
                     }
