@@ -114,11 +114,8 @@ namespace nuttyupsclient.Views
                         NUT_Background.debugLog.Trace("[SETTINGS] Executing telnet client task");
                         ValidationTest = await NUT_Poller.ValidateNUTServer(txtIPAddress.Text, Convert.ToUInt16(txtPort.Text));
                     });
-                    while (!ValidationTestTask.IsCompleted)
-                    {
-                        NUT_Background.debugLog.Trace("[SETTINGS] Waiting for testing task to complete. Waiting 500ms.");
-                        System.Threading.Thread.Sleep(500);
-                    }
+                    
+                    Task.WaitAll(ValidationTestTask);
                     NUT_Background.debugLog.Info(ValidationTestTask.Status.ToString());
                     if (ValidationTestTask.IsFaulted) NUT_Background.debugLog.Fatal(ValidationTestTask.Exception.ToString());
                     ValidationTestTask.Dispose();
