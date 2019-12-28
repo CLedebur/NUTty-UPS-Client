@@ -9,6 +9,7 @@ using PrimS.Telnet;
 using Windows.Networking;
 using System.Threading.Tasks;
 using System.Timers;
+using Windows.System.Threading;
 
 namespace nuttyupsclient.Backend
 {
@@ -41,30 +42,29 @@ namespace nuttyupsclient.Backend
 
         #region Poll Timer
 
-        System.Timers.Timer PollUPS;
-        public void InitializeUPSPolling()
-        {
-            PollUPS = new System.Timers.Timer(NUT_Background.PollFrequency);
-            PollUPS.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            PollUPS.AutoReset = true;
-            if (!NUT_Background.NeedConfig)
+        ThreadPoolTimer PollUPS = ThreadPoolTimer.CreatePeriodicTimer((source) =>
             {
-                PollUPS.Enabled = true;
 
-                PollNUTServer(NUT_Background.NUTConnectionSettings.Item1, NUT_Background.NUTConnectionSettings.Item2);
-            }
-        }
+                NUT_Background.debugLog.Trace("[POLLER:TIMER] Multithreaded timer fired");
+                // Will only poll if configuration is not needed
+                if (!NUT_Background.NeedConfig && NUT_Background.isPolling)
+                {
+                    //PollUPS.Enabled = false;
+                    PollNUTServer(NUT_Background.NUTConnectionSettings.Item1, NUT_Background.NUTConnectionSettings.Item2);
+                    //PollUPS.Enabled = true;
+                }
+
+            }, TimeSpan.FromMilliseconds(NUT_Background.PollFrequency));
 
         public void PauseUPSPolling()
         {
-            PollUPS.Enabled = false;
             NUT_Background.isPolling = false;
         }
 
         public void ResumeUPSPolling()
         {
-            PollUPS.Interval = NUT_Background.PollFrequency;
-            PollUPS.Enabled = true;
+            //PollUPS.Interval = NUT_Background.PollFrequency;
+            //PollUPS.Enabled = true;
         }
 
         void OnTimedEvent(object sender, ElapsedEventArgs e)
@@ -73,9 +73,9 @@ namespace nuttyupsclient.Backend
             // Will only poll if configuration is not needed
             if (!NUT_Background.NeedConfig && NUT_Background.isPolling)
             {
-                PollUPS.Enabled = false;
+                //PollUPS.Enabled = false;
                 PollNUTServer(NUT_Background.NUTConnectionSettings.Item1, NUT_Background.NUTConnectionSettings.Item2);
-                PollUPS.Enabled = true;
+                //PollUPS.Enabled = true;
             }
         }
 
