@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Core;
+using Windows.ApplicationModel.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -110,16 +112,58 @@ namespace nuttyupsclient.Views
                 {
                     string testIP = txtIPAddress.Text;
                     ushort testPort = Convert.ToUInt16(txtPort.Text);
-                    Task ValidationTestTask = Task.Run(async () =>
+                    IAsyncAction ValidationTestTask = Windows.System.Threading.ThreadPool.RunAsync(async (workItem) =>
                     {
                         NUT_Background.debugLog.Trace("[SETTINGS] Executing telnet client task");
-                        ValidationTest = await NUT_Poller.ValidateNUTServer(testIP, testPort).ConfigureAwait(true);
+                        try
+                        {
+                            ValidationTest = await NUT_Poller.ValidateNUTServer(testIP, testPort).ConfigureAwait(true);
+                        }
+                        catch (System.AggregateException eAggregate)
+                        {
+                            ValidationTest = false;
+                        }
                     });
                     
-                    Task.WaitAll(ValidationTestTask);
-                    NUT_Background.debugLog.Info(ValidationTestTask.Status.ToString());
-                    if (ValidationTestTask.IsFaulted) NUT_Background.debugLog.Fatal(ValidationTestTask.Exception.ToString());
-                    ValidationTestTask.Dispose();
+                    ValidationTestTask.Completed = new AsyncActionCompletedHandler(async (IAsyncAction asyncInfo, AsyncStatus asyncStatus) =>
+                    {
+                        await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.High, new DispatchedHandler(() =>
+                         {
+                             if (ValidationTest)
+                             {
+                                 ContentDialog TestDialog = new ContentDialog
+                                 {
+                                    //Title = "Server validation successful",
+                                    Content = "Connection to the NUT server was successful",
+                                     CloseButtonText = "OK"
+                                 };
+                                 TestDialog.ShowAsync();
+                             }
+                             else
+                             {
+                                 ContentDialog TestDialog = new ContentDialog
+                                 {
+                                    //Title = "Server validation failed",
+                                    Content = "Connection to the NUT server has failed. Please confirm the settings and try again.",
+                                     CloseButtonText = "OK"
+                                 };
+                                 TestDialog.ShowAsync();
+                             }
+
+                             if (PausePoll)
+                             {
+                                 NUT_Background.debugLog.Debug("[SETTINGS] Polling has resumed.");
+                                 NUT_Background.isPolling = true;
+                             }
+
+                             btnConnect.Content = "Test Connection";
+                             btnConnect.IsEnabled = true;
+                             TestingRing.IsActive = false;
+                             Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 10);
+                         }));
+
+                    });
+
                 }
                 catch (Exception eTest)
                 {
@@ -127,37 +171,6 @@ namespace nuttyupsclient.Views
                     ValidationTest = false;
                 }
 
-                if (ValidationTest)
-                {
-                    ContentDialog TestDialog = new ContentDialog
-                    {
-                        //Title = "Server validation successful",
-                        Content = "Connection to the NUT server was successful",
-                        CloseButtonText = "OK"
-                    };
-                    TestDialog.ShowAsync();
-                }
-                else
-                {
-                    ContentDialog TestDialog = new ContentDialog
-                    {
-                        //Title = "Server validation failed",
-                        Content = "Connection to the NUT server has failed. Please confirm the settings and try again.",
-                        CloseButtonText = "OK"
-                    };
-                    TestDialog.ShowAsync();
-                }
-
-                if (PausePoll)
-                {
-                    NUT_Background.debugLog.Debug("[SETTINGS] Polling has resumed.");
-                    NUT_Background.isPolling = true;
-                }
-
-                btnConnect.Content = "Test Connection";
-                btnConnect.IsEnabled = true;
-                TestingRing.IsActive = false;
-                Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 10);
 
             }
 

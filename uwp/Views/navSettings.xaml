@@ -27,7 +27,7 @@
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <ProgressRing x:Name="TestingRing" Height="50" Width="50" HorizontalAlignment="Right" Grid.Column="0" />
+                <ProgressRing x:Name="TestingRing" Height="32" Width="32" HorizontalAlignment="Right" Grid.Column="0" />
                 <Button x:Name="btnConnect" Content="Test Connection" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="12,5,0,3" Click="TestConnection" Grid.Column="1"/>
             </Grid>
 
