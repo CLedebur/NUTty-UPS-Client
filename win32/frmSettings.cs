@@ -19,16 +19,16 @@ namespace NUTty_UPS_Client
         public bool isPolled = false;
         public static bool isPollingUPS = false;
         private bool IsSimulatingDecay = false;
-        private UInt16 AlarmPercentage;
+        private ushort AlarmPercentage;
 
         IPAddress NUTServer;
-        UInt16 NUTPort;
+        ushort NUTPort;
 
         System.Timers.Timer UPSPollTimer; // Timer to poll the NUT server every UPSPollingInterval ms, default 5000 ms
         private double SimUPSDecayRate = 1;
 
 
-        void OnTimedEvent(Object sender, ElapsedEventArgs e)
+        void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             if (isPollingUPS)
             {
@@ -47,7 +47,7 @@ namespace NUTty_UPS_Client
         private void UPSPoll()
         {
             // Pulls latest data from UPSVariables
-            Int16 nutPort = Convert.ToInt16(txtPort.Text);
+            short nutPort = Convert.ToInt16(txtPort.Text);
             
             // Determines whether it is in simulation mode (isSimulated) and whether it has already been polled
             if (Backend.Background.isSimulated && isPolled)
@@ -87,7 +87,7 @@ namespace NUTty_UPS_Client
                 isPollingUPS = true;
             }
 
-            UInt16 BatteryPercentage = Convert.ToUInt16(NUT_Processor.SearchNUTData("battery.charge"));
+            ushort BatteryPercentage = Convert.ToUInt16(NUT_Processor.SearchNUTData("battery.charge"));
             if (BatteryPercentage <= AlarmPercentage)
             {
                 PerformAlarmAction();
@@ -181,7 +181,7 @@ namespace NUTty_UPS_Client
 
             // Checks settings in the registry and fills in the fields accordingly
 
-            Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings = Backend.NUT_Config.GetConnectionSettings();
+            Tuple<IPAddress, ushort, uint> NUTConnectionSettings = Backend.NUT_Config.GetConnectionSettings();
             if (NUTConnectionSettings.Item1 != IPAddress.Parse("127.0.0.1"))
             {
                 txtIPAddress.Text = NUTConnectionSettings.Item1.ToString();
@@ -204,10 +204,10 @@ namespace NUTty_UPS_Client
             else IsConfigurationNeeded = true;
 
             string TempValue;
-            UInt32 number;
+            uint number;
 
             TempValue = Backend.NUT_Config.GetConfig("Warn Threshold");
-            if (UInt32.TryParse(TempValue, out number))
+            if (uint.TryParse(TempValue, out number))
             {
                 AlarmPercentage = Convert.ToUInt16(TempValue);
                 cmbBatteryPercentage.Text = TempValue;
@@ -484,8 +484,8 @@ namespace NUTty_UPS_Client
 
         private bool ValidatePort()
         {
-            UInt16 NUTPort;
-            if(UInt16.TryParse(txtPort.Text, out NUTPort))
+            ushort NUTPort;
+            if(ushort.TryParse(txtPort.Text, out NUTPort))
             {
                 return true;
             }
@@ -498,8 +498,8 @@ namespace NUTty_UPS_Client
 
         private bool ValidatePollInterval()
         {
-            UInt32 NUTPollInterval;
-            if(UInt32.TryParse(txtPollFrequency.Text, out NUTPollInterval))
+            uint NUTPollInterval;
+            if(uint.TryParse(txtPollFrequency.Text, out NUTPollInterval))
             {
                 return true;
             }
@@ -558,9 +558,9 @@ namespace NUTty_UPS_Client
                 SimulatorPopulate();
 
             double BattValue = Convert.ToDouble(NUT_Processor.SearchNUTData("battery.charge"));
-            Int32 BattRuntimeMax = Convert.ToInt32(txtSimBatteryRuntime.Text);
-            Int32 BattRuntimeBreakdown = (BattRuntimeMax / 100);
-            Int32 BattRuntime = Convert.ToInt32(NUT_Processor.SearchNUTData("battery.runtime"));
+            int BattRuntimeMax = Convert.ToInt32(txtSimBatteryRuntime.Text);
+            int BattRuntimeBreakdown = (BattRuntimeMax / 100);
+            int BattRuntime = Convert.ToInt32(NUT_Processor.SearchNUTData("battery.runtime"));
 
             // Since it would be impossible for a battery to have a negative charge, it will set the charge to 0
             if ((BattValue - SimUPSDecayRate) <= 0)

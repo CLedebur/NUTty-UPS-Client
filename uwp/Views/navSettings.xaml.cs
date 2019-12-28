@@ -108,11 +108,12 @@ namespace nuttyupsclient.Views
                 bool ValidationTest = false;
                 try
                 {
-
-                    Task ValidationTestTask = Task.Factory.StartNew(async () =>
+                    string testIP = txtIPAddress.Text;
+                    ushort testPort = Convert.ToUInt16(txtPort.Text);
+                    Task ValidationTestTask = Task.Run(async () =>
                     {
                         NUT_Background.debugLog.Trace("[SETTINGS] Executing telnet client task");
-                        ValidationTest = await NUT_Poller.ValidateNUTServer(txtIPAddress.Text, Convert.ToUInt16(txtPort.Text));
+                        ValidationTest = await NUT_Poller.ValidateNUTServer(testIP, testPort).ConfigureAwait(true);
                     });
                     
                     Task.WaitAll(ValidationTestTask);

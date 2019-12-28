@@ -64,7 +64,7 @@ namespace nuttyupsclient.Backend
             return s.ToString();
         }
 
-        public static Tuple<String, UInt16, UInt32> GetConnectionSettings()
+        public static Tuple<string, ushort, uint> GetConnectionSettings()
         {
             string NUTServerIP = GetConfig("IP Address");
             string NUTServerPort = GetConfig("Port");
@@ -72,7 +72,7 @@ namespace nuttyupsclient.Backend
 
             if (NUTServerIP == null || NUTServerPort == null || NUTPollInterval == null)
             {
-                return Tuple.Create((string)null, (UInt16)3493, (UInt32)5);
+                return Tuple.Create((string)null, (ushort)3493, (uint)5);
             }
 
             return Tuple.Create(NUTServerIP.ToString(), Convert.ToUInt16(NUTServerPort), Convert.ToUInt32(NUTPollInterval));

@@ -34,7 +34,7 @@ namespace nuttyupsclient.Views
             InitializeValues();
         }
 
-        void OnTimedEvent(Object sender, ElapsedEventArgs e)
+        void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             if (Backend.NUT_Background.isPolling)
             {

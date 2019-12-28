@@ -54,7 +54,7 @@ namespace nuttyupsclient.Backend
             int j = 0;
             for (int i = 1; i < NUTList.Count - 1; i++)
             {
-                List<string> NUTVarNames = new List<string>(NUTList[i].Split(new String[] { "\"" }, StringSplitOptions.RemoveEmptyEntries));
+                List<string> NUTVarNames = new List<string>(NUTList[i].Split(new string[] { "\"" }, StringSplitOptions.RemoveEmptyEntries));
 
                 // We're now putting the variable names and values alongside each other in the list, giving us an easy lookup table
                 UPSVariables[j, 0] = NUTVarNames[0].Trim(' ').Substring(8); // Only needs the data in between the quotes

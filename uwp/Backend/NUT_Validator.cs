@@ -21,8 +21,8 @@ namespace nuttyupsclient.Backend
 
         public bool ValidatePort(string TestPort)
         {
-            UInt16 NUTPort;
-            if (UInt16.TryParse(TestPort, out NUTPort))
+            ushort NUTPort;
+            if (ushort.TryParse(TestPort, out NUTPort))
             {
                 return true;
             }
@@ -31,8 +31,8 @@ namespace nuttyupsclient.Backend
 
         public bool ValidatePollInterval(string TestPollInterval)
         {
-            UInt64 NUTPollInterval;
-            if (UInt64.TryParse(TestPollInterval, out NUTPollInterval))
+            ulong NUTPollInterval;
+            if (ulong.TryParse(TestPollInterval, out NUTPollInterval))
             {
                 return true;
             }

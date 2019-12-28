@@ -49,10 +49,10 @@ namespace NUTty_UPS_Client.Backend
                         }
                         break;
                     case RegistryValueKind.DWord:
-                        Backend.Background.WriteNUTLog("[CONFIG] Got: " + Convert.ToString((Int32)RegValue));
+                        Backend.Background.WriteNUTLog("[CONFIG] Got: " + Convert.ToString((int)RegValue));
                         break;
                     case RegistryValueKind.QWord:
-                        Backend.Background.WriteNUTLog("[CONFIG] Got: " + Convert.ToString((Int64)RegValue));
+                        Backend.Background.WriteNUTLog("[CONFIG] Got: " + Convert.ToString((long)RegValue));
                         break;
                     case RegistryValueKind.MultiString:
                         foreach (string s in (string[])RegValue)
@@ -79,7 +79,7 @@ namespace NUTty_UPS_Client.Backend
             return RegValue.ToString();
         }
 
-        public static Tuple<IPAddress, UInt16, UInt32> GetConnectionSettings()
+        public static Tuple<IPAddress, ushort, uint> GetConnectionSettings()
         {
             string NUTServerIP = GetConfig("IP Address");
             string NUTServerPort = GetConfig("Port");

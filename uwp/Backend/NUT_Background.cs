@@ -15,13 +15,13 @@ namespace nuttyupsclient.Backend
     class NUT_Background
     {
         public static bool isSimulated = false;
-        public static Tuple<String, UInt16, UInt32> NUTConnectionSettings;
+        public static Tuple<string, ushort, uint> NUTConnectionSettings;
         public static bool isLogging = false;
         public static bool isDebug = true;
         public static bool isPolling = false;
         public static bool NeedConfig = false;
-        public static UInt64 PollFrequency = 5000;
-        public static UInt64 PollCount = 0;
+        public static ulong PollFrequency = 5000;
+        public static ulong PollCount = 0;
         public static ILogger debugLog = LogManagerFactory.DefaultLogManager.GetLogger<NUT_Background>();
 
         public static void InitializeBg()

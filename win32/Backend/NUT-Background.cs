@@ -14,7 +14,7 @@ namespace NUTty_UPS_Client.Backend
     class Background
     {
         public static bool isSimulated = false;
-        public static Tuple<IPAddress, UInt16, UInt32> NUTConnectionSettings;
+        public static Tuple<IPAddress, ushort, uint> NUTConnectionSettings;
         public static bool isLogging = false;
 
 
@@ -37,7 +37,7 @@ namespace NUTty_UPS_Client.Backend
             Console.WriteLine(strOutput);
             if (isLogging)
             {
-                String CurDateTime = DateTime.Now.ToString("dd/MM/yy hh:mm:ss");
+                string CurDateTime = DateTime.Now.ToString("dd/MM/yy hh:mm:ss");
                 System.IO.File.AppendAllText(Application.StartupPath + @"\NUTtyUPS.log", "[" + CurDateTime + "]" + strOutput + "\r\n");
             }
         }

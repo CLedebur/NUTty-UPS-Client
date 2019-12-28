@@ -13,12 +13,12 @@ using System.Timers;
 namespace nuttyupsclient.Backend
 {
 
-    public class NUT_Poller
+    public class NUT_Poller : IDisposable
     {
 
-        private static string NUTOutput;
+        TextReader SimFile;
 
-        private static async Task<string> TelnetClient(string nutIP, UInt16 nutPort)
+        private static async Task<string> TelnetClient(string nutIP, ushort nutPort)
         {
             NUT_Background.PollCount++;
             NUT_Background.debugLog.Trace("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
@@ -27,9 +27,9 @@ namespace nuttyupsclient.Backend
                 while (true)
                 {
                     // Gets the NUT server to return the list of UPS variables
-                    await Client.WriteLine("LIST VAR ups");
+                    await Client.WriteLine("LIST VAR ups").ConfigureAwait(true);
 
-                    var s = await Client.TerminatedReadAsync("END LIST VAR ups");
+                    var s = await Client.TerminatedReadAsync("END LIST VAR ups").ConfigureAwait(true);
 
                     NUT_Background.debugLog.Trace("[POLLER] NUT server returned:\r\n" + s.ToString());
 
@@ -67,7 +67,7 @@ namespace nuttyupsclient.Backend
             PollUPS.Enabled = true;
         }
 
-        void OnTimedEvent(Object sender, ElapsedEventArgs e)
+        void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             NUT_Background.debugLog.Trace("[POLLER] Timer fired");
             // Will only poll if configuration is not needed
@@ -95,17 +95,13 @@ namespace nuttyupsclient.Backend
             }
 
 
-            Task NUTConnection = Task.Factory.StartNew(async () =>
+            Task NUTConnection = Task.Run(async () =>
            {
                NUT_Background.debugLog.Trace("[POLLER] Executing telnet client task");
-               s = await TelnetClient(nutIP, nutPort);
+               s = await TelnetClient(nutIP, nutPort).ConfigureAwait(true);
            });
 
-            while (!NUTConnection.IsCompleted)
-            {
-                NUT_Background.debugLog.Trace("[POLLER] Waiting for task to complete. Waiting 500ms.");
-                Thread.Sleep(500);
-            }
+            Task.WaitAll(NUTConnection);
             NUTConnection.Dispose();
 
             NUT_Background.isPolling = true;
@@ -113,37 +109,46 @@ namespace nuttyupsclient.Backend
             return;
         }
 
-        public static async Task<bool> ValidateNUTServer(String nutIP, UInt16 nutPort)
+        public static async Task<bool> ValidateNUTServer(string nutIP, ushort nutPort)
         {
             string s = null;
-            Task NUTConnection = Task.Factory.StartNew(async () =>
+            Task NUTConnection = Task.Run(async () =>
             {
                 NUT_Background.debugLog.Trace("[POLLER:VALIDATE] Executing telnet client task");
-                s = await TelnetClient(nutIP, nutPort);
+                s = await TelnetClient(nutIP, nutPort).ConfigureAwait(true);
             });
 
-            while (!NUTConnection.IsCompleted)
-            {
-                NUT_Background.debugLog.Trace("[POLLER:VALIDATE] Waiting for task to complete. Waiting 500ms.");
-                Thread.Sleep(500);
-            }
+            Task.WaitAll(NUTConnection);
+
             NUTConnection.Dispose();
             NUT_Background.debugLog.Info("ValidateNUTServer task " + NUTConnection.Status.ToString());
 
             Tuple<List<string>, bool> NUTValidation = NUT_Processor.ValidateNUTOutput(s);
 
             return NUTValidation.Item2;
-            
-
         }
 
-        public static string SimulateNUTServer()
+        public string SimulateNUTServer()
         {
-            TextReader SimFile = new StreamReader(@"Assets\Simulated\CraigUPS.txt");
+            SimFile = new StreamReader(@"Assets\Simulated\CraigUPS.txt");
             string SimFileContents = SimFile.ReadToEnd();
+            SimFile.Dispose();
 
             return SimFileContents;
 
+        }
+
+        protected virtual void Dispose (bool disposing)
+        {
+            if(disposing)
+            {
+                SimFile.Close();
+            }
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

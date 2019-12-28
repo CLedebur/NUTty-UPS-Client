@@ -29,9 +29,9 @@ namespace NUTty_UPS_Client
             int j = 0;
             for (int i = 1; i < nutList.Count - 1; i++)
             {
-                List<string> strUPSVarList = new List<string>(nutList[i].Split(new String[] { "\"" }, StringSplitOptions.RemoveEmptyEntries));
+                List<string> strUPSVarList = new List<string>(nutList[i].Split(new string[] { "\"" }, StringSplitOptions.RemoveEmptyEntries));
 
-                List<string> strTemp = new List<string>(strUPSVarList[0].Split(new String[] { " " }, StringSplitOptions.RemoveEmptyEntries));
+                List<string> strTemp = new List<string>(strUPSVarList[0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries));
 
                 UPSVariables[j, 0] = strTemp[strTemp.Count - 1].Trim(' '); // Removes trailing spaces
                 UPSVariables[j, 1] = strUPSVarList[strUPSVarList.Count - 2]; // Only needs the data in between the quotes
