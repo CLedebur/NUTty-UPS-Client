@@ -135,7 +135,6 @@ namespace nuttyupsclient.Backend
             SimFile.Dispose();
 
             return SimFileContents;
-
         }
 
         protected virtual void Dispose (bool disposing)
