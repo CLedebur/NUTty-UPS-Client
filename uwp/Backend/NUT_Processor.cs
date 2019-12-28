@@ -19,9 +19,17 @@ namespace nuttyupsclient.Backend
         {
 
             NUT_Background.debugLog.Trace("[PROCESSOR:VALIDATOR] Received data:\n" + NUTOutput);
-            
             NUT_Background.debugLog.Trace("[PROCESSOR:VALIDATOR] Attempting to validate output");
-            List<string> NUTList = new List<string>(NUTOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
+
+
+            // List<string> NUTList = new List<string>(NUTOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
+
+            List<string> NUTList = new List<string>();
+
+            // Simple test to see if the variable is not null
+            if (NUTOutput == null) return Tuple.Create(NUTList, false);
+
+            NUTList = NUTOutput.Split("\n", StringSplitOptions.RemoveEmptyEntries).ToList();
 
             // Sanity check! 
             if (NUTList[0].Contains("BEGIN LIST VAR ups") && NUTList[NUTList.Count - 1].Contains("END LIST VAR ups"))

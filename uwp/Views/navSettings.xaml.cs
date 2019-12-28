@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using nuttyupsclient.Backend;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -58,7 +59,115 @@ namespace nuttyupsclient.Views
             
         }
 
-        private async void BtnSave(object sender, RoutedEventArgs e)
+        private void BtnSave(object sender, RoutedEventArgs e)
+        {
+
+            NUT_Config.SetConfig("IP Address", txtIPAddress.Text);
+            NUT_Config.SetConfig("Port", txtPort.Text);
+            NUT_Config.SetConfig("Poll Interval", txtPollFrequency.Text);
+
+            // We'll also update the public variable here
+            NUT_Background.NUTConnectionSettings = Tuple.Create(txtIPAddress.Text, Convert.ToUInt16(txtPort.Text), Convert.ToUInt32(txtPollFrequency.Text) * 1000);
+            NUT_Background.NeedConfig = false;
+
+            
+
+            var poller = new NUT_Poller();
+            poller.ResumeUPSPolling();
+            return;
+        }
+
+        private void OnLoading(FrameworkElement sender, object args)
+        {
+            InitializeValues();
+
+        }
+
+        private void TestConnection(object sender, RoutedEventArgs e)
+        {
+
+            if (ValidateSettings())
+            {
+                TestingRing.IsActive = true;
+                bool PausePoll = false;
+                if (NUT_Background.isPolling)
+                {
+                    NUT_Background.debugLog.Debug("[SETTINGS] Polling is active. Temporarily paused for the duration of this test.");
+                    PausePoll = true;
+                    NUT_Background.isPolling = false;
+                }
+
+                //Temporarily changing the button and disabling it for the duration of this test
+                btnConnect.Content = "Testing...";
+                btnConnect.IsEnabled = false;
+                Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Wait, 10);
+
+                NUT_Background.debugLog.Info("[SETTINGS] Testing connection settings");
+                //bool ValidationTest = NUT_Poller.ValidateNUTServer(txtIPAddress.Text, Convert.ToUInt16(txtPort.Text));
+
+                bool ValidationTest = false;
+                try
+                {
+
+                    Task ValidationTestTask = Task.Factory.StartNew(async () =>
+                    {
+                        NUT_Background.debugLog.Trace("[SETTINGS] Executing telnet client task");
+                        ValidationTest = await NUT_Poller.ValidateNUTServer(txtIPAddress.Text, Convert.ToUInt16(txtPort.Text));
+                    });
+                    while (!ValidationTestTask.IsCompleted)
+                    {
+                        NUT_Background.debugLog.Trace("[SETTINGS] Waiting for testing task to complete. Waiting 500ms.");
+                        System.Threading.Thread.Sleep(500);
+                    }
+                    NUT_Background.debugLog.Info(ValidationTestTask.Status.ToString());
+                    if (ValidationTestTask.IsFaulted) NUT_Background.debugLog.Fatal(ValidationTestTask.Exception.ToString());
+                    ValidationTestTask.Dispose();
+                }
+                catch (Exception eTest)
+                {
+                    NUT_Background.debugLog.Fatal("[SETTINGS] An error occurred while trying to test the connection:\n" + eTest + "\n" + e);
+                    ValidationTest = false;
+                }
+
+                if (ValidationTest)
+                {
+                    ContentDialog TestDialog = new ContentDialog
+                    {
+                        //Title = "Server validation successful",
+                        Content = "Connection to the NUT server was successful",
+                        CloseButtonText = "OK"
+                    };
+                    TestDialog.ShowAsync();
+                }
+                else
+                {
+                    ContentDialog TestDialog = new ContentDialog
+                    {
+                        //Title = "Server validation failed",
+                        Content = "Connection to the NUT server has failed. Please confirm the settings and try again.",
+                        CloseButtonText = "OK"
+                    };
+                    TestDialog.ShowAsync();
+                }
+
+                if (PausePoll)
+                {
+                    NUT_Background.debugLog.Debug("[SETTINGS] Polling has resumed.");
+                    NUT_Background.isPolling = true;
+                }
+
+                btnConnect.Content = "Test Connection";
+                btnConnect.IsEnabled = true;
+                TestingRing.IsActive = false;
+                Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 10);
+
+            }
+
+
+
+        }
+
+        private bool ValidateSettings()
         {
             // We're going to validate all the settings first to ensure that they'll work
             var validator = new NUT_Validator();
@@ -73,10 +182,9 @@ namespace nuttyupsclient.Views
                     Content = "The IP address that was entered does not appear to be correct. Please correct it and try again.",
                     CloseButtonText = "OK"
                 };
-                await InvalidData.ShowAsync();
-                return;
+                InvalidData.ShowAsync();
+                return false;
             }
-            NUT_Config.SetConfig("IP Address",txtIPAddress.Text);
 
             // Then validate the port number
             if (!validator.ValidatePort(txtPort.Text))
@@ -87,10 +195,9 @@ namespace nuttyupsclient.Views
                     Content = "The port number that was entered does not appear to be correct. Please correct it and try again. It is typically 3493.",
                     CloseButtonText = "OK"
                 };
-                await InvalidData.ShowAsync();
-                return;
+                InvalidData.ShowAsync();
+                return false;
             }
-            NUT_Config.SetConfig("Port", txtPort.Text);
 
             // Finally we validate the polling frequency
             if (!validator.ValidatePollInterval(txtPollFrequency.Text))
@@ -101,22 +208,10 @@ namespace nuttyupsclient.Views
                     Content = "The polling interval does not appear to be correct. It should be 5 seconds at minimum.",
                     CloseButtonText = "OK"
                 };
-                await InvalidData.ShowAsync();
-                return;
+                InvalidData.ShowAsync();
+                return false;
             }
-            NUT_Config.SetConfig("Poll Interval", txtPollFrequency.Text);
-
-            // We'll also update the public variable here
-            NUT_Background.NUTConnectionSettings = Tuple.Create(txtIPAddress.Text, Convert.ToUInt16(txtPort.Text), Convert.ToUInt32(txtPollFrequency.Text) * 1000);
-            NUT_Background.NeedConfig = false;
-            var poller = new NUT_Poller();
-            poller.ResumeUPSPolling();
-            return;
-        }
-
-        private void OnLoading(FrameworkElement sender, object args)
-        {
-            InitializeValues();
+            return true;
 
         }
     }

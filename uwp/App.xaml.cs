@@ -49,8 +49,9 @@ namespace nuttyupsclient
             InitContainer.InitializeContainer();
             Backend.NUT_Background.InitializeBg();
 
+            // Invokes an instance of NUT_Poller and then starts polling
             Backend.NUT_Poller nutPoller = new Backend.NUT_Poller();
-            nutPoller.InitializeUPSPolling();
+            //nutPoller.InitializeUPSPolling();
 
 
         }

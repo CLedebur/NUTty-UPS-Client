@@ -18,7 +18,7 @@ namespace nuttyupsclient.Backend
 
         private static string NUTOutput;
 
-        private static async Task TelnetClient(string nutIP, UInt16 nutPort)
+        private static async Task<string> TelnetClient(string nutIP, UInt16 nutPort)
         {
             NUT_Background.PollCount++;
             NUT_Background.debugLog.Trace("[POLLER] Connecting to NUT server " + nutIP + " at " + nutPort);
@@ -33,8 +33,7 @@ namespace nuttyupsclient.Backend
 
                     NUT_Background.debugLog.Trace("[POLLER] NUT server returned:\r\n" + s.ToString());
 
-                    NUTOutput = s;
-                    return;
+                    return s;
                 }
             }
 
@@ -51,6 +50,7 @@ namespace nuttyupsclient.Backend
             if (!NUT_Background.NeedConfig)
             {
                 PollUPS.Enabled = true;
+
                 PollNUTServer(NUT_Background.NUTConnectionSettings.Item1, NUT_Background.NUTConnectionSettings.Item2);
             }
         }
@@ -71,7 +71,7 @@ namespace nuttyupsclient.Backend
         {
             NUT_Background.debugLog.Trace("[POLLER] Timer fired");
             // Will only poll if configuration is not needed
-            if (!NUT_Background.NeedConfig)
+            if (!NUT_Background.NeedConfig && NUT_Background.isPolling)
             {
                 PollUPS.Enabled = false;
                 PollNUTServer(NUT_Background.NUTConnectionSettings.Item1, NUT_Background.NUTConnectionSettings.Item2);
@@ -81,8 +81,9 @@ namespace nuttyupsclient.Backend
 
         #endregion
 
-        public static void PollNUTServer(String nutIP, UInt16 nutPort)
-        {            
+        public static void PollNUTServer(string nutIP, ushort nutPort)
+        {
+            string s = null;
 
             if (NUT_Background.isSimulated)
             {
@@ -92,11 +93,12 @@ namespace nuttyupsclient.Backend
                 //NUT_Processor.UPSVariables = Tuple.Create(SimulateNUTServer());
                 return;
             }
-            
+
+
             Task NUTConnection = Task.Factory.StartNew(async () =>
            {
                NUT_Background.debugLog.Trace("[POLLER] Executing telnet client task");
-               await TelnetClient(nutIP, nutPort);
+               s = await TelnetClient(nutIP, nutPort);
            });
 
             while (!NUTConnection.IsCompleted)
@@ -107,11 +109,34 @@ namespace nuttyupsclient.Backend
             NUTConnection.Dispose();
 
             NUT_Background.isPolling = true;
-            NUT_Processor.ParseNUTOutput(NUTOutput); // Pipes to the parser so that the new data can be processed
+            NUT_Processor.ParseNUTOutput(s); // Pipes to the parser so that the new data can be processed
             return;
-            
         }
-        
+
+        public static async Task<bool> ValidateNUTServer(String nutIP, UInt16 nutPort)
+        {
+            string s = null;
+            Task NUTConnection = Task.Factory.StartNew(async () =>
+            {
+                NUT_Background.debugLog.Trace("[POLLER:VALIDATE] Executing telnet client task");
+                s = await TelnetClient(nutIP, nutPort);
+            });
+
+            while (!NUTConnection.IsCompleted)
+            {
+                NUT_Background.debugLog.Trace("[POLLER:VALIDATE] Waiting for task to complete. Waiting 500ms.");
+                Thread.Sleep(500);
+            }
+            NUTConnection.Dispose();
+            NUT_Background.debugLog.Info("ValidateNUTServer task " + NUTConnection.Status.ToString());
+
+            Tuple<List<string>, bool> NUTValidation = NUT_Processor.ValidateNUTOutput(s);
+
+            return NUTValidation.Item2;
+            
+
+        }
+
         public static string SimulateNUTServer()
         {
             TextReader SimFile = new StreamReader(@"Assets\Simulated\CraigUPS.txt");
