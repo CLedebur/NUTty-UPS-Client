@@ -34,16 +34,16 @@ namespace nuttyupsclient.Views
         private void InitializeValues()
         {
             // IP Address field
-            if (NUT_Background.NUTConnectionSettings.Item1 == null) txtIPAddress.PlaceholderText = "127.0.0.1";
-            else txtIPAddress.Text = NUT_Background.NUTConnectionSettings.Item1;
+            if (NUTInitialization.NUTConnectionSettings.Item1 == null) txtIPAddress.PlaceholderText = "127.0.0.1";
+            else txtIPAddress.Text = NUTInitialization.NUTConnectionSettings.Item1;
 
             // Port field
-            if (NUT_Background.NUTConnectionSettings.Item2 == 0) txtPort.Text = "3493";
-            else txtPort.Text = NUT_Background.NUTConnectionSettings.Item2.ToString();
+            if (NUTInitialization.NUTConnectionSettings.Item2 == 0) txtPort.Text = "3493";
+            else txtPort.Text = NUTInitialization.NUTConnectionSettings.Item2.ToString();
 
             // Poll Interval field
-            if (NUT_Background.NUTConnectionSettings.Item3 == 0) txtPollFrequency.Text = "5";
-            else txtPollFrequency.Text = NUT_Background.NUTConnectionSettings.Item3.ToString();
+            if (NUTInitialization.NUTConnectionSettings.Item3 == 0) txtPollFrequency.Text = "5";
+            else txtPollFrequency.Text = NUTInitialization.NUTConnectionSettings.Item3.ToString();
 
         }
 
@@ -64,17 +64,17 @@ namespace nuttyupsclient.Views
         private void BtnSave(object sender, RoutedEventArgs e)
         {
 
-            NUT_Config.SetConfig("IP Address", txtIPAddress.Text);
-            NUT_Config.SetConfig("Port", txtPort.Text);
-            NUT_Config.SetConfig("Poll Interval", txtPollFrequency.Text);
+            NUTConfig.SetConfig("IP Address", txtIPAddress.Text);
+            NUTConfig.SetConfig("Port", txtPort.Text);
+            NUTConfig.SetConfig("Poll Interval", txtPollFrequency.Text);
 
             // We'll also update the public variable here
-            NUT_Background.NUTConnectionSettings = Tuple.Create(txtIPAddress.Text, Convert.ToUInt16(txtPort.Text), Convert.ToUInt32(txtPollFrequency.Text) * 1000);
-            NUT_Background.NeedConfig = false;
+            NUTInitialization.NUTConnectionSettings = Tuple.Create(txtIPAddress.Text, Convert.ToUInt16(txtPort.Text), Convert.ToUInt32(txtPollFrequency.Text) * 1000);
+            NUTInitialization.NeedConfig = false;
 
             
 
-            var poller = new NUT_Poller();
+            var poller = new NUTPoller();
             poller.ResumeUPSPolling();
             return;
         }
@@ -92,11 +92,11 @@ namespace nuttyupsclient.Views
             {
                 TestingRing.IsActive = true;
                 bool PausePoll = false;
-                if (NUT_Background.isPolling)
+                if (NUTInitialization.isPolling)
                 {
-                    NUT_Background.debugLog.Debug("[SETTINGS] Polling is active. Temporarily paused for the duration of this test.");
+                    NUTInitialization.debugLog.Debug("[SETTINGS] Polling is active. Temporarily paused for the duration of this test.");
                     PausePoll = true;
-                    NUT_Background.isPolling = false;
+                    NUTInitialization.isPolling = false;
                 }
 
                 //Temporarily changing the button and disabling it for the duration of this test
@@ -104,8 +104,8 @@ namespace nuttyupsclient.Views
                 btnConnect.IsEnabled = false;
                 Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Wait, 10);
 
-                NUT_Background.debugLog.Info("[SETTINGS] Testing connection settings");
-                //bool ValidationTest = NUT_Poller.ValidateNUTServer(txtIPAddress.Text, Convert.ToUInt16(txtPort.Text));
+                NUTInitialization.debugLog.Info("[SETTINGS] Testing connection settings");
+                //bool ValidationTest = NUTPoller.ValidateNUTServer(txtIPAddress.Text, Convert.ToUInt16(txtPort.Text));
 
                 bool ValidationTest = false;
                 try
@@ -114,10 +114,10 @@ namespace nuttyupsclient.Views
                     ushort testPort = Convert.ToUInt16(txtPort.Text);
                     IAsyncAction ValidationTestTask = Windows.System.Threading.ThreadPool.RunAsync(async (workItem) =>
                     {
-                        NUT_Background.debugLog.Trace("[SETTINGS] Executing telnet client task");
+                        NUTInitialization.debugLog.Trace("[SETTINGS] Executing telnet client task");
                         try
                         {
-                            ValidationTest = await NUT_Poller.ValidateNUTServer(testIP, testPort).ConfigureAwait(true);
+                            ValidationTest = await NUTPoller.ValidateNUTServer(testIP, testPort).ConfigureAwait(true);
                         }
                         catch (System.AggregateException eAggregate)
                         {
@@ -152,8 +152,8 @@ namespace nuttyupsclient.Views
 
                              if (PausePoll)
                              {
-                                 NUT_Background.debugLog.Debug("[SETTINGS] Polling has resumed.");
-                                 NUT_Background.isPolling = true;
+                                 NUTInitialization.debugLog.Debug("[SETTINGS] Polling has resumed.");
+                                 NUTInitialization.isPolling = true;
                              }
 
                              btnConnect.Content = "Test Connection";
@@ -167,7 +167,7 @@ namespace nuttyupsclient.Views
                 }
                 catch (Exception eTest)
                 {
-                    NUT_Background.debugLog.Fatal("[SETTINGS] An error occurred while trying to test the connection:\n" + eTest + "\n" + e);
+                    NUTInitialization.debugLog.Fatal("[SETTINGS] An error occurred while trying to test the connection:\n" + eTest + "\n" + e);
                     ValidationTest = false;
                 }
 
@@ -181,7 +181,7 @@ namespace nuttyupsclient.Views
         private bool ValidateSettings()
         {
             // We're going to validate all the settings first to ensure that they'll work
-            var validator = new NUT_Validator();
+            var validator = new NUTValidator();
 
             // First, validate that the IP address is correct
 

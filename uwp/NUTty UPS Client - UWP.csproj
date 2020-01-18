@@ -119,11 +119,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Backend\NUT_Background.cs" />
-    <Compile Include="Backend\NUT_Config.cs" />
-    <Compile Include="Backend\NUT_Poller.cs" />
-    <Compile Include="Backend\NUT_Processor.cs" />
-    <Compile Include="Backend\NUT_Validator.cs" />
+    <Compile Include="Backend\NUTBackgroundTask.cs" />
+    <Compile Include="Backend\NUTInitialization.cs" />
+    <Compile Include="Backend\NUTConfig.cs" />
+    <Compile Include="Backend\NUTPoller.cs" />
+    <Compile Include="Backend\NUTProcessor.cs" />
+    <Compile Include="Backend\NUTValidator.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

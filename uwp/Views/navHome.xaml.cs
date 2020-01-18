@@ -32,7 +32,7 @@ namespace nuttyupsclient.Views
             this.InitializeComponent();
 
             // Sets up the timer that updates the UPS statistics at the set interval
-            UpdateUPSStatistics = new Timer(Backend.NUT_Background.PollFrequency);
+            UpdateUPSStatistics = new Timer(Backend.NUTInitialization.PollFrequency);
             UpdateUPSStatistics.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             UpdateUPSStatistics.AutoReset = true;
             UpdateUPSStatistics.Enabled = true;
@@ -45,25 +45,25 @@ namespace nuttyupsclient.Views
 
         void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            if (Backend.NUT_Background.isPolling)
+            if (Backend.NUTInitialization.isPolling)
             {
-                Backend.NUT_Background.debugLog.Trace("[UI:HOME] Timer fired");
+                Backend.NUTInitialization.debugLog.Trace("[UI:HOME] Timer fired");
                 InitializeValues();
             }
         }
 
         public async void InitializeValues()
         {
-            Backend.NUT_Background.debugLog.Trace("[UI:HOME] Updating statistics text");
+            Backend.NUTInitialization.debugLog.Trace("[UI:HOME] Updating statistics text");
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
                     try
                     {
-                        TXTUPSStatus = (Backend.NUT_Processor.UPSStatistics());
+                        TXTUPSStatus = (Backend.NUTProcessor.UPSStatistics());
                     }
                     catch (Exception e)
                     {
-                        Backend.NUT_Background.debugLog.Fatal("[UI:HOME] Error trying to update the statistics text.\n" + e);
+                        Backend.NUTInitialization.debugLog.Fatal("[UI:HOME] Error trying to update the statistics text.\n" + e);
 
                     }
                 }

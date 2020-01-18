@@ -26,7 +26,7 @@ namespace nuttyupsclient.Views
         {
             this.InitializeComponent();
 
-            UPSRawData = new System.Timers.Timer(Backend.NUT_Background.PollFrequency);
+            UPSRawData = new System.Timers.Timer(Backend.NUTInitialization.PollFrequency);
             UPSRawData.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             UPSRawData.AutoReset = true;
             UPSRawData.Enabled = true;
@@ -36,9 +36,9 @@ namespace nuttyupsclient.Views
 
         void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            if (Backend.NUT_Background.isPolling)
+            if (Backend.NUTInitialization.isPolling)
             {
-                Backend.NUT_Background.debugLog.Trace("[UI:DEBUGGING] Timer fired");
+                Backend.NUTInitialization.debugLog.Trace("[UI:DEBUGGING] Timer fired");
                 InitializeValues();
             }
         }
@@ -46,16 +46,16 @@ namespace nuttyupsclient.Views
 
         public async void InitializeValues()
         {
-            Backend.NUT_Background.debugLog.Trace("[UI:DEBUGGING] Updating raw output text");
+            Backend.NUTInitialization.debugLog.Trace("[UI:DEBUGGING] Updating raw output text");
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 try
                 {
-                    TXTDebugRawOutput = Backend.NUT_Processor.ParseUPSVariables();
+                    TXTDebugRawOutput = Backend.NUTProcessor.ParseUPSVariables();
                 }
                 catch (Exception e)
                 {
-                    Backend.NUT_Background.debugLog.Fatal("[UI:DEBUGGING] Error trying to update the raw output text.\n" + e);
+                    Backend.NUTInitialization.debugLog.Fatal("[UI:DEBUGGING] Error trying to update the raw output text.\n" + e);
 
                 }
             }
@@ -89,7 +89,7 @@ namespace nuttyupsclient.Views
             ContentDialogResult result = await Confirmation.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                var nutConfig = new Backend.NUT_Config();
+                var nutConfig = new Backend.NUTConfig();
                 nutConfig.DeleteContainer();
                 Application.Current.Exit();
 

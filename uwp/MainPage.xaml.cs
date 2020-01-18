@@ -28,14 +28,14 @@ namespace nuttyupsclient
         {
             this.InitializeComponent();
 
-            if (Backend.NUT_Background.NeedConfig)
+            if (Backend.NUTInitialization.NeedConfig)
             {
                 // Empty configuration detected, so we're going to hold off on starting the polling process and switch focus to the Settings tab
                 contentFrame.Navigate(typeof(navSettings));
             }
             else
             {
-                UpdateUPSCharge = new System.Timers.Timer(Backend.NUT_Background.PollFrequency);
+                UpdateUPSCharge = new System.Timers.Timer(Backend.NUTInitialization.PollFrequency);
                 UpdateUPSCharge.Elapsed += new ElapsedEventHandler(OnTimedEvent);
                 UpdateUPSCharge.AutoReset = true;
                 UpdateUPSCharge.Enabled = true;
@@ -47,9 +47,9 @@ namespace nuttyupsclient
 
         void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
-            if (Backend.NUT_Background.isPolling)
+            if (Backend.NUTInitialization.isPolling)
             {
-                Backend.NUT_Background.debugLog.Trace("[UI:MAIN] Timer fired");
+                Backend.NUTInitialization.debugLog.Trace("[UI:MAIN] Timer fired");
                 InitializeValues();
             }
         }
@@ -57,27 +57,27 @@ namespace nuttyupsclient
 
         public async void InitializeValues()
         {
-            Backend.NUT_Background.debugLog.Trace("[UI:MAIN] Updating battery charge status");
+            Backend.NUTInitialization.debugLog.Trace("[UI:MAIN] Updating battery charge status");
 
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 try
                 {
-                    if (!Backend.NUT_Background.isPolling)
+                    if (!Backend.NUTInitialization.isPolling)
                     {
-                        Backend.NUT_Background.debugLog.Trace("[UI:MAIN] No data from UPS. Will not update charge status.");
+                        Backend.NUTInitialization.debugLog.Trace("[UI:MAIN] No data from UPS. Will not update charge status.");
                         TXTChargeText = "Not connected to UPS";
                     }
                     else
                     {
-                        Backend.NUT_Background.debugLog.Trace("[UI:MAIN] Was able to acquire data. Updating charge status.");
-                        Tuple<string, int, double> ChargeStatus = Backend.NUT_Processor.ChargeStatus();
+                        Backend.NUTInitialization.debugLog.Trace("[UI:MAIN] Was able to acquire data. Updating charge status.");
+                        Tuple<string, int, double> ChargeStatus = Backend.NUTProcessor.ChargeStatus();
                         TXTChargeText = (ChargeStatus.Item3 + "%, " + ChargeStatus.Item1);
                     }
                 }
                 catch (Exception e)
                 {
-                    Backend.NUT_Background.debugLog.Fatal("[UI:MAIN] Error trying to update the charging status.\n" + e);
+                    Backend.NUTInitialization.debugLog.Fatal("[UI:MAIN] Error trying to update the charging status.\n" + e);
 
                 }
             }

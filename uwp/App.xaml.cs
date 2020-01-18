@@ -42,17 +42,17 @@ namespace nuttyupsclient
 #else
             LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Error, LogLevel.Fatal, new StreamingFileTarget());
 #endif
-            Backend.NUT_Background.debugLog.Info("\n\n\n\n[CORE] Application is starting");
+            Backend.NUTInitialization.debugLog.Info("\n\n\n\n[CORE] Application is starting");
 
             // Now we start loading the stored configuration, if any
-            var InitContainer = new Backend.NUT_Config();
+            var InitContainer = new Backend.NUTConfig();
             InitContainer.InitializeContainer();
-            Backend.NUT_Background.InitializeBg();
+            Backend.NUTInitialization.InitializeBg();
 
-            // Invokes an instance of NUT_Poller and then starts polling
-            //Backend.NUT_Poller nutPoller = new Backend.NUT_Poller();
+            // Invokes an instance of NUTPoller and then starts polling
+            //Backend.NUTPoller nutPoller = new Backend.NUTPoller();
             //nutPoller.InitializeUPSPolling();
-            //Backend.NUT_Poller.Poll
+            //Backend.NUTPoller.Poll
 
         }
 
@@ -121,7 +121,7 @@ namespace nuttyupsclient
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
-            Backend.NUT_Background.debugLog.Trace("[CORE] Application is entering a suspended state");
+            Backend.NUTInitialization.debugLog.Trace("[CORE] Application is entering a suspended state");
             deferral.Complete();
         }
     }

@@ -7,7 +7,7 @@ using System.Net;
 
 namespace nuttyupsclient.Backend
 {
-    class NUT_Validator
+    class NUTValidator
     {
         public bool ValidateIPAddress(string TestIP)
         {

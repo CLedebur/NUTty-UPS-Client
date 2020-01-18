@@ -11,15 +11,15 @@ using Windows.UI.Xaml;
 
 namespace nuttyupsclient.Backend
 {
-    class NUT_Processor
+    class NUTProcessor
     {
         public static string[,] UPSVariables;
 
         public static Tuple<List<string>,bool> ValidateNUTOutput(string NUTOutput)
         {
 
-            NUT_Background.debugLog.Trace("[PROCESSOR:VALIDATOR] Received data:\n" + NUTOutput);
-            NUT_Background.debugLog.Trace("[PROCESSOR:VALIDATOR] Attempting to validate output");
+            NUTInitialization.debugLog.Trace("[PROCESSOR:VALIDATOR] Received data:\n" + NUTOutput);
+            NUTInitialization.debugLog.Trace("[PROCESSOR:VALIDATOR] Attempting to validate output");
 
 
             // List<string> NUTList = new List<string>(NUTOutput.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
@@ -34,10 +34,10 @@ namespace nuttyupsclient.Backend
             // Sanity check! 
             if (NUTList[0].Contains("BEGIN LIST VAR ups") && NUTList[NUTList.Count - 1].Contains("END LIST VAR ups"))
             {
-                NUT_Background.debugLog.Debug("[PROCESSOR:VALIDATOR] Data structure is correct.");
+                NUTInitialization.debugLog.Debug("[PROCESSOR:VALIDATOR] Data structure is correct.");
                 return Tuple.Create(NUTList,true);
             }
-            NUT_Background.debugLog.Fatal("[PROCESSOR:VALIDATOR] Data structure is not correct.");
+            NUTInitialization.debugLog.Fatal("[PROCESSOR:VALIDATOR] Data structure is not correct.");
             return Tuple.Create(NUTList,false);
 
         }
@@ -112,7 +112,7 @@ namespace nuttyupsclient.Backend
             catch (Exception e)
             {
                 UPSInfo = "No data has been received from the UPS.";
-                if (NUT_Background.isDebug) UPSInfo = (UPSInfo + "\n" + e);
+                if (NUTInitialization.isDebug) UPSInfo = (UPSInfo + "\n" + e);
             }
             
             return UPSInfo;
@@ -132,7 +132,7 @@ namespace nuttyupsclient.Backend
                 }
             } catch (Exception e)
             {
-                NUT_Background.debugLog.Error("[PROCESSOR] Exception occurred:\n" + e);
+                NUTInitialization.debugLog.Error("[PROCESSOR] Exception occurred:\n" + e);
                 return ("Error: " + e);
             }
             return UPSFormattedVariables;
@@ -234,7 +234,7 @@ namespace nuttyupsclient.Backend
             {
                 return "";
             }
-                NUT_Background.debugLog.Trace("[PROCESSOR:SEARCH] Searching for " + NUTVariable);
+                NUTInitialization.debugLog.Trace("[PROCESSOR:SEARCH] Searching for " + NUTVariable);
             for (int i = 0; i < UPSVariables.GetLength(0); i++)
             {
                 if (UPSVariables[i, 0].Contains(NUTVariable))
@@ -243,25 +243,25 @@ namespace nuttyupsclient.Backend
                 }
             }
 
-            NUT_Background.debugLog.Debug("[PROCESSOR:SEARCHNUTDATA] Could not find requested variable");
+            NUTInitialization.debugLog.Debug("[PROCESSOR:SEARCHNUTDATA] Could not find requested variable");
             return "";
         }
 
         public static void ModifySimNUTData(string NUTVariable, string NUTValue)
         {
-            NUT_Background.debugLog.Debug("[MODNUTDATA] Array length is " + Convert.ToString(UPSVariables.GetLength(0)));
-            NUT_Background.debugLog.Debug("[MODNUTDATA] Invoked. Searching for: " + NUTVariable);
+            NUTInitialization.debugLog.Debug("[MODNUTDATA] Array length is " + Convert.ToString(UPSVariables.GetLength(0)));
+            NUTInitialization.debugLog.Debug("[MODNUTDATA] Invoked. Searching for: " + NUTVariable);
             for (int i = 0; i < UPSVariables.GetLength(0); i++)
             {
                 if (UPSVariables[i, 0].Equals(NUTVariable))
                 {
-                    NUT_Background.debugLog.Debug("[SEARCHNUTDATA] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
+                    NUTInitialization.debugLog.Debug("[SEARCHNUTDATA] Searched for " + NUTVariable + " and got: " + UPSVariables[i, 1]);
                     UPSVariables[i, 1] = NUTValue;
                     return;
                 }
             }
 
-            NUT_Background.debugLog.Debug("[SEARCHNUTDATA] Could not find requested variable");
+            NUTInitialization.debugLog.Debug("[SEARCHNUTDATA] Could not find requested variable");
             return;
         }
 
